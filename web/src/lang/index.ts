@@ -6,9 +6,9 @@ import enUS from "@/lang/modules/enUS";
 const getLang = () => {
   let store = localStorage.getItem("theme-config");
   if (store) {
-    return JSON.parse(store)?.language || "zh-CN";
+    return JSON.parse(store)?.language || "en-US";
   } else {
-    return "zh-CN";
+    return "en-US";
   }
 };
 /* 这里必须YesmessagesName */
