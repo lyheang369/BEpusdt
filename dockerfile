@@ -9,7 +9,8 @@ COPY web/package.json web/pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --shamefully-hoist
 
 COPY web/ ./
-RUN pnpm run build:prod
+# Skip vue-tsc type check to reduce memory usage; bump Node heap for vite
+RUN NODE_OPTIONS="--max-old-space-size=1536" pnpm exec vite build --mode production
 
 FROM golang:1.26.2-alpine3.23 AS builder
 
