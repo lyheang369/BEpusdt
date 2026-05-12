@@ -1,12 +1,12 @@
 <template>
   <div class="page-404">
     <div>
-      <s-svg-icon name="网络断开" :size="500" />
+      <s-svg-icon name="network-disconnected" :size="500" />
     </div>
     <div class="prompt">
       <div class="title">500</div>
-      <div class="text">抱歉，无网络连接~</div>
-      <a-button type="primary" v-throttle="onBack">立即返回</a-button>
+      <div class="text">Sorry, there is no network connection.</div>
+      <a-button type="primary" v-throttle="onBack">Return Now</a-button>
     </div>
   </div>
 </template>
@@ -18,7 +18,7 @@ const router = useRouter();
 
 const onBack = () => {
   if (!navigator.onLine) {
-    Message.error("网络未连接");
+    Message.error("Network is not connected");
   } else {
     if (window.history.state.back !== null) {
       router.replace(window.history.state.back);

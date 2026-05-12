@@ -1,4 +1,4 @@
-// 获取法币对应的旗帜emoji
+// Get the flag emoji for each fiat currency
 const getFiatFlag = (fiat: string) => {
   const fiatFlagMap: Record<string, string> = {
     CNY: "🇨🇳",

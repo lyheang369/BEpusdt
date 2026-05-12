@@ -4,9 +4,9 @@
       <LoginBanner v-if="isPc" />
       <div class="login_box">
         <div class="login_title">Welcome Back</div>
-        <div class="login_title_desc">一款更好用的个人加密货币收款网关，助力出海需求！</div>
+        <div class="login_title_desc">A better personal cryptocurrency payment gateway, supporting global business needs!</div>
         <LoginForm />
-        <!-- <div class="author">by 兔子先森</div> -->
+        <!-- <div class="author">by Rabbit</div> -->
       </div>
     </div>
   </div>

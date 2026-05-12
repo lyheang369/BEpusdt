@@ -1,7 +1,7 @@
 @use "@/style/var/index" as *;
 
-// 处理首页数据图大小
-// 页面宽度 大于 0px 小于 992px;
+// 处理Homedata chart大小
+// page宽度 大于 0px 小于 992px;
 @media screen and (min-width: $xs) and (max-width: $lg) {
   .sell-histogram {
     width: 100%;
@@ -15,7 +15,7 @@
   }
 }
 
-// 页面宽度 大于 992px 小于 1600px;
+// page宽度 大于 992px 小于 1600px;
 @media screen and (min-width: $lg) and (max-width: $xxl) {
   .sell-histogram {
     width: 100%;
@@ -29,7 +29,7 @@
   }
 }
 
-// 页面宽度 大于 1600px;
+// page宽度 大于 1600px;
 @media screen and (min-width: $xxl) {
   .sell-histogram {
     width: calc(100% - 600px - $padding);

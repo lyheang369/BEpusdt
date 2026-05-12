@@ -11,7 +11,7 @@
   background: $color-fill-1;
 }
 
-// 内部main窗口容器-有内边距
+// Internalmain窗口容器-有内边距
 .snow-inner {
   padding: $padding;
   background: $color-bg-1;
@@ -33,7 +33,7 @@
   background: $color-bg-1;
 }
 
-// 铺满main窗口-无内边距
+// 铺满main窗口-None内边距
 .snow-fill-pure {
   height: 100%;
   overflow: hidden;

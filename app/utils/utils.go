@@ -20,7 +20,7 @@ import (
 	nid "github.com/matoous/go-nanoid/v2"
 )
 
-// IsExist 判断文件是否存在
+// IsExist checks whether a file exists
 func IsExist(path string) bool {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -208,8 +208,8 @@ func StrSha256(str string) string {
 }
 
 func IsAllowedCallbackURL(raw string) bool {
-	// IsAllowedCallbackURL 校验回调/跳转地址格式是否合法
-	// 规则：必须是合法 URL，且 scheme 只允许 http 或 https
+	// IsAllowedCallbackURL validates callback/redirect URL format
+	// Rule: must be a valid URL, and only http or https schemes are allowed
 	if raw == "" {
 		return false
 	}
@@ -223,15 +223,15 @@ func IsAllowedCallbackURL(raw string) bool {
 	return u.Host != ""
 }
 
-// GetRequestHost 识别完整的请求主机地址
+// GetRequestHost detects the full request host address
 func GetRequestHost(r *http.Request) string {
 	scheme := "http"
 
 	if r.TLS != nil {
 		scheme = "https"
 	} else {
-		// 检查各种代理转发的协议头
-		// Nginx、Apache、Caddy 通用
+		// checks proxy-forwarded protocol headers
+		// Nginx、Apache、Caddy common
 		if proto := r.Header.Get("X-Forwarded-Proto"); proto == "https" {
 			scheme = "https"
 		} else if r.Header.Get("X-Forwarded-Ssl") == "on" {
@@ -244,7 +244,7 @@ func GetRequestHost(r *http.Request) string {
 			scheme = "https"
 		} else if r.Header.Get("CF-Visitor") != "" {
 			// Cloudflare
-			// CF-Visitor 格式: {"scheme":"https"}
+			// CF-Visitor format: {"scheme":"https"}
 			if strings.Contains(r.Header.Get("CF-Visitor"), `"scheme":"https"`) {
 				scheme = "https"
 			}

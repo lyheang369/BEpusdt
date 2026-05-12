@@ -10,9 +10,9 @@ const maxRecords = 1000
 type stat struct {
 	mu      sync.RWMutex
 	records []bool
-	index   int // 当前位置
-	total   int // 已记录总数
-	succ    int // 成功记录数
+	index   int // current position
+	total   int // total records
+	succ    int // successful records
 }
 
 var (

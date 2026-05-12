@@ -93,16 +93,16 @@ func (Rate) SetSyntax(ctx *gin.Context) {
 
 	model.SetK(model.ConfKey("rate_float_"+req.Crypto+"_"+req.Fiat), req.Syntax)
 
-	base.Ok(ctx, "设置成功")
+	base.Ok(ctx, "Settings saved")
 }
 
 func (Rate) Sync(ctx *gin.Context) {
 	err := model.CoingeckoRate()
 	if err != nil {
-		base.BadRequest(ctx, "同步异常: "+err.Error())
+		base.BadRequest(ctx, "Sync exception: "+err.Error())
 
 		return
 	}
 
-	base.Ok(ctx, "同步完成。")
+	base.Ok(ctx, "Sync complete.")
 }

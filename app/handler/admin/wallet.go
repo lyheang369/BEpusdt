@@ -46,7 +46,7 @@ func (Wallet) Add(ctx *gin.Context) {
 	}
 
 	if !model.IsSupportedTradeType(model.TradeType(req.TradeType)) {
-		base.BadRequest(ctx, fmt.Sprintf("不支持的交易类型: %s", req.TradeType))
+		base.BadRequest(ctx, fmt.Sprintf("Unsupported trade type: %s", req.TradeType))
 
 		return
 	}
@@ -62,12 +62,12 @@ func (Wallet) Add(ctx *gin.Context) {
 	}
 
 	if !wallet.IsValid() {
-		base.BadRequest(ctx, "钱包地址格式不合法，请检查")
+		base.BadRequest(ctx, "Wallet address format is invalid. Please check.")
 
 		return
 	}
 
-	// 非大小写敏感的地址，统一转为小写存储
+	// Case-insensitive addresses are stored in lowercase
 	if !model.AddrCaseSens(model.TradeType(wallet.TradeType)) {
 		wallet.MatchAddr = strings.ToLower(wallet.MatchAddr)
 	}
@@ -127,7 +127,7 @@ func (Wallet) Mod(ctx *gin.Context) {
 	var w model.Wallet
 	model.Db.Where("id = ?", req.ID).Find(&w)
 	if w.ID == 0 {
-		base.BadRequest(ctx, "钱包不存在")
+		base.BadRequest(ctx, "Wallet does not exist")
 
 		return
 	}
@@ -144,7 +144,7 @@ func (Wallet) Mod(ctx *gin.Context) {
 	}
 	if req.TradeType != nil {
 		if !model.IsSupportedTradeType(model.TradeType(*req.TradeType)) {
-			base.BadRequest(ctx, fmt.Sprintf("不支持的交易类型: %s", *req.TradeType))
+			base.BadRequest(ctx, fmt.Sprintf("Unsupported trade type: %s", *req.TradeType))
 
 			return
 		}
@@ -159,12 +159,12 @@ func (Wallet) Mod(ctx *gin.Context) {
 	}
 
 	if !w.IsValid() {
-		base.BadRequest(ctx, "钱包地址格式不合法，请检查")
+		base.BadRequest(ctx, "Wallet address format is invalid. Please check.")
 
 		return
 	}
 
-	// 非大小写敏感的地址，统一转为小写存储
+	// Case-insensitive addresses are stored in lowercase
 	if !model.AddrCaseSens(model.TradeType(w.TradeType)) {
 		w.MatchAddr = strings.ToLower(w.Address)
 	}
@@ -175,7 +175,7 @@ func (Wallet) Mod(ctx *gin.Context) {
 		return
 	}
 
-	base.Response(ctx, 200, "修改成功")
+	base.Response(ctx, 200, "Updated successfully")
 }
 
 func (Wallet) Del(ctx *gin.Context) {
@@ -188,5 +188,5 @@ func (Wallet) Del(ctx *gin.Context) {
 
 	model.Db.Where("id = ?", req.ID).Delete(&model.Wallet{})
 
-	base.Response(ctx, 200, "删除成功")
+	base.Response(ctx, 200, "Deleted successfully")
 }

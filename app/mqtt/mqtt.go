@@ -23,12 +23,12 @@ var (
 	curConf activeConf
 )
 
-// Reload 按最新配置连接MQTT服务器
+// Reload 按最新配置connect to MQTT server
 func Reload() error {
 	host := model.GetC(model.MqttHost)
 	port := model.GetC(model.MqttPort)
 	if host == "" || port == "" {
-		return nil // 未配置 MQTT，跳过
+		return nil // MQTT is not configured, skipping
 	}
 
 	newConf := activeConf{
@@ -40,18 +40,18 @@ func Reload() error {
 
 	mu.Lock()
 	defer mu.Unlock()
-	if newConf == curConf { // 配置未变更，无需重连
+	if newConf == curConf { // configuration unchanged, no reconnect needed
 		return nil
 	}
 
-	// 断开旧连接（给 250ms 优雅退出）
+	// disconnect old connection with 250ms graceful shutdown
 	if client != nil {
 		client.Disconnect(250)
-		log.Info("🔄 MQTT 配置变动，正在连接...")
+		log.Info("🔄 MQTT configuration changed, connecting...")
 	}
 
 	opts := mqtt.NewClientOptions()
-	// 暂时只支持 tcp 模式
+	// TCP mode is currently the only supported mode
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%s", newConf.host, newConf.port))
 	opts.SetUsername(newConf.user)
 	opts.SetPassword(newConf.pass)
@@ -63,7 +63,7 @@ func Reload() error {
 
 	newClient := mqtt.NewClient(opts)
 	if token := newClient.Connect(); token.Wait() && token.Error() != nil {
-		return fmt.Errorf("MQTT 连接失败: %s", token.Error())
+		return fmt.Errorf("MQTT connection failed: %s", token.Error())
 	}
 
 	client = newClient
@@ -77,9 +77,9 @@ func onConnectHandler(c mqtt.Client) {
 		c.Subscribe(topic, cb.Qos, cb.Handler).Wait()
 	}
 
-	log.Info("✅ MQTT 连接成功")
+	log.Info("✅ MQTT connected successfully")
 }
 
 func onConnectionLost(_ mqtt.Client, err error) {
-	log.Warn(fmt.Sprintf("❌ MQTT 连接断开: %s", err.Error()))
+	log.Warn(fmt.Sprintf("❌ MQTT connection disconnected: %s", err.Error()))
 }

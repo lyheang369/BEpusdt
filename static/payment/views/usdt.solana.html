@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USDT・Solana 一款更好用的个人USDT收款网关 BEpusdt</title>
+    <title>USDT・Solana A better personal USDT payment gateway BEpusdt</title>
     <link rel="shortcut icon" href="/payment/assets/img/tether.svg">
     <link rel="stylesheet" href="/payment/assets/css/core.min.css">
     <script src="/payment/assets/js/jquery.min.js"></script>
@@ -17,50 +17,50 @@
     <div class="payment-container" data-token="USDT" data-network="Solana" data-network-name="Solana" data-warning-token="SOL">
         <div class="language-switcher">
             <select id="languageSwitcher" onchange="changeLanguage(this.value)">
-                <option value="zh">中文</option>
+                <option value="zh">Chinese</option>
                 <option value="en">English</option>
             </select>
         </div>
 
         <div class="crypto-icon">USDT</div>
-        <h1 class="payment-title" data-i18n="payment.title">USDT 支付</h1>
+        <h1 class="payment-title" data-i18n="payment.title">USDT Payment</h1>
         <p class="payment-subtitle">
             <span class="status-indicator"></span>
-            <span data-i18n="payment.subtitle">请使用 <strong>Solana</strong> 网络进行转账</span>
+            <span data-i18n="payment.subtitle">Please use <strong>Solana</strong> network for transfer</span>
             <span class="network-badge" data-i18n="payment.networkBadge">Solana</span>
         </p>
 
         <div class="order-info">
             <div class="order-item">
-                <span class="order-label" data-i18n="payment.paymentAmount">付款数额:</span>
-                <span class="order-value amount-value" id="payAmount" onclick="copyAmount()" data-i18n="[title]payment.clickToCopy" title="点击复制金额">{{.amount}} USDT</span>
+                <span class="order-label" data-i18n="payment.paymentAmount">Payment Amount:</span>
+                <span class="order-value amount-value" id="payAmount" onclick="copyAmount()" data-i18n="[title]payment.clickToCopy" title="Click to copy amount">{{.amount}} USDT</span>
             </div>
             <div class="order-item">
-                <span class="order-label" data-i18n="payment.merchantOrder">商户订单:</span>
+                <span class="order-label" data-i18n="payment.merchantOrder">Merchant Order:</span>
                 <span class="order-value">{{.order_id}}</span>
             </div>
             <div class="order-item">
-                <span class="order-label" data-i18n="payment.orderAmount">订单金额:</span>
+                <span class="order-label" data-i18n="payment.orderAmount">Order Amount:</span>
                 <span class="order-value">
-                    <span class="fiat-amount"><span data-i18n="payment.amountPrefix">约</span> {{.money}} {{.fiat}}</span>
+                    <span class="fiat-amount"><span data-i18n="payment.amountPrefix">Approx.</span> {{.money}} {{.fiat}}</span>
                 </span>
             </div>
         </div>
         <div class="countdown-banner">
             <div class="countdown-content">
                 <div class="countdown-info">
-                    <div class="countdown-title" data-i18n="payment.countdownTitle">⏰ 支付倒计时</div>
-                    <div class="countdown-subtitle" data-i18n="payment.countdownSubtitle">请在指定时间内完成转账，超时勿付请重新下单</div>
+                    <div class="countdown-title" data-i18n="payment.countdownTitle">⏰ Payment Countdown</div>
+                    <div class="countdown-subtitle" data-i18n="payment.countdownSubtitle">Please complete the transfer within the specified time. Do not pay after timeout; create a new order.</div>
                 </div>
                 <div class="countdown-timer" id="countdown">
                     <div class="time-unit">
                         <span class="time-number" id="minutes">15</span>
-                        <span class="time-label" data-i18n="payment.minutes">分</span>
+                        <span class="time-label" data-i18n="payment.minutes">min</span>
                     </div>
                     <span class="time-separator">:</span>
                     <div class="time-unit">
                         <span class="time-number" id="seconds">00</span>
-                        <span class="time-label" data-i18n="payment.seconds">秒</span>
+                        <span class="time-label" data-i18n="payment.seconds">sec</span>
                     </div>
                 </div>
             </div>
@@ -68,18 +68,18 @@
         <div class="qr-section">
             <div class="qr-code" id="qrcode"></div>
             <div class="address-section">
-                <div class="address-label" data-i18n="payment.addressLabel">收款地址 (Solana 网络)</div>
+                <div class="address-label" data-i18n="payment.addressLabel">Receiving Address (Solana Network)</div>
                 <div class="address-text" id="walletAddress">{{.address}}</div>
-                <button class="copy-btn" onclick="copyAddress()" data-i18n="payment.copyAddress">复制地址</button>
+                <button class="copy-btn" onclick="copyAddress()" data-i18n="payment.copyAddress">Copy Address</button>
             </div>
         </div>
         <div class="instructions">
-            <h4 data-i18n="payment.instructionsTitle">📋 转账说明</h4>
+            <h4 data-i18n="payment.instructionsTitle">📋 Transfer Instructions</h4>
             <ol>
-                <li data-i18n="[html]payment.instruction1">必须使用 <strong>Solana 网络</strong> 进行转账，请勿转入 SOL！</li>
-                <li data-i18n="payment.instruction2">转账完成后系统会自动确认到账</li>
-                <li data-i18n="payment.instruction3">转账金额必须与显示金额完全一致</li>
-                <li data-i18n="payment.instruction4">如果有其它疑问，请联系客服处理</li>
+                <li data-i18n="[html]payment.instruction1">You must use the <strong>Solana network</strong> for transfers. Do not send SOL！</li>
+                <li data-i18n="payment.instruction2">The system will automatically confirm receipt after the transfer.</li>
+                <li data-i18n="payment.instruction3">The transfer amount must exactly match the displayed amount.</li>
+                <li data-i18n="payment.instruction4">If you have any questions, contact customer support.</li>
             </ol>
         </div>
         <div class="footer-info">

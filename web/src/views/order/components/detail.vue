@@ -3,11 +3,11 @@
     <template #title>
       <div class="detail-modal-title">
         <icon-star />
-        <span>订单详情</span>
+        <span>Order Details</span>
       </div>
     </template>
 
-    <!-- 功能操作按钮 -->
+    <!-- action buttons -->
     <template #footer>
       <a-space wrap>
         <a-button
@@ -17,21 +17,21 @@
           @click="handleManualNotify"
         >
           <template #icon><icon-notification /></template>
-          回调
+          Callback
         </a-button>
-        <a-popconfirm content="确定删除该订单吗？删除后将无法恢复！" type="error" @ok="handleDelete">
+        <a-popconfirm content="Delete this order? This cannot be undone!" type="error" @ok="handleDelete">
           <a-button type="primary" status="danger">
             <template #icon><icon-delete /></template>
-            删除
+            Delete
           </a-button>
         </a-popconfirm>
-        <a-button @click="onClose">关闭窗口</a-button>
+        <a-button @click="onClose">Close Window</a-button>
       </a-space>
     </template>
 
     <div class="detail-content">
-      <!-- 基础信息卡片 -->
-      <a-card class="detail-card" title="基础信息" :bordered="false">
+      <!-- Basic Informationcard -->
+      <a-card class="detail-card" title="Basic Information" :bordered="false">
         <template #extra>
           <a-tag size="medium" :color="getStatusColor(detailData.status)" class="status-tag">
             <icon-check-circle v-if="detailData.status === 2" />
@@ -45,7 +45,7 @@
             <div class="detail-item">
               <div class="detail-label">
                 <icon-user />
-                <span>商品名称</span>
+                <span>Product Name</span>
               </div>
               <div class="detail-value">{{ detailData.name }}</div>
             </div>
@@ -54,7 +54,7 @@
             <div class="detail-item">
               <div class="detail-label">
                 <icon-swap />
-                <span>交易类型</span>
+                <span>Trade Type</span>
               </div>
               <div class="detail-value">
                 <a-tag color="blue" class="trade-type-tag">{{ detailData.trade_type }}</a-tag>
@@ -67,7 +67,7 @@
             <div class="detail-item">
               <div class="detail-label">
                 <icon-file />
-                <span>商户订单</span>
+                <span>Merchant Order</span>
               </div>
               <div class="detail-value">
                 <a-typography-text copyable>{{ detailData.order_id }}</a-typography-text>
@@ -78,7 +78,7 @@
             <div class="detail-item">
               <div class="detail-label">
                 <icon-tag />
-                <span>交易编号</span>
+                <span>Transaction ID</span>
               </div>
               <div class="detail-value">
                 <a-typography-text copyable>{{ detailData.trade_id }}</a-typography-text>
@@ -91,7 +91,7 @@
             <div class="detail-item">
               <div class="detail-label">
                 <icon-archive />
-                <span>交易金额（汇率）</span>
+                <span>Transaction Amount (Rate)</span>
               </div>
               <div class="detail-value">
                 <span class="currency-symbol">{{ getCurrencySymbol(detailData.fiat) }}</span
@@ -104,7 +104,7 @@
             <div class="detail-item">
               <div class="detail-label">
                 <icon-pushpin />
-                <span>交易数额</span>
+                <span>Trade Amount</span>
               </div>
               <div class="detail-value">
                 {{ detailData.amount }}
@@ -117,14 +117,14 @@
         </a-row>
       </a-card>
 
-      <!-- 地址信息卡片 -->
-      <a-card class="detail-card" title="交易地址" :bordered="false">
+      <!-- Addressinformationcard -->
+      <a-card class="detail-card" title="Transaction Address" :bordered="false">
         <a-row :gutter="24">
           <a-col :span="24">
             <div class="detail-item">
               <div class="detail-label">
                 <icon-location />
-                <span>收款地址</span>
+                <span>Receiving Address</span>
               </div>
               <div class="detail-value address-value">
                 <a-typography-text copyable>{{ detailData.address }}</a-typography-text>
@@ -137,7 +137,7 @@
             <div class="detail-item">
               <div class="detail-label">
                 <icon-send />
-                <span>支付地址</span>
+                <span>Payment Address</span>
               </div>
               <div class="detail-value address-value">
                 <a-typography-text copyable>{{ detailData.from_address }}</a-typography-text>
@@ -147,18 +147,18 @@
         </a-row>
       </a-card>
 
-      <!-- 回调信息卡片 -->
-      <a-card class="detail-card" title="回调信息" :bordered="false" v-if="detailData.status === 2 || detailData.status === 5">
+      <!-- Callback Informationcard -->
+      <a-card class="detail-card" title="Callback Information" :bordered="false" v-if="detailData.status === 2 || detailData.status === 5">
         <a-row :gutter="24">
           <a-col :xs="24" :sm="24" :md="12">
             <div class="detail-item">
               <div class="detail-label">
                 <icon-check />
-                <span>回调状态</span>
+                <span>Callback Status</span>
               </div>
               <div class="detail-value">
-                <a-tag v-if="detailData.notify_state === 1" color="green"> 成功 </a-tag>
-                <a-tag v-else color="red"> 失败，等待第 {{ detailData.notify_num + 1 }} 次回调中 </a-tag>
+                <a-tag v-if="detailData.notify_state === 1" color="green"> Success </a-tag>
+                <a-tag v-else color="red"> Failed, waiting for callback attempt {{ detailData.notify_num + 1 }} </a-tag>
               </div>
             </div>
           </a-col>
@@ -166,7 +166,7 @@
             <div class="detail-item">
               <div class="detail-label">
                 <icon-link />
-                <span>商户网站</span>
+                <span>Merchant Website</span>
               </div>
               <div class="detail-value">
                 <a-link @click="openMerchantWebsite" :hoverable="false">
@@ -178,14 +178,14 @@
         </a-row>
       </a-card>
 
-      <!-- 区块链信息卡片 -->
-      <a-card class="detail-card" title="区块链数据" :bordered="false" v-if="detailData.status === 2 || detailData.status === 5">
+      <!-- blockchain informationcard -->
+      <a-card class="detail-card" title="Blockchain Data" :bordered="false" v-if="detailData.status === 2 || detailData.status === 5">
         <a-row :gutter="24" v-if="detailData.ref_hash">
           <a-col :xs="24" :sm="24" :md="12" v-if="detailData.ref_block_num">
             <div class="detail-item">
               <div class="detail-label">
                 <icon-layers />
-                <span>区块索引</span>
+                <span>Block Index</span>
               </div>
               <div class="detail-value">{{ detailData.ref_block_num }}</div>
             </div>
@@ -194,7 +194,7 @@
             <div class="detail-item">
               <div class="detail-label">
                 <icon-safe />
-                <span>链上详情</span>
+                <span>On-chain Details</span>
               </div>
               <div class="detail-value hash-value">
                 <a-link
@@ -207,7 +207,7 @@
                 </a-link>
                 <a-tag v-else color="blue" size="small">
                   <template #icon><icon-clock-circle /></template>
-                  等待交易确认
+                  Waiting for transaction confirmation
                 </a-tag>
               </div>
             </div>
@@ -215,14 +215,14 @@
         </a-row>
       </a-card>
 
-      <!-- 时间信息卡片 -->
-      <a-card class="detail-card" title="订单时间" :bordered="false">
+      <!-- Time Informationcard -->
+      <a-card class="detail-card" title="Order Time" :bordered="false">
         <a-row :gutter="24">
           <a-col :xs="24" :sm="24" :md="12" v-if="detailData.created_at">
             <div class="detail-item">
               <div class="detail-label">
                 <icon-plus-circle />
-                <span>创建订单</span>
+                <span>Create Order</span>
               </div>
               <div class="detail-value">{{ formatDateTime(detailData.created_at) }}</div>
             </div>
@@ -233,9 +233,9 @@
                 <icon-check-circle v-if="detailData.confirmed_at && (detailData.status === 2 || detailData.status === 5)" />
                 <icon-schedule v-else-if="detailData.status === 3" />
                 <icon-sync v-else />
-                <span v-if="detailData.confirmed_at && (detailData.status === 2 || detailData.status === 5)">交易确认</span>
-                <span v-else-if="detailData.status === 3">交易过期</span>
-                <span v-else>最后更新</span>
+                <span v-if="detailData.confirmed_at && (detailData.status === 2 || detailData.status === 5)">Transaction Confirmed</span>
+                <span v-else-if="detailData.status === 3">Transaction Expired</span>
+                <span v-else>Last Updated</span>
               </div>
               <div class="detail-value">
                 <span v-if="detailData.confirmed_at && (detailData.status === 2 || detailData.status === 5)">
@@ -304,7 +304,7 @@ const openMerchantWebsite = () => {
 const handleDelete = async () => {
   try {
     await delOrderApi({ ids: [props.detailData.id] });
-    Notification.success("删除成功");
+    Notification.success("Deleted successfully");
     emits("refresh");
     onClose();
   } catch (error) {
@@ -314,19 +314,19 @@ const handleDelete = async () => {
 
 const handleManualNotify = () => {
   Modal.confirm({
-    title: "确认手动回调",
-    content: `确定要手动触发订单 ${props.detailData.order_id} 的回调吗?系统将立即向商户发送回调通知。`,
-    okText: "确认回调",
-    cancelText: "取消",
+    title: "Confirm Manual Callback",
+    content: `Are you sure you want to manually trigger callback for order ${props.detailData.order_id}? The system will immediately send a callback notification to the merchant.`,
+    okText: "Confirm Callback",
+    cancelText: "Cancel",
     onOk: () => {
       return manualNotifyAPI({ id: props.detailData.id })
         .then(result => {
-          Notification.success(result.msg || "回调成功");
+          Notification.success(result.msg || "Callback successful");
           emits("refresh");
           onClose();
         })
         .catch(error => {
-          console.error("回调失败:", error);
+          console.error("Callback failed:", error);
           emits("refresh");
         });
     }
@@ -334,16 +334,16 @@ const handleManualNotify = () => {
 };
 
 const statusMap: Record<number, { color: string; text: string }> = {
-  1: { color: "blue", text: "等待支付" },
-  2: { color: "green", text: "交易成功" },
-  3: { color: "gray", text: "交易过期" },
-  4: { color: "gold", text: "交易取消" },
-  5: { color: "pinkpurple", text: "等待确认" },
-  6: { color: "red", text: "确认失败" }
+  1: { color: "blue", text: "Waiting for Payment" },
+  2: { color: "green", text: "Transaction Successful" },
+  3: { color: "gray", text: "Transaction Expired" },
+  4: { color: "gold", text: "Transaction Canceled" },
+  5: { color: "pinkpurple", text: "Waiting for Confirmation" },
+  6: { color: "red", text: "Confirmation Failed" }
 };
 
 const getStatusColor = (status: number) => statusMap[status]?.color || "gray";
-const getStatusText = (status: number) => statusMap[status]?.text || "未知状态";
+const getStatusText = (status: number) => statusMap[status]?.text || "Unknown Status";
 
 const formatDateTime = (dateTimeStr: string) => {
   if (!dateTimeStr) return "";

@@ -5,7 +5,7 @@ import (
 	"github.com/v03413/bepusdt/app/log"
 )
 
-// Publish 发布消息。若 MQTT 未连接则静默丢弃，返回 nil。
+// Publish publish messages。silently drops messages and returns nil if MQTT is not connected。
 func Publish(topic string, qos byte, retained bool, payload interface{}) mqtt.Token {
 	mu.RLock()
 	c := client

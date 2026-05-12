@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BEpusdt - 安装完成</title>
+    <title>BEpusdt - Installation Complete</title>
     <style>
         * {
             margin: 0;
@@ -225,61 +225,61 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎉 欢迎使用 BEpusdt</h1>
-            <p>首次运行检测，初始配置完成</p>
+            <h1>🎉 Welcome to BEpusdt</h1>
+            <p>First-run check complete. Initial configuration is ready.</p>
         </div>
 
         <div class="content">
             <div class="warning-banner pulse">
-                <strong>⚠️ 重要提示：当前页面仅展示一次！</strong>
+                <strong>⚠️ Important: this page is shown only once!</strong>
                 <ul>
-                    <li>请立即将所有信息保存到安全位置</li>
-                    <li>关闭此页面后将无法再次查看</li>
-                    <li>建议截图或复制到密码管理器中保存</li>
+                    <li>Save all information in a secure location immediately.</li>
+                    <li>After closing this page, you will not be able to view it again.</li>
+                    <li>Take a screenshot or save it in a password manager.</li>
                 </ul>
             </div>
 
             <div class="info-section">
-                <h3>🔐 后台登录信息</h3>
+                <h3>🔐 Admin Login Information</h3>
                 <div class="info-item">
-                    <div class="label">👤 登录账号：</div>
+                    <div class="label">👤 Login Account：</div>
                     <div class="value" id="username">{{ .username }}</div>
-                    <button class="copy-btn" onclick="copyText('username', this)">复制</button>
+                    <button class="copy-btn" onclick="copyText('username', this)">Copy</button>
                 </div>
                 <div class="info-item">
-                    <div class="label">🔑 登录密码：</div>
+                    <div class="label">🔑 Login Password：</div>
                     <div class="value" id="password">{{ .password }}</div>
-                    <button class="copy-btn" onclick="copyText('password', this)">复制</button>
+                    <button class="copy-btn" onclick="copyText('password', this)">Copy</button>
                 </div>
                 <div class="info-item">
-                    <div class="label">🛡️ 安全入口：</div>
+                    <div class="label">🛡️ Secure Entry：</div>
                     <div class="value" id="secure">{{ .secure }}</div>
-                    <button class="copy-btn" onclick="copyText('secure', this)">复制</button>
+                    <button class="copy-btn" onclick="copyText('secure', this)">Copy</button>
                 </div>
             </div>
 
             <div class="info-section">
-                <h3>🔌 API 对接信息</h3>
+                <h3>🔌 API Integration Information</h3>
                 <div class="info-item">
-                    <div class="label">🎫 对接令牌：</div>
+                    <div class="label">🎫 Integration Token：</div>
                     <div class="value" id="token">{{ .token }}</div>
-                    <button class="copy-btn" onclick="copyText('token', this)">复制</button>
+                    <button class="copy-btn" onclick="copyText('token', this)">Copy</button>
                 </div>
             </div>
 
             <div class="tips">
-                <h4>💡 温馨提示</h4>
+                <h4>💡 Tips</h4>
                 <ul>
-                    <li>登录密码遗忘可通过 bepusdt reset 命令重置</li>
-                    <li>API 令牌可在网页后台进行修改</li>
-                    <li>建议定期更换密码以确保账户安全</li>
-                    <li>请勿将登录信息分享给他人</li>
+                    <li>If you forget the login password, reset it with the bepusdt reset command.</li>
+                    <li>The API token can be changed in the web admin panel.</li>
+                    <li>Change your password regularly to keep the account secure.</li>
+                    <li>Do not share login information with others.</li>
                 </ul>
             </div>
 
             <div class="action-buttons">
-                <button class="btn btn-secondary" onclick="copyAllInfo()">📋 复制全部信息</button>
-                <button class="btn btn-primary" onclick="confirmAndLogin()">🚀 进入后台管理</button>
+                <button class="btn btn-secondary" onclick="copyAllInfo()">📋 Copy All Information</button>
+                <button class="btn btn-primary" onclick="confirmAndLogin()">🚀 Enter Admin Panel</button>
             </div>
         </div>
     </div>
@@ -292,7 +292,7 @@
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(() => {
                     const originalText = button.textContent;
-                    button.textContent = '✓ 已复制';
+                    button.textContent = '✓ Copied';
                     button.classList.add('copied');
 
                     setTimeout(() => {
@@ -300,8 +300,8 @@
                         button.classList.remove('copied');
                     }, 2000);
                 }).catch(err => {
-                    console.error('复制失败:', err);
-                    alert('复制失败，请手动复制');
+                    console.error('Copy failed:', err);
+                    alert('Copy failed. Please copy manually.');
                 });
             } else {
                 // Fallback for older browsers
@@ -316,7 +316,7 @@
                 try {
                     document.execCommand('copy');
                     const originalText = button.textContent;
-                    button.textContent = '✓ 已复制';
+                    button.textContent = '✓ Copied';
                     button.classList.add('copied');
 
                     setTimeout(() => {
@@ -324,8 +324,8 @@
                         button.classList.remove('copied');
                     }, 2000);
                 } catch (err) {
-                    console.error('Fallback复制失败:', err);
-                    alert('复制失败，请手动复制');
+                    console.error('Fallback copy failed:', err);
+                    alert('Copy failed. Please copy manually.');
                 }
                 document.body.removeChild(textArea);
             }
@@ -339,27 +339,27 @@
 
             const allInfo = `
 ═══════════════════════════════════════════
-    BEpusdt 系统初始化信息
+    BEpusdt System Initialization Information
 ═══════════════════════════════════════════
 
-【后台登录信息】
-登录账号：${username}
-登录密码：${password}
-安全入口：${secure}
+【Admin Login Information】
+Login Account：${username}
+Login Password：${password}
+Secure Entry：${secure}
 
-【API 对接信息】
-对接令牌：${token}
+【API Integration Information】
+Integration Token：${token}
 
-⚠️ 请妥善保管以上信息！
+⚠️ Keep the above information safe!
 ═══════════════════════════════════════════
             `.trim();
 
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(allInfo).then(() => {
-                    alert('✓ 所有信息已复制到剪贴板！');
+                    alert('✓ All information copied to clipboard!');
                 }).catch(err => {
-                    console.error('复制失败:', err);
-                    alert('复制失败，请手动复制');
+                    console.error('Copy failed:', err);
+                    alert('Copy failed. Please copy manually.');
                 });
             } else {
                 // Fallback for older browsers
@@ -373,17 +373,17 @@
                 textArea.select();
                 try {
                     document.execCommand('copy');
-                    alert('✓ 所有信息已复制到剪贴板！');
+                    alert('✓ All information copied to clipboard!');
                 } catch (err) {
-                    console.error('Fallback复制失败:', err);
-                    alert('复制失败，请手动复制');
+                    console.error('Fallback copy failed:', err);
+                    alert('Copy failed. Please copy manually.');
                 }
                 document.body.removeChild(textArea);
             }
         }
 
         function confirmAndLogin() {
-            const confirmMsg = `⚠️ 重要提醒\n\n在跳转到后台之前，请确认您已经：\n\n✓ 保存了登录账号和密码\n✓ 记录了安全入口地址\n✓ 保存了 API 对接令牌\n\n关闭此页面后将无法再次查看这些信息！\n\n确认已保存所有信息？`;
+            const confirmMsg = `⚠️ Important Reminder\n\nBefore going to the admin panel, confirm that you have:\n\n- Saved the login account and password\n- Recorded the secure entry address\n- Saved the API integration token\n\nAfter closing this page, you will not be able to view this information again.\n\nHave you saved all information?`;
 
             if (confirm(confirmMsg)) {
                 const secure = document.getElementById('secure').textContent;
@@ -393,7 +393,7 @@
 
         window.addEventListener('beforeunload', function (e) {
             e.preventDefault();
-            e.returnValue = '您确定要离开吗？请确保已保存所有重要信息！';
+            e.returnValue = 'Are you sure you want to leave? Make sure all important information is saved!';
         });
     </script>
 </body>

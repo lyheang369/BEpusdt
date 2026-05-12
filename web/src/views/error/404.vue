@@ -1,12 +1,12 @@
 <template>
   <div class="page-404">
     <div>
-      <s-svg-icon name="内容加载失败" :size="500" />
+      <s-svg-icon name="content-load-failed" :size="500" />
     </div>
     <div class="prompt">
       <div class="title">404</div>
-      <div class="text">抱歉，访问的页面不存在~</div>
-      <a-button type="primary" @click="onBack">立即返回</a-button>
+      <div class="text">Sorry, the page you visited does not exist.</div>
+      <a-button type="primary" @click="onBack">Return Now</a-button>
     </div>
   </div>
 </template>

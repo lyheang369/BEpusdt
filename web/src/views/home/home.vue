@@ -2,9 +2,9 @@
   <div class="snow-page">
     <div class="home-page">
       <div class="dashboard-toolbar">
-        <!-- 法币选择器 -->
+        <!-- fiat selector -->
         <div class="fiat-selector">
-          <span class="label">交易法币：</span>
+          <span class="label">Transaction Fiat:</span>
           <div class="fiat-options">
             <div
               v-for="item in fiatOptions"
@@ -34,14 +34,14 @@
           </a-select>
           <a-button type="primary" :loading="loading" @click="forceRefresh">
             <template #icon><icon-refresh /></template>
-            强制刷新
+            Force Refresh
           </a-button>
         </div>
       </div>
 
-      <!-- 财务指标 -->
+      <!-- financial metrics -->
       <Finance :home-data="home" />
-      <!-- 数据图 -->
+      <!-- data chart -->
       <DataBox :home-data="home" />
     </div>
   </div>
@@ -61,18 +61,18 @@ const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Shang
 let dashboardRetryTimer: ReturnType<typeof setTimeout> | null = null;
 
 const fiatOptions = ref([
-  { value: "CNY", label: "人民币", symbol: "¥" },
-  { value: "USD", label: "美元", symbol: "$" },
-  { value: "EUR", label: "欧元", symbol: "€" },
-  { value: "GBP", label: "英镑", symbol: "£" },
-  { value: "JPY", label: "日元", symbol: "¥" }
+  { value: "CNY", label: "Chinese Yuan", symbol: "¥" },
+  { value: "USD", label: "US Dollar", symbol: "$" },
+  { value: "EUR", label: "Euro", symbol: "€" },
+  { value: "GBP", label: "British Pound", symbol: "£" },
+  { value: "JPY", label: "Japanese Yen", symbol: "¥" }
 ]);
 
 const rangeOptions = [
-  { value: "today", label: "今天" },
-  { value: "7d", label: "最近 7 天" },
-  { value: "30d", label: "最近 30 天" },
-  { value: "custom", label: "自定义" }
+  { value: "today", label: "Today" },
+  { value: "7d", label: "Last 7 Days" },
+  { value: "30d", label: "Last 30 Days" },
+  { value: "custom", label: "Custom" }
 ];
 
 const clearDashboardRetry = () => {
@@ -104,7 +104,7 @@ const getDashboardHome = async (force = false, retryCount = 0) => {
 
     const data = await getDashboardHomeAPI(params);
     if (!data?.data) {
-      throw new Error("仪表盘数据为空");
+      throw new Error("Dashboard data is empty");
     }
     home.value = data.data;
   } catch (error) {
@@ -114,13 +114,13 @@ const getDashboardHome = async (force = false, retryCount = 0) => {
       }, (retryCount + 1) * 1000);
       return;
     }
-    console.error("获取首页统计失败:", error);
+    console.error("Failed to get home statistics:", error);
   } finally {
     loading.value = false;
   }
 };
 
-// 处理法币切换
+// handle fiat switch
 const handleFiatChange = (value: string) => {
   fiat.value = value;
   getDashboardHome();
@@ -238,7 +238,7 @@ onUnmounted(() => {
   margin-left: auto;
 }
 
-// 响应式设计
+// responsive design
 @media (max-width: 768px) {
   .dashboard-toolbar {
     align-items: stretch;

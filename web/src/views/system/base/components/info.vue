@@ -1,80 +1,80 @@
 <template>
   <a-row align="center" :gutter="[0, 16]">
     <a-col :span="24">
-      <a-card title="基本信息">
+      <a-card title="Basic Information">
         <a-form :model="form" :rules="rules" :layout="layoutMode" class="base-setting-form" @submit="onSubmit">
           <a-form-item
             field="block_height_max_diff"
-            label="区块最大差值"
-            extra="区块高度最大差值，超过此值则以当前区块高度为准，重新开始扫描"
+            label="Maximum Block Difference"
+            extra="Maximum block height difference. If exceeded, scanning restarts from the current block height."
           >
-            <a-input v-model="form.block_height_max_diff" placeholder="推荐 1000" />
+            <a-input v-model="form.block_height_max_diff" placeholder="Recommended 1000" />
           </a-form-item>
 
           <a-form-item
             field="block_offset_confirm"
-            label="区块偏移确认"
-            extra="启用后可进一步提高交易的安全性，但会增加交易确认的等待时间"
+            label="Block Offset Confirmation"
+            extra="Enabling this improves transaction safety but increases confirmation wait time."
           >
-            <a-select v-model="form.block_offset_confirm" placeholder="请选择">
-              <a-option value="0">关闭</a-option>
-              <a-option value="1">开启</a-option>
+            <a-select v-model="form.block_offset_confirm" placeholder="Select">
+              <a-option value="0">Off</a-option>
+              <a-option value="1">On</a-option>
             </a-select>
           </a-form-item>
 
           <a-form-item
             field="notify_max_retry"
-            label="回调最大重试"
-            extra="支付回调失败时的最大重试次数，重试分钟间隔数：2 4 8 16 32 64 ..."
+            label="Max Callback Retries"
+            extra="Maximum retries after payment callback failure. Retry intervals in minutes: 2, 4, 8, 16, 32, 64..."
           >
-            <a-input v-model="form.notify_max_retry" placeholder="推荐 10" />
+            <a-input v-model="form.notify_max_retry" placeholder="Recommended 10" />
           </a-form-item>
 
           <a-form-item
             field="payment_min_amount"
-            label="单笔最小金额"
-            extra="单笔支付允许的最小金额，单位为创建交易时传入的法币，用于一定风险控制"
+            label="Minimum Single Payment"
+            extra="Minimum allowed amount for a single payment, in the fiat currency passed when creating the transaction. Used for risk control."
           >
-            <a-input v-model="form.payment_min_amount" placeholder="推荐 0.01" />
+            <a-input v-model="form.payment_min_amount" placeholder="Recommended 0.01" />
           </a-form-item>
 
           <a-form-item
             field="payment_max_amount"
-            label="单笔最大金额"
-            extra="单笔支付允许的最大金额，单位为创建交易时传入的法币，用于一定风险控制"
+            label="Maximum Single Payment"
+            extra="Maximum allowed amount for a single payment, in the fiat currency passed when creating the transaction. Used for risk control."
           >
-            <a-input v-model="form.payment_max_amount" placeholder="建议 9999" />
+            <a-input v-model="form.payment_max_amount" placeholder="Suggested 9999" />
           </a-form-item>
 
           <a-form-item
             field="payment_timeout"
-            label="订单默认超时"
-            extra="订单默认超时，单位为秒；超过此时间未支付的订单将被自动关闭"
+            label="Default Order Timeout"
+            extra="Default order timeout in seconds. Orders unpaid after this time are automatically closed."
           >
-            <a-input v-model="form.payment_timeout" placeholder="推荐 1200" />
+            <a-input v-model="form.payment_timeout" placeholder="Recommended 1200" />
           </a-form-item>
 
-          <a-form-item field="payment_match_mode" label="金额匹配模式">
+          <a-form-item field="payment_match_mode" label="Amount Matching Mode">
             <template #extra>
-              订单交易在金额确认时，使用不同算法的算法进行比对；详细区别请看
+              When confirming order amounts, different matching algorithms can be used. For details, see
               <a-link
                 href="https://github.com/v03413/BEpusdt/blob/main/docs/payment-match-mode/README.md"
                 target="_blank"
                 :hoverable="false"
               >
-                文档说明
+                Documentation
               </a-link>
             </template>
-            <a-select v-model="form.payment_match_mode" placeholder="请选择金额匹配模式">
-              <a-option value="classic">传统模式</a-option>
-              <a-option value="has_prefix">前缀匹配</a-option>
-              <a-option value="round_off">修约匹配</a-option>
+            <a-select v-model="form.payment_match_mode" placeholder="Select amount matching mode">
+              <a-option value="classic">Classic Mode</a-option>
+              <a-option value="has_prefix">Prefix Match</a-option>
+              <a-option value="round_off">Rounded Match</a-option>
             </a-select>
           </a-form-item>
 
           <a-form-item>
             <a-space>
-              <a-button type="primary" html-type="submit">提交</a-button>
+              <a-button type="primary" html-type="submit">Submit</a-button>
             </a-space>
           </a-form-item>
         </a-form>
@@ -108,13 +108,13 @@ const rules = {
       required: true,
       type: "number",
       positive: true,
-      message: "区块高度最大差值不能为空"
+      message: "Maximum block difference is required"
     }
   ],
   block_offset_confirm: [
     {
       required: true,
-      message: "区块偏移确认不能为空"
+      message: "Block offset confirmation is required"
     }
   ],
   notify_max_retry: [
@@ -122,7 +122,7 @@ const rules = {
       required: true,
       type: "number",
       positive: true,
-      message: "回调最大重试次数不能为空"
+      message: "Maximum callback retry count is required"
     }
   ],
   payment_min_amount: [
@@ -130,7 +130,7 @@ const rules = {
       required: true,
       type: "number",
       positive: true,
-      message: "单笔支付最小金额不能为空"
+      message: "Minimum payment amount is required"
     }
   ],
   payment_max_amount: [
@@ -138,7 +138,7 @@ const rules = {
       required: true,
       type: "number",
       positive: true,
-      message: "单笔支付最大金额不能为空"
+      message: "Maximum payment amount is required"
     }
   ],
   payment_timeout: [
@@ -147,14 +147,14 @@ const rules = {
       type: "number",
       min: 180,
       max: 3600,
-      message: "订单默认超时必须在180到3600秒之间",
+      message: "Default order timeout must be between 180 and 3600 seconds",
       positive: true
     }
   ],
   payment_match_mode: [
     {
       required: true,
-      message: "金额匹配模式不能为空"
+      message: "Amount matching mode is required"
     }
   ]
 };
@@ -172,7 +172,7 @@ const onSubmit = async ({ errors }: ArcoDesign.ArcoSubmit) => {
     { key: "payment_match_mode", value: form.value.payment_match_mode }
   ]);
 
-  Message.success("保存成功");
+  Message.success("Saved successfully");
 
   emit("refresh");
 };

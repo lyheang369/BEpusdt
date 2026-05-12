@@ -14,8 +14,8 @@ type callback struct {
 
 var subscribeMap = make(map[string]callback)
 
-// Subscribe 注册订阅。topic 会持久保存在 subscribeMap，
-// 重连后由 onConnectHandler 自动恢复所有订阅。
+// Subscribe register subscription。topic is persisted in subscribeMap，
+// subscriptions are automatically restored by onConnectHandler after reconnect。
 func Subscribe(topic string, qos byte, handler mqtt.MessageHandler) {
 	subscribeMap[topic] = callback{Qos: qos, Handler: handler}
 
@@ -28,6 +28,6 @@ func Subscribe(topic string, qos byte, handler mqtt.MessageHandler) {
 	}
 
 	if token := c.Subscribe(topic, qos, handler); token.Wait() && token.Error() == nil {
-		log.Info(fmt.Sprintf("✅ 订阅主题: %s", topic))
+		log.Info(fmt.Sprintf("✅ subscribed topic: %s", topic))
 	}
 }

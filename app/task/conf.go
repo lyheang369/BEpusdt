@@ -10,7 +10,7 @@ import (
 type rConf struct {
 }
 
-// init 配置刷新到内存，高频读取
+// init 配置Refresh到内存，高频读取
 func init() {
 	var c = rConf{}
 

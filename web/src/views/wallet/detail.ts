@@ -24,13 +24,13 @@ export const useWalletDetail = () => {
     status: 0
   });
 
-  // 显示详情
+  // show details
   const showDetail = (record: WalletDetail) => {
     detailData.value = { ...record };
     detailVisible.value = true;
   };
 
-  // 关闭详情
+  // OffDetails
   const closeDetail = () => {
     detailVisible.value = false;
     detailData.value = {

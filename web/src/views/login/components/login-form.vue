@@ -3,14 +3,14 @@
     <div class="login_form_box">
       <a-form :rules="rules" :model="form" layout="vertical" @submit="onSubmit">
         <a-form-item field="username" :hide-asterisk="true">
-          <a-input v-model="form.username" allow-clear placeholder="请输入账号">
+          <a-input v-model="form.username" allow-clear placeholder="Enter account">
             <template #prefix>
               <icon-user />
             </template>
           </a-input>
         </a-form-item>
         <a-form-item field="password" :hide-asterisk="true">
-          <a-input-password v-model="form.password" allow-clear placeholder="请输入密码">
+          <a-input-password v-model="form.password" allow-clear placeholder="Enter password">
             <template #prefix>
               <icon-lock />
             </template>
@@ -18,12 +18,12 @@
         </a-form-item>
         <a-form-item field="remember">
           <div class="remember">
-            <a-checkbox v-model="form.remember">记住密码</a-checkbox>
-            <div class="forgot-password" @click="handleForgotPassword">忘记密码</div>
+            <a-checkbox v-model="form.remember">Remember Password</a-checkbox>
+            <div class="forgot-password" @click="handleForgotPassword">Forgot Password</div>
           </div>
         </a-form-item>
         <a-form-item>
-          <a-button long type="primary" html-type="submit">登录</a-button>
+          <a-button long type="primary" html-type="submit">Login</a-button>
         </a-form-item>
       </a-form>
     </div>
@@ -38,10 +38,10 @@ import { loginAPI } from "@/api/modules/user/index";
 let userStores = useUserInfoStore();
 const router = useRouter();
 
-// 记住密码的存储key
+// Remember Password storage key
 const REMEMBER_KEY = "login_remember_info";
 
-// 简单的加密解密函数
+// simple encryption/decryption functions
 const encrypt = (str: string) => {
   return btoa(encodeURIComponent(str));
 };
@@ -64,18 +64,18 @@ const rules = ref({
   username: [
     {
       required: true,
-      message: "请输入账号"
+      message: "Enter account"
     }
   ],
   password: [
     {
       required: true,
-      message: "请输入密码"
+      message: "Enter password"
     }
   ]
 });
 
-// 组件挂载时读取记住的密码
+// read remembered password when component is mounted
 onMounted(() => {
   const savedInfo = localStorage.getItem(REMEMBER_KEY);
   if (savedInfo) {
@@ -85,23 +85,23 @@ onMounted(() => {
       form.value.password = decrypt(password);
       form.value.remember = remember;
     } catch (error) {
-      console.error("读取记住的密码失败:", error);
+      console.error("Failed to read remembered password:", error);
       localStorage.removeItem(REMEMBER_KEY);
     }
   }
 });
 
-// 提交表单
+// submit form
 const onSubmit = async ({ errors }: any) => {
   if (errors) return;
   onLogin();
 };
 
-// 登录
+// Login
 const onLogin = async () => {
-  // 处理记住密码
+  // handle Remember Password
   if (form.value.remember) {
-    // 保存加密后的账号密码
+    // save encrypted account and password
     const rememberInfo = {
       username: encrypt(form.value.username),
       password: encrypt(form.value.password),
@@ -109,28 +109,28 @@ const onLogin = async () => {
     };
     localStorage.setItem(REMEMBER_KEY, JSON.stringify(rememberInfo));
   } else {
-    // 不记住密码时清除存储
+    // clear storage when Remember Password is disabled
     localStorage.removeItem(REMEMBER_KEY);
   }
 
-  // 登录
+  // Login
   let res = await loginAPI(form.value);
 
   userStores.token = res.data.token;
 
-  // 加载用户信息
+  // load user information
   await userStores.setAccount();
-  // // 加载路由信息
+  // // load route information
   // await routeStore.initSetRouter();
 
-  arcoMessage("success", "登录成功");
-  // 跳转首页
+  arcoMessage("success", "Login successful");
+  // navigate to Home
   router.replace("/home");
-  // 设置字典
+  // set dictionary
   // useSystemStore().setDictData();
 };
 
-// 忘记密码
+// Forgot Password
 const handleForgotPassword = () => {
   window.open("https://github.com/v03413/BEpusdt", "_blank");
 };

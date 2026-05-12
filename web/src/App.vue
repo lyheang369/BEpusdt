@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { useThemeMethods } from "@/hooks/useThemeMethods";
 
-// 初始化主题
+// initialize theme
 const onTheme = () => {
   let { initTheme } = useThemeMethods();
   initTheme();

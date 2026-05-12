@@ -51,39 +51,39 @@ const handleCancel = () => {
   }
 }
 
-// 修改左侧滚动条宽度
+// Editleft scrollbar width
 :deep(.arco-scrollbar-thumb-direction-vertical .arco-scrollbar-thumb-bar) {
   width: 4px;
   margin-left: 8px;
 }
 
-// 去掉右侧阴影并替换为边线
+// remove right shadow and replace with border
 :deep(.arco-layout-sider-light) {
   border-right: $border-1 solid $color-border-2;
   box-shadow: unset;
 }
 
-// 解决折叠菜单的icon不居中问题
+// fix collapsed menu icon centering
 :deep(.arco-menu-vertical.arco-menu-collapsed) {
-  // 消除icon的自带padding值，并且让元素居中
+  // remove icon padding and center the element
   .arco-menu-has-icon {
     justify-content: center;
     padding: 0;
   }
 
-  // 消除icon的自带margin-right值，并且设置icon的padding值以保留icon空隙
+  // remove icon margin-right and set padding to preserve spacing
   .arco-menu-icon {
     padding: 10px 0;
     margin-right: 0;
   }
 
-  // 消除title占位
+  // remove title placeholder
   .arco-menu-title {
     display: none;
   }
 }
 
-// 去掉sider背景
+// remove sider background
 .arco-layout-sider {
   background: unset;
 }

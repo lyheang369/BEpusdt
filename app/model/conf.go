@@ -39,7 +39,7 @@ var defaultConf = map[ConfKey]string{
 	NotifyMaxRetry:          "10",
 	BlockHeightMaxDiff:      "1000",
 	BlockOffsetConfirm:      "0",
-	PaymentTimeout:          "1200", // 20分钟
+	PaymentTimeout:          "1200", // 20min钟
 	PaymentMatchMode:        string(Classic),
 	SystemInstallLock:       "0",
 	RateSyncCoingeckoApiUrl: "https://api.coingecko.com",
@@ -72,7 +72,7 @@ func SetK(k ConfKey, v string) {
 
 		return nil
 	}); err != nil {
-		_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf("设置配置项 %s 错误：%s", k, err.Error()))
+		_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to set config item %s: %s", k, err.Error()))
 	}
 }
 
@@ -85,7 +85,7 @@ func GetK(k ConfKey) string {
 		return row.V
 	}
 
-	_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf("获取配置项 %s 错误：%s", k, tx.Error.Error()))
+	_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to get config item %s: %s", k, tx.Error.Error()))
 
 	return ""
 }
@@ -108,7 +108,7 @@ func GetVs(keys []ConfKey) map[ConfKey]string {
 	return result
 }
 
-// GetC 从缓存获取配置，适用于高频读取，依赖 RefreshC 刷新缓存
+// GetC 从缓存获取配置，适用于高频读取，依赖 RefreshC Refresh缓存
 func GetC(k ConfKey) string {
 	value, ok := confCache.Load(k)
 	if !ok {
@@ -169,33 +169,33 @@ func ConfInit() {
 
 	fmt.Println()
 	fmt.Println("╔═══════════════════════════════════════════════════════════════════════")
-	fmt.Println("║  🎉  欢迎使用 BEpusdt  -  首次运行检测，初始化配置完成")
+	fmt.Println("║  🎉  Welcome to BEpusdt - first-run check complete, initial configuration finished")
 	fmt.Println("╚═══════════════════════════════════════════════════════════════════════")
 	fmt.Println()
-	fmt.Println("┏━━  🔐  后台登录信息 (请立即保存！)")
+	fmt.Println("┏━━  🔐  Admin Login Information (save immediately!)")
 	fmt.Println("┃")
-	fmt.Printf("┃    👤  登录账号:  %s\n", username)
-	fmt.Printf("┃    🔑  登录密码:  %s\n", password)
-	fmt.Printf("┃    🛡️   安全入口:  %s\n", secure)
+	fmt.Printf("┃    👤  Login Account:  %s\n", username)
+	fmt.Printf("┃    🔑  Login Password:  %s\n", password)
+	fmt.Printf("┃    🛡️   Secure Entry:  %s\n", secure)
 	fmt.Println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 	fmt.Println()
-	fmt.Println("┏━━  🔌  API 对接信息")
+	fmt.Println("┏━━  🔌  API Integration Information")
 	fmt.Println("┃")
-	fmt.Printf("┃    🎫  对接令牌:  %s\n", token)
+	fmt.Printf("┃    🎫  Integration Token:  %s\n", token)
 	fmt.Println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 	fmt.Println()
-	fmt.Println("⚠️   重要提示:")
-	fmt.Println("    •  以上信息仅显示一次，请务必妥善保存至安全位置")
-	fmt.Println("    •  登录密码遗忘可通过 'reset' 命令重置")
-	fmt.Println("    •  API 令牌可在网页后台进行修改")
-	fmt.Println("    •  建议定期更换密码以确保账户安全")
+	fmt.Println("⚠️   Important Notice:")
+	fmt.Println("    •  The above information is shown only once. Save it securely.")
+	fmt.Println("    •  Forgotten login password can be reset with the 'reset' command")
+	fmt.Println("    •  The API token can be changed in the web admin panel.")
+	fmt.Println("    •  Change your password regularly to keep the account secure.")
 	fmt.Println()
 	fmt.Println("═══════════════════════════════════════════════════════════════════════")
 	fmt.Println()
 
 	Db.Create(&rows)
 
-	// 数据丢到缓存，前台首次访问时会展示这部分初始化信息；明文密码只这一次保存到缓存，不写入数据库
+	// 数据丢到缓存，前台首次访问时会展示这部min初始化information；明文Password只这one次Save到缓存，不写入数据库
 	cache.Set(string(SystemInstallLock), gin.H{
 		"username": username,
 		"password": password,

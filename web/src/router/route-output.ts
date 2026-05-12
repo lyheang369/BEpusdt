@@ -6,10 +6,10 @@ import { deepClone } from "@/utils/index";
 import { arrayFlattened } from "@/utils/tree-tools";
 
 /**
- * 统一处理所有的路由跳转：当前路由高亮、tabs栏数据
- * 处理项目内跳转，存入当前跳转路由和tabs标签栏数据
- * menu和tabs以及手动刷新浏览器等功能只需要跳转即可，缓存和高亮的逻辑这边负责
- * @param {any} current 需要跳转的路由和路由参数
+ * 统one处理所有的route跳转：current route高亮、tabs栏数据
+ * 处理项目内跳转，存入当前跳转route和tabsTab Bar数据
+ * menu和tabs以及手动Refresh浏览器等功能只需要跳转即可，缓存和高亮的逻辑这边负责
+ * @param {any} current 需要跳转的route和route参数
  */
 export const currentlyRoute = (current: any) => {
   const route = deepCloneRoute(current);
@@ -17,25 +17,25 @@ export const currentlyRoute = (current: any) => {
   const { isTabs } = storeToRefs(themeStore);
   const store = useRouteConfigStore(pinia);
   const { tabsList, routeList } = storeToRefs(store);
-  // tabs无数据则默认添加首页
+  // tabsNone数据则默认添加Home
   if (tabsList.value.length == 0 && routeList.value.length != 0) {
     store.setTabs(routeList.value[0]);
   }
-  // 存入当前路由-高亮
+  // 存入current route-高亮
   store.setCurrentRoute(route);
-  // 如果是外链路由则不做后续任何缓存操作，条件: 有外链 && 非内嵌
+  // 如果Yes外链route则不做后续任何缓存Actions，条件: 有外链 && 非内嵌
   if (route.meta.link && !route.meta.iframe) return;
-  // 存入tabs栏数据，条件：开启tabs
+  // 存入tabs栏数据，条件：Ontabs
   if (isTabs.value && !route.meta.isFull) store.setTabs(route);
-  // 不缓存路由 || 不渲染tabs ，符合任意条件则不缓存路由
+  // 不缓存route || 不渲染tabs ，符合任意条件则不缓存route
   if (!route.meta.keepAlive || !isTabs.value) return;
-  store.setRoutePaths(route.path); // 缓存路由
+  store.setRoutePaths(route.path); // 缓存route
 };
 
 /**
- * 深拷贝路由，切断与原路由的联系，防止路由参数污染
- * @param route 当前路由
- * @returns 深拷贝后的路由
+ * deep cloneroute，切断与原route的联系，防止route参数污染
+ * @param route current route
+ * @returns deep clone后的route
  */
 export const deepCloneRoute = (route: any) => {
   return deepClone({
@@ -48,8 +48,8 @@ export const deepCloneRoute = (route: any) => {
 };
 
 /**
- * 模块替换，对路由中的模块进行转换
- * @param {array} tree 过滤角色权限后的树
+ * 模块替换，对routeMedium的模块进行转换
+ * @param {array} tree 过滤角色permission后的树
  */
 export const moduleReplacement = (tree: any) => {
   tree.forEach((item: any) => {
@@ -74,16 +74,16 @@ export const moduleMatch = (item: any) => {
     // 若匹配上，则替换真实模块
     if (item.component === dir) {
       // 按需引入modules
-      // 将模块的导入操作和实际使用操作解耦，使得我们可以在需要的时候才执行导入操作
+      // 将模块的导入Actions和实际使用Actions解耦，使得我们可以在需要的时候才执行导入Actions
       item.component = () => modules[key]();
     }
   }
 };
 
 /**
- * 路由树转一维数组
- * @param {array} tree 路由树
- * @returns 一维路由数组
+ * route树转one维数组
+ * @param {array} tree route树
+ * @returns one维route数组
  */
 export function linearArray(tree: any) {
   const nodes: any = deepClone(tree);

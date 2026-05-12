@@ -17,7 +17,7 @@ var supportFiat = map[Fiat]struct{}{
 	GBP: {},
 }
 
-// supportCrypto 支持的加密货币；Coin Id 参考来源：https://docs.coingecko.com/v3.0.1/reference/coins-list
+// supportCrypto 支持的Cryptocurrency；Coin Id 参考来源：https://docs.coingecko.com/v3.0.1/reference/coins-list
 var supportCrypto = map[Crypto]CoinId{
 	USDT: "tether",
 	USDC: "usd-coin",
@@ -26,7 +26,7 @@ var supportCrypto = map[Crypto]CoinId{
 	ETH:  "ethereum",
 }
 
-// TradeType 交易类型，当下类型开始增多，现在这里统一管理、尽量收缩配置项
+// TradeType Trade Type，当下类型开始增多，现在这里统one管理、尽量收缩配置项
 var registry = map[TradeType]TradeTypeConf{
 	UsdtPlasma: {
 		Alias:       "USDT・Plasma",
@@ -44,7 +44,7 @@ var registry = map[TradeType]TradeTypeConf{
 		NetworkName:  "TRC20",
 		Network:      conf.Tron,
 		Crypto:       USDT,
-		Contract:     "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t", // 占位，目前实际没使用
+		Contract:     "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t", // placeholder, currently unused
 		Decimal:      conf.UsdtTronDecimals,
 		AmountRange:  usdGeneralRange,
 		ExplorerFmt:  "https://tronscan.org/#/transaction/%s",
@@ -200,7 +200,7 @@ var registry = map[TradeType]TradeTypeConf{
 		NetworkName:  "TRC20",
 		Network:      conf.Tron,
 		Crypto:       USDC,
-		Contract:     "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8", // 占位，目前实际没使用
+		Contract:     "TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8", // placeholder, currently unused
 		Decimal:      conf.UsdcTronDecimals,
 		AmountRange:  usdGeneralRange,
 		ExplorerFmt:  "https://tronscan.org/#/transaction/%s",

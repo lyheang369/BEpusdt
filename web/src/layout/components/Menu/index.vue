@@ -28,7 +28,7 @@ interface Props {
   routeTree: Menu.MenuOptions[];
 }
 // props的数据类型
-// type类型参考：https://cn.vuejs.org/guide/typescript/composition-api.html#typing-component-props
+// type类型Reference: https://cn.vuejs.org/guide/typescript/composition-api.html#typing-component-props
 const props = withDefaults(defineProps<Props>(), {
   routeTree: () => []
 });

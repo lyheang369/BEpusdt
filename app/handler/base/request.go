@@ -1,6 +1,6 @@
 package base
 
-// ListRequest 通用列表请求
+// ListRequest common列表请求
 type ListRequest struct {
 	Page    int    `json:"page" form:"page" binding:"min=1"`
 	Size    int    `json:"size" form:"size" binding:"min=1"`

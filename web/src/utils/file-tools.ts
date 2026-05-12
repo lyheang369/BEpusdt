@@ -1,5 +1,5 @@
 /**
- * 获取麦克风权限
+ * 获取麦克风permission
  * @returns {Promise<boolean>} true/false
  */
 export const getMicPower = (): Promise<boolean> => {
@@ -8,15 +8,15 @@ export const getMicPower = (): Promise<boolean> => {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       resolve(true);
     } catch (error) {
-      console.log("获取麦克风权限失败:", error);
+      console.log("Failed to get microphone permission:", error);
       reject(false);
     }
   });
 };
 
 /**
- * 十六进制字符串转换为字节数组
- * @param {string} hexString 十六进制字符串
+ * 十六进制string转换为字节数组
+ * @param {string} hexString 十六进制string
  * @returns {Uint8Array} Uint8Array
  */
 export const hexStringToByteArray = (hexString: string): Uint8Array => {
@@ -30,7 +30,7 @@ export const hexStringToByteArray = (hexString: string): Uint8Array => {
 
 /**
  * Uint8Array转换为 ArrayBuffer
- * @param {Uint8Array} byteArray 数据格式Uint8Array
+ * @param {Uint8Array} byteArray 数据formatUint8Array
  * @returns {ArrayBuffer} ArrayBuffer
  */
 export const byteArrayToArrayBuffer = (byteArray: Uint8Array): ArrayBuffer => {
@@ -42,13 +42,13 @@ export const byteArrayToArrayBuffer = (byteArray: Uint8Array): ArrayBuffer => {
 
 /**
  * base64转blob
- * @param {string} base64String base64字符串
+ * @param {string} base64String base64string
  * @param {string} contentType MIME类型，当base64String没有包含 MIME 类型前缀时，就会使用这个参数来指定生成 Blob 的 MIME 类型
  * @param {number} sliceSize 控制处理大文件时的内存使用效率
  * @returns {Blob} 处理后的blob
  */
 export const base64ToBlob = (base64String: any, contentType = "", sliceSize = 512): Blob => {
-  // 分离Base64数据和MIME类型（如果包含前缀）
+  // min离Base64数据和MIME类型（如果包含前缀）
   const parts = base64String.match(/^data:(image\/\w+);base64,(.+)$/);
   let base64Data = base64String;
   let mimeType = contentType;
@@ -59,11 +59,11 @@ export const base64ToBlob = (base64String: any, contentType = "", sliceSize = 51
     base64Data = parts[2];
   }
 
-  // 解码Base64字符串
+  // 解码Base64string
   const byteCharacters = atob(base64Data);
   const byteArrays = [];
 
-  // 分片处理大文件（避免内存问题）
+  // min片处理大文件（避免内存问题）
   for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
     const slice = byteCharacters.slice(offset, offset + sliceSize);
     const byteNumbers = new Array(slice.length);
@@ -76,13 +76,13 @@ export const base64ToBlob = (base64String: any, contentType = "", sliceSize = 51
     byteArrays.push(byteArray);
   }
 
-  // 创建并返回Blob对象
+  // 创建并返回Blobobject
   return new Blob(byteArrays, { type: mimeType });
 };
 
 /**
  * base64转ArrayBuffer
- * @param {string} base64 base64字符串
+ * @param {string} base64 base64string
  * @returns {ArrayBuffer} ArrayBuffer
  */
 export const base64ToArrayBuffer = (base64: any): ArrayBuffer => {

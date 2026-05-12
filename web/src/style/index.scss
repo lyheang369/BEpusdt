@@ -19,8 +19,8 @@ html {
   overflow: hidden;
 }
 
-// 设置全局颜色-关联黑暗模式
-// 全局取一级容器背景色$color-bg-2，main窗口取边框色浅色$color-border-1
+// 设置全局颜色-关联dark mode
+// 全局取one级容器背景色$color-bg-2，main窗口取边框色浅色$color-border-1
 body {
   color: $color-text-1; // 整体文字的颜色
   background: $color-bg-2; // body背景颜色

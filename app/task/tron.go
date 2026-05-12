@@ -62,7 +62,7 @@ func newTron() tron {
 	}
 }
 
-// syncBlocksForward 正向同步区块
+// syncBlocksForward 正向同步Block
 func (t *tron) syncBlocksForward(context.Context) {
 	if t.syncBreak() {
 
@@ -81,26 +81,26 @@ func (t *tron) syncBlocksForward(context.Context) {
 	defer cancel()
 
 	if err1 != nil {
-		log.Task.Warn("GetNowBlock2 超时：", err1)
+		log.Task.Warn("GetNowBlock2 timeout: ", err1)
 
 		return
 	}
 
 	var now = int(block.BlockHeader.RawData.Number)
 
-	// 区块高度变化过大，强制丢块重扫
+	// Blockblock height changed too much, forcing rescan
 	if now-t.lastBlockNum > cast.ToInt(model.GetC(model.BlockHeightMaxDiff)) {
 		t.syncBlocksBackward(now)
 		t.lastBlockNum = now - 1
 	}
 
-	// 区块高度没有变化
+	// Blockblock height unchanged
 	if now == t.lastBlockNum {
 
 		return
 	}
 
-	// 待扫描区块入列
+	// block queued for scanning
 	for n := t.lastBlockNum + 1; n <= now; n++ {
 
 		t.blockScanQueue.In <- n
@@ -109,7 +109,7 @@ func (t *tron) syncBlocksForward(context.Context) {
 	t.lastBlockNum = now
 }
 
-// syncBlocksBackward 反向同步区块，针对程序启动前就已经存在待支付订单时，补齐之前的区块数据，自适应偏移数量
+// syncBlocksBackward 反向同步Block，针对程序启动前就已经存在待PaymentOrder时，补齐之前的Block数据，自适应偏移数量
 func (t *tron) syncBlocksBackward(now int) {
 	var o model.Order
 	trade := model.GetNetworkTrades(conf.Tron)
@@ -119,9 +119,9 @@ func (t *tron) syncBlocksBackward(now int) {
 		return
 	}
 
-	// 波场出块速度大概3秒一个，同时再冗余5个区块
-	num := (time.Now().Unix() - o.CreatedAt.Time().Unix() + 1) / 3 // 计算需要反向扫描的区块数量
-	start := now - int(num) - 5                                    // 计算反向扫描的起始区块高度
+	// 波场出块速度大概3secone个，同时再冗余5个Block
+	num := (time.Now().Unix() - o.CreatedAt.Time().Unix() + 1) / 3 // calculate the number of blocks to scan backward
+	start := now - int(num) - 5                                    // 计算反向扫描的起始Block高度
 
 	go func() {
 		ticker := time.NewTicker(time.Second)
@@ -207,7 +207,7 @@ func (t *tron) blockParse(n any) {
 		var itm = trans.GetTransaction()
 		var id = hex.EncodeToString(trans.Txid)
 		for _, contract := range itm.GetRawData().GetContract() {
-			// 资源代理 DelegateResourceContract
+			// 资源Delegate DelegateResourceContract
 			if contract.GetType() == core.Transaction_Contract_DelegateResourceContract {
 				var foo = &core.DelegateResourceContract{}
 				err := contract.GetParameter().UnmarshalTo(foo)
@@ -227,7 +227,7 @@ func (t *tron) blockParse(n any) {
 				})
 			}
 
-			// 资源回收 UnDelegateResourceContract
+			// 资源Reclaim UnDelegateResourceContract
 			if contract.GetType() == core.Transaction_Contract_UnDelegateResourceContract {
 				var foo = &core.UnDelegateResourceContract{}
 				err := contract.GetParameter().UnmarshalTo(foo)
@@ -247,7 +247,7 @@ func (t *tron) blockParse(n any) {
 				})
 			}
 
-			// TRX转账交易
+			// TRX转账Transaction
 			if contract.GetType() == core.Transaction_Contract_TransferContract {
 				var foo = &core.TransferContract{}
 				err := contract.GetParameter().UnmarshalTo(foo)
@@ -268,7 +268,7 @@ func (t *tron) blockParse(n any) {
 				})
 			}
 
-			// 触发智能合约
+			// 触发智能合Approx.
 			if contract.GetType() == core.Transaction_Contract_TriggerSmartContract {
 				var foo = &core.TriggerSmartContract{}
 				if err := contract.GetParameter().UnmarshalTo(foo); err != nil {
@@ -282,7 +282,7 @@ func (t *tron) blockParse(n any) {
 					continue
 				}
 
-				// Gas Free 钱包 合约授权转账
+				// Gas Free 钱包 合Approx.授权转账
 				if bytes.Equal(foo.OwnerAddress, gasFreeOwnerAddress) && bytes.Equal(foo.ContractAddress, gasFreeContractAddress) {
 					from, receiver, amount := t.gasFreePermitTransfer(data)
 					if amount != nil {
@@ -299,7 +299,7 @@ func (t *tron) blockParse(n any) {
 					}
 				}
 
-				// trc20 合约解析
+				// trc20 合Approx.解析
 				var tradeType model.TradeType = "None"
 				if bytes.Equal(foo.GetContractAddress(), usdtTrc20ContractAddress) {
 					tradeType = model.UsdtTrc20
@@ -351,7 +351,7 @@ func (t *tron) blockParse(n any) {
 		resourceQueue.In <- resources
 	}
 
-	log.Task.Info(fmt.Sprintf("区块扫描完成(Tron): %d 成功率：%s", num, conf.GetSuccessRate(conf.Tron)))
+	log.Task.Info(fmt.Sprintf("Block scan complete(Tron): %d success rate:%s", num, conf.GetSuccessRate(conf.Tron)))
 }
 
 func (t *tron) parseTrc20ContractTransfer(data []byte) (string, *big.Int) {
@@ -483,7 +483,7 @@ func (t *tron) base58CheckEncode(input []byte) string {
 
 func (t *tron) syncBreak() bool {
 	if t.blockScanQueue.Len() >= blockQueueLimit {
-		log.Task.Warn("tron 同步阻塞，当前区块消费堆积数量：", t.blockScanQueue.Len())
+		log.Task.Warn("tron sync blocked, current block consumer backlog:", t.blockScanQueue.Len())
 
 		return true
 	}
@@ -536,7 +536,7 @@ func (t *tron) scheduleBlockRetry(num int, delay time.Duration) {
 		t.retryMu.Unlock()
 
 		if t.blockScanQueue.Len() >= blockQueueLimit {
-			log.Task.Warn("Tron 重试延后，当前区块消费堆积数量：", t.blockScanQueue.Len())
+			log.Task.Warn("Tron retry delayed, current block consumer backlog:", t.blockScanQueue.Len())
 			t.scheduleBlockRetry(num, delay)
 
 			return
@@ -603,11 +603,11 @@ func (t *tron) client() (*grpc.ClientConn, error) {
 	conn, err := utils.NewTronGrpcClient(endpoint, model.GetTronGridApiKeys())
 	if err != nil {
 
-		return nil, fmt.Errorf("连接失败: %w", err)
+		return nil, fmt.Errorf("connection failed: %w", err)
 	}
 
 	t.conn[endpoint] = conn
-	log.Task.Info("Tron gRPC 连接已建立:", endpoint)
+	log.Task.Info("Tron gRPC connection established:", endpoint)
 
 	return conn, nil
 }

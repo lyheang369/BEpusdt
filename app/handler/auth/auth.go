@@ -327,14 +327,14 @@ func (Auth) Login(ctx *gin.Context) {
 
 	var username = model.GetK(model.AdminUsername)
 	if req.Username != username {
-		base.Response(ctx, 400, "用户名或密码错误")
+		base.Response(ctx, 400, "Usernameor password is incorrect")
 
 		return
 	}
 
 	var password = model.GetK(model.AdminPassword)
 	if bcrypt.CompareHashAndPassword([]byte(password), []byte(req.Password)) != nil {
-		base.Response(ctx, 400, "用户名或密码错误")
+		base.Response(ctx, 400, "Usernameor password is incorrect")
 
 		return
 	}
@@ -358,7 +358,7 @@ func (Auth) Logout(ctx *gin.Context) {
 	sess.Delete(conf.AdminSecureK)
 	_ = sess.Save()
 
-	base.Response(ctx, 200, "退出成功")
+	base.Response(ctx, 200, "Logged out successfully")
 }
 
 func (Auth) SetPassword(ctx *gin.Context) {
@@ -371,20 +371,20 @@ func (Auth) SetPassword(ctx *gin.Context) {
 
 	var password = model.GetK(model.AdminPassword)
 	if bcrypt.CompareHashAndPassword([]byte(password), []byte(req.Password)) != nil {
-		base.BadRequest(ctx, "原密码错误")
+		base.BadRequest(ctx, "Original password is incorrect")
 
 		return
 	}
 
 	if req.ConfirmPassword != req.NewPassword {
-		base.BadRequest(ctx, "两次输入的新密码不一致")
+		base.BadRequest(ctx, "The two new passwords do not match")
 
 		return
 	}
 
 	var newPassword = strings.TrimSpace(req.NewPassword)
 	if len(newPassword) < 6 {
-		base.BadRequest(ctx, "新密码长度不能少于6位")
+		base.BadRequest(ctx, "New password must be at least 6 characters")
 
 		return
 	}
@@ -394,5 +394,5 @@ func (Auth) SetPassword(ctx *gin.Context) {
 	model.SetK(model.AdminPassword, string(hash))
 	cache.Set(conf.AdminTokenK, "", -1)
 
-	base.Ok(ctx, "修改成功，请重新登录")
+	base.Ok(ctx, "Updated successfully，Please log in again")
 }

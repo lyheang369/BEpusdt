@@ -11,7 +11,7 @@ const getLang = () => {
     return "zh-CN";
   }
 };
-/* 这里必须是messages名称 */
+/* 这里必须YesmessagesName */
 const messages = {
   "zh-CN": zhCN,
   "en-US": enUS
@@ -20,16 +20,16 @@ const messages = {
 const i18n = createI18n({
   legacy: false, // Composition API模式需要设为false
   globalInjection: true, // 全局生效: $
-  locale: getLang(), // 默认语言
-  messages, // 数据源
+  locale: getLang(), // default language
+  messages, // data source
   missing: (_: string, key: string) => {
     return removeBeforeFirstDot(key);
   }
 });
 
 /**
- * @param { string } str 国际化key
- * @returns 去掉第一个点之前的字符串，例如："menu.home" => "home"，否则返回原字符串
+ * @param { string } str Internationalizationkey
+ * @returns 去掉No. one个点之前的string，Example："menu.home" => "home"，No则返回原string
  */
 function removeBeforeFirstDot(str: string) {
   const dotIndex = str.indexOf(".");

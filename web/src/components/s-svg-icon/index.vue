@@ -32,7 +32,7 @@ const props = defineProps({
   }
 });
 
-// 判断传入的值，是否带有单位，如果没有，就默认用px单位
+// 判断传入的值，YesNo带有单位，如果没有，就默认用px单位
 const getUnitValue = (value: string | number): string | number => {
   return /(px|em|rem|%)$/.test(value.toString()) ? value : value + "px";
 };
@@ -42,7 +42,7 @@ const iconSize = computed<string | number>(() => {
   return getUnitValue(props.size);
 });
 
-// svg名称-对应资源文件夹的svg名称
+// svgName-对应资源文件夹的svgName
 const iconName = computed<string>(() => `#icon-${props.name}`);
 
 // svg动态类名

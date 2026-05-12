@@ -3,23 +3,23 @@ import persistedstateConfig from "@/store/config/index";
 import { getUserInfoAPI } from "@/api/modules/user/index";
 
 interface Account {
-  user: any; // 用户信息
+  user: any; // User Information
   roles: string[]; // 角色
-  permissions: string[]; // 权限
+  permissions: string[]; // permission
 }
 
 /**
- * 用户信息
- * @methods setAccount 设置账号信息
+ * User Information
+ * @methods setAccount 设置Accountinformation
  * @methods setToken 设置token
- * @methods logOut 退出登录
+ * @methods logOut Log Out
  */
 const userInfoStore = () => {
-  // 账号信息
+  // Accountinformation
   const account = ref<Account>({
-    user: {}, // 用户信息
+    user: {}, // User Information
     roles: [], // 角色
-    permissions: [] // 权限
+    permissions: [] // permission
   });
 
   const trade_type = ref<Record<string, string>>({});
@@ -45,9 +45,9 @@ const userInfoStore = () => {
     token.value = data;
   }
 
-  // 退出登录
+  // Log Out
   async function logOut() {
-    // 清除账号数据
+    // 清除Account数据
     account.value = {
       user: {},
       roles: [],

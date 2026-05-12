@@ -13,13 +13,13 @@ const (
 
 type Wallet struct {
 	Id
-	Name        string `gorm:"column:name;type:varchar(32);not null;default:-';comment:名称" json:"name"`
-	Status      uint8  `gorm:"column:status;not null;default:1;comment:地址状态" json:"status"`
-	Address     string `gorm:"column:address;type:varchar(128);not null;index;comment:钱包地址" json:"address"`
-	MatchAddr   string `gorm:"column:match_addr;type:varchar(128);not null;uniqueIndex:idx_address;comment:匹配地址" json:"match_addr"`
-	TradeType   string `gorm:"column:trade_type;type:varchar(20);not null;uniqueIndex:idx_address;comment:交易类型" json:"trade_type"`
-	OtherNotify uint8  `gorm:"column:other_notify;not null;default:0;comment:其它通知" json:"other_notify"`
-	Remark      string `gorm:"column:remark;type:varchar(255);not null;default:'';comment:备注" json:"remark"`
+	Name        string `gorm:"column:name;type:varchar(32);not null;default:-';comment:Name" json:"name"`
+	Status      uint8  `gorm:"column:status;not null;default:1;comment:AddressStatus" json:"status"`
+	Address     string `gorm:"column:address;type:varchar(128);not null;index;comment:Wallet Address" json:"address"`
+	MatchAddr   string `gorm:"column:match_addr;type:varchar(128);not null;uniqueIndex:idx_address;comment:match address" json:"match_addr"`
+	TradeType   string `gorm:"column:trade_type;type:varchar(20);not null;uniqueIndex:idx_address;comment:Trade Type" json:"trade_type"`
+	OtherNotify uint8  `gorm:"column:other_notify;not null;default:0;comment:Other Notifications" json:"other_notify"`
+	Remark      string `gorm:"column:remark;type:varchar(255);not null;default:'';comment:remarks" json:"remark"`
 	AutoTimeAt
 }
 
@@ -36,22 +36,22 @@ func (wa *Wallet) SetStatus(status uint8) {
 func (wa *Wallet) IsValid() bool {
 	tradeType := TradeType(wa.TradeType)
 
-	// Tron 地址验证
+	// Tron Addressvalidation
 	if tradeType == TronTrx || tradeType == UsdtTrc20 || tradeType == UsdcTrc20 {
 		return utils.IsValidTronAddress(wa.Address)
 	}
 
-	// Solana 地址验证
+	// Solana Addressvalidation
 	if tradeType == UsdtSolana || tradeType == UsdcSolana {
 		return utils.IsValidSolanaAddress(wa.Address)
 	}
 
-	// Aptos 地址验证
+	// Aptos Addressvalidation
 	if tradeType == UsdtAptos || tradeType == UsdcAptos {
 		return utils.IsValidAptosAddress(wa.Address)
 	}
 
-	// 默认使用 EVM 地址验证（Ethereum, BSC, Polygon, Arbitrum, Base, X Layer）
+	// 默认使用 EVM Addressvalidation（Ethereum, BSC, Polygon, Arbitrum, Base, X Layer）
 	return utils.IsValidEvmAddress(wa.Address)
 }
 

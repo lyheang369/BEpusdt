@@ -1,25 +1,25 @@
 <template>
   <div class="snow-page">
-    <a-spin :loading="loading" tip="正在加载..." class="full-height">
-      <!-- 警告横幅 -->
+    <a-spin :loading="loading" tip="Loading..." class="full-height">
+      <!-- warning banner -->
       <a-alert type="warning" show-icon class="warning-banner">
         <template #icon>
           <icon-exclamation-circle />
         </template>
         <div>
-          <strong>重要提醒：</strong>
-          一般情况下不推荐修改RPC节点,除非您非常了解区块网络并确保节点的可用性和稳定性。
+          <strong>Important Reminder:</strong>
+          Changing RPC nodes is generally not recommended unless you understand the blockchain network and can ensure node availability and stability.
         </div>
       </a-alert>
 
-      <!-- 主要内容 -->
+      <!-- main content -->
       <a-card :bordered="false" class="main-card">
         <template #title>
           <div class="card-title">
             <div class="title-icon">
               <icon-settings />
             </div>
-            <span>区块网络配置</span>
+            <span>Blockchain Network Configuration</span>
           </div>
         </template>
 
@@ -29,26 +29,26 @@
               <template #icon>
                 <icon-refresh />
               </template>
-              重置
+              Reset
             </a-button>
             <a-button type="primary" @click="handleSave" :loading="saveLoading" size="small" class="action-btn save-btn">
               <template #icon>
                 <icon-save />
               </template>
-              保存配置
+              Save Configuration
             </a-button>
           </a-space>
         </template>
 
         <div class="form-container">
           <a-form :model="formData" layout="vertical" ref="formRef">
-            <!-- Tron 网络配置区域 -->
+            <!-- Tron Networkconfiguration section -->
             <div class="tron-section">
               <div class="section-header">
                 <div class="header-icon">
                   <icon-fire />
                 </div>
-                <span class="header-title">Tron 网络</span>
+                <span class="header-title">Tron Network</span>
               </div>
 
               <a-row :gutter="16">
@@ -56,12 +56,12 @@
                   <a-form-item
                     field="rpc_endpoint_tron"
                     label="Tron RPC"
-                    :rules="[{ required: true, message: '请输入Tron RPC' }]"
+                    :rules="[{ required: true, message: 'Enter Tron RPC' }]"
                     class="network-form-item"
                   >
                     <a-input
                       v-model="formData.rpc_endpoint_tron"
-                      placeholder="请输入 Tron RPC"
+                      placeholder="Enter Tron RPC"
                       allow-clear
                       size="small"
                       class="network-input tron-input"
@@ -80,10 +80,10 @@
                       <div class="tron-grid-label">
                         <span class="label-with-tip">
                           <span>Tron Grid Api Key</span>
-                          <a-tooltip content="配置独立 Api Key 可提高扫块稳定性，多个可用半角符逗号隔开。" position="top">
+                          <a-tooltip content="Configuring dedicated API keys can improve block scanning stability. Separate multiple keys with commas." position="top">
                             <icon-question-circle class="tip-icon" />
                           </a-tooltip>
-                          <span class="optional-tag">(可选)</span>
+                          <span class="optional-tag">(optional)</span>
                         </span>
                         <a
                           href="https://github.com/v03413/BEpusdt/blob/main/docs/tron-grid/readme.md"
@@ -91,14 +91,14 @@
                           class="help-link"
                         >
                           <icon-question-circle />
-                          获取方法
+                          How to get it
                         </a>
                       </div>
                     </template>
 
                     <a-textarea
                       v-model="formData.rpc_endpoint_tron_grid_api_key"
-                      placeholder="请输入 Tron Grid Api Key (可选)，多个可用半角符逗号隔开"
+                      placeholder="Enter Tron Grid API Key (optional). Separate multiple keys with commas."
                       allow-clear
                       size="small"
                       class="network-input tron-input tron-grid-api-key-input"
@@ -115,13 +115,13 @@
               </a-row>
             </div>
 
-            <!-- 其他网络配置 -->
+            <!-- Other Networks configuration -->
             <div class="other-section">
               <div class="section-header">
                 <div class="header-icon">
                   <icon-link />
                 </div>
-                <span class="header-title">其他网络</span>
+                <span class="header-title">Other Networks</span>
               </div>
 
               <a-row :gutter="[16, 6]">
@@ -136,12 +136,12 @@
                   <a-form-item
                     :field="network.key"
                     :label="network.label"
-                    :rules="[{ required: true, message: `请输入${network.label}` }]"
+                    :rules="[{ required: true, message: `Enter${network.label}` }]"
                     class="network-form-item"
                   >
                     <a-input
                       v-model="formData[network.key]"
-                      :placeholder="`请输入 ${network.label}`"
+                      :placeholder="`Enter ${network.label}`"
                       allow-clear
                       size="small"
                       class="network-input"
@@ -159,11 +159,11 @@
           </a-form>
         </div>
 
-        <!-- 配置说明 -->
+        <!-- Configuration Notes -->
         <a-divider orientation="left" class="info-divider">
           <div class="divider-content">
             <icon-info-circle />
-            <span>配置说明</span>
+            <span>Configuration Notes</span>
           </div>
         </a-divider>
 
@@ -201,7 +201,7 @@ import {
   IconSafe
 } from "@arco-design/web-vue/es/icon";
 
-// 网络配置
+// Network configuration
 const networks = [
   { key: "rpc_endpoint_ethereum", label: "Ethereum RPC", icon: IconLink },
   { key: "rpc_endpoint_bsc", label: "BSC RPC", icon: IconLink },
@@ -216,10 +216,10 @@ const networks = [
 ];
 
 const infoList = [
-  { icon: IconCheckCircle, text: "RPC节点是与区块链网络通信的关键接口，请确保所配置的节点稳定可靠" },
-  { icon: IconStar, text: "建议使用官方推荐的RPC节点或知名的第三方服务商" },
-  { icon: IconThunderbolt, text: "配置前请先测试节点的连通性和响应速度" },
-  { icon: IconFire, text: "修改配置后系统将立即生效，请谨慎操作" }
+  { icon: IconCheckCircle, text: "RPC nodes are critical interfaces for blockchain communication. Ensure configured nodes are stable and reliable." },
+  { icon: IconStar, text: "Use officially recommended RPC nodes or reputable third-party providers." },
+  { icon: IconThunderbolt, text: "Test node connectivity and response speed before saving." },
+  { icon: IconFire, text: "Changes take effect immediately. Use caution." }
 ];
 
 const loading = ref<boolean>(false);
@@ -243,8 +243,8 @@ const getConf = async () => {
 
     originalData.value = { ...formData };
   } catch (error) {
-    Message.error("获取配置失败");
-    console.error("获取配置失败:", error);
+    Message.error("Failed to get configuration");
+    console.error("Failed to get configuration:", error);
   } finally {
     loading.value = false;
   }
@@ -254,22 +254,22 @@ const handleSave = async () => {
   try {
     const errors = await formRef.value?.validate();
     if (errors) {
-      Message.error("表单验证失败，请检查所有字段");
+      Message.error("Form validation failed. Check all fields.");
       return;
     }
   } catch (validationError) {
-    console.error("表单验证失败:", validationError);
-    Message.error("请填写所有必填项");
+    console.error("Form validation failed:", validationError);
+    Message.error("Fill in all required fields");
     return;
   }
 
   try {
     saveLoading.value = true;
 
-    // 构建保存数据数组
+    // build save data array
     const saveData: Array<{ key: string; value: string }> = [];
 
-    // 添加所有网络的 RPC 配置
+    // add RPC configuration for all networks
     networks.forEach(network => {
       const value = formData[network.key]?.trim();
       if (value) {
@@ -280,13 +280,13 @@ const handleSave = async () => {
       }
     });
 
-    // 验证所有必填的 RPC 节点是否都已填写
+    // validate that all required RPC nodes are filled
     if (saveData.length < networks.length) {
-      Message.error("所有RPC节点都必须填写");
+      Message.error("All RPC nodes are required");
       return;
     }
 
-    // 添加 Tron Grid Api Key (可选，但即使为空也要保存)
+    // Add Tron Grid API Key (optional, saved even if empty)
     const tronApiKey = formData.rpc_endpoint_tron_grid_api_key?.trim() || "";
     saveData.push({
       key: "rpc_endpoint_tron_grid_api_key",
@@ -295,21 +295,21 @@ const handleSave = async () => {
 
     await setsConfAPI(saveData);
 
-    Message.success("配置保存成功");
+    Message.success("Configuration saved successfully");
 
     await getConf();
   } catch (error) {
-    Message.error("保存配置失败");
-    console.error("保存配置失败:", error);
+    Message.error("Failed to save configuration");
+    console.error("Failed to save configuration:", error);
   } finally {
     saveLoading.value = false;
   }
 };
 
-// 重置配置
+// reset configuration
 const handleReset = () => {
   Object.assign(formData, originalData.value);
-  Message.info("已重置为原始配置");
+  Message.info("Reset to original configuration");
 };
 
 onMounted(() => {
@@ -404,7 +404,7 @@ onMounted(() => {
   margin: 12px 0;
 }
 
-// Tron 配置区域样式 - 使用 Tron 官方红色系
+// Tron configuration section styles - use official Tron red palette
 .tron-section {
   background: rgba(var(--danger-6), 0.06);
   border: 1px solid rgba(var(--danger-6), 0.18);
@@ -453,7 +453,7 @@ onMounted(() => {
   }
 }
 
-// 其他网络配置区域样式 - 使用柔和的浅绿色系
+// Other Networks configuration section styles - use soft light-green palette
 .other-section {
   background: rgba(var(--success-6), 0.06);
   border: 1px solid rgba(var(--success-6), 0.18);
@@ -556,7 +556,7 @@ onMounted(() => {
   }
 }
 
-// Tron 输入框特殊样式
+// Tron input special style
 .tron-input {
   :deep(.arco-input-wrapper) {
     border-color: $color-border-2;
@@ -704,7 +704,7 @@ onMounted(() => {
   }
 }
 
-// 响应式设计
+// responsive design
 @media (max-width: 768px) {
   .card-title {
     font-size: 14px;
@@ -736,7 +736,7 @@ onMounted(() => {
   }
 }
 
-// 暗色主题适配
+// dark theme adaptation
 :deep(.arco-card.arco-card-bordered) {
   border: 1px solid $color-border-2;
 }

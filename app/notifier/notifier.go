@@ -13,12 +13,12 @@ const (
 
 type Notifier interface {
 	Initialize(params string) error                             // 初始化
-	Success(o model.Order)                                      // 交易成功通知
-	NotifyFail(o model.Order, reason string)                    // 订单回调失败通知
-	NonOrderTransfer(trans model.TronTransfer, wa model.Wallet) // 非订单交易通知
-	TronResourceChange(res model.TronResource)                  // Tron 资源变动通知
-	Welcome()                                                   // 程序启动时的欢迎信息
-	Test() error                                                // 测试通知是否成功
+	Success(o model.Order)                                      // Transaction SuccessfulNotifications
+	NotifyFail(o model.Order, reason string)                    // OrderCallback failedNotifications
+	NonOrderTransfer(trans model.TronTransfer, wa model.Wallet) // Non-order transactionNotifications
+	TronResourceChange(res model.TronResource)                  // Tron 资源变动Notifications
+	Welcome()                                                   // 程序启动时的欢迎information
+	Test() error                                                // TestNotificationsYesNoSuccess
 }
 
 var notifierMap = make(map[string]Notifier)

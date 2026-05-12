@@ -23,13 +23,13 @@ service.interceptors.request.use(
       userInfo = JSON.parse(localStorage.getItem("user-info") as string);
     }
     if (userInfo?.token) {
-      // 有token，在请求头中携带token
+      // 有token，在请求头Medium携带token
       config.headers.Authorization = userInfo.token;
     }
     return config;
   },
   function (error: any) {
-    // 请求错误
+    // Request error
     return Promise.reject(error);
   }
 );
@@ -38,7 +38,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   function (response: any) {
     if (response.status != 200) {
-      Message.error("服务器异常，请联系管理员");
+      Message.error("Server error. Contact the admin.");
 
       return Promise.reject(response.data);
     }
@@ -54,18 +54,18 @@ service.interceptors.response.use(
       // 清除 localStorage
       localStorage.removeItem("user-info");
 
-      // 清除 Pinia store 中的 token 和用户信息
+      // 清除 Pinia store Medium的 token 和User Information
       const userStore = useUserInfoStore(pinia);
       userStore.logOut();
 
-      // 跳转到登录页（保留当前路径前缀，如 /admin）
+      // 跳转到Login页（保留当前路径前缀，如 /admin）
       const basePath = window.location.pathname.split("#")[0];
       window.location.href = `${basePath}#/login`;
 
       return Promise.reject(res);
     }
     if (res.code == 404) {
-      Message.error("请求连接超时");
+      Message.error("Request timed out");
 
       return Promise.reject(res);
     }
@@ -79,21 +79,21 @@ service.interceptors.response.use(
     return Promise.resolve(res);
   },
   function (error: any) {
-    // 处理 HTTP 错误状态码
+    // 处理 HTTP 错误Status码
     if (error.response) {
       if (error.response.status === 403) {
         localStorage.removeItem("user-info");
         const userStore = useUserInfoStore(pinia);
         userStore.logOut();
 
-        Message.error("登录已过期，请重新登录");
+        Message.error("Login expired. Please log in again.");
 
         const basePath = window.location.pathname.split("#")[0];
 
         return (window.location.href = `${basePath}#/login`);
       }
 
-      return Message.error(error.message || "请求失败");
+      return Message.error(error.message || "Request failed");
     }
   }
 );

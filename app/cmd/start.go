@@ -26,18 +26,18 @@ import (
 
 var Start = &cli.Command{
 	Name:  "start",
-	Usage: "启动收款网关",
+	Usage: "Start payment gateway",
 	Flags: []cli.Flag{SQLiteFlag, MySQLDSNFlag, PostgresDSNFlag, LogFlag, ListenFlag},
 	Before: func(ctx context.Context, c *cli.Command) (context.Context, error) {
 		mysql := c.String("mysql")
 		postgres := c.String("postgres")
 		sqlite := c.String("sqlite")
 		if err := model.Init(sqlite, mysql, postgres); err != nil {
-			return ctx, fmt.Errorf("数据库初始化失败 %w", err)
+			return ctx, fmt.Errorf("database initialization failed %w", err)
 		}
 
 		if err := log.Init(c.String("log")); err != nil {
-			return ctx, fmt.Errorf("日志初始化失败 %w", err)
+			return ctx, fmt.Errorf("log initialization failed %w", err)
 		}
 
 		return ctx, task.Init()
@@ -55,7 +55,7 @@ func start(ctx context.Context, cmd *cli.Command) error {
 	// 开始任务调度
 	task.Start(ctx)
 
-	// 启动 Web 服务器
+	// Start web server
 	var listen = cmd.String("listen")
 	var srv = &http.Server{Addr: listen, Handler: router.Handler()}
 
@@ -67,7 +67,7 @@ func start(ctx context.Context, cmd *cli.Command) error {
 		}
 	}()
 
-	// 关闭 Web 服务器
+	// Stop web server
 	go func() {
 		<-ctx.Done()
 		shutdown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -83,9 +83,9 @@ func start(ctx context.Context, cmd *cli.Command) error {
 
 	notifier.Welcome()
 
-	fmt.Println(fmt.Sprintf("BEpusdt 启动成功(%s)，当前版本：%s", listen, app.Version))
+	fmt.Println(fmt.Sprintf("BEpusdt started successfully(%s)，Current version:%s", listen, app.Version))
 
-	// 等待中断信号
+	// Wait for interrupt signal
 	var signals = make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
 	<-signals

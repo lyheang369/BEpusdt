@@ -1,6 +1,6 @@
 FROM node:25.2.1 AS web_builder
 
-# 安装 pnpm
+# Install pnpm
 RUN npm install -g pnpm@10
 
 WORKDIR /web
@@ -31,12 +31,12 @@ FROM alpine:3.20
 
 ENV TZ=Asia/Shanghai
 
-# 安装所需的依赖
+# Install required dependencies
 RUN apk add --no-cache tzdata ca-certificates
 
 COPY --from=builder /go/release/bepusdt /usr/local/bin/bepusdt
 
-# 设置时区
+# Set timezone
 RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 EXPOSE 8080

@@ -15,15 +15,15 @@
           </a-col>
           <a-col :span="isMobile ? 24 : 22">
             <a-space direction="vertical" size="large" fill class="base-profile-space">
-              <a-descriptions :column="descriptionsColumn(1, 2)" title="基本信息" :align="{ label: 'right' }">
-                <a-descriptions-item label="管理员">
+              <a-descriptions :column="descriptionsColumn(1, 2)" title="Basic Information" :align="{ label: 'right' }">
+                <a-descriptions-item label="Admin">
                   {{ Conf.admin_username }}
                 </a-descriptions-item>
-                <a-descriptions-item label="登录时间">
+                <a-descriptions-item label="LoginTime">
                   {{ Conf.admin_login_at }}
                 </a-descriptions-item>
-                <a-descriptions-item label="登录IP">
-                  {{ Conf.admin_login_ip || "暂无" }}
+                <a-descriptions-item label="LoginIP">
+                  {{ Conf.admin_login_ip || "None" }}
                 </a-descriptions-item>
               </a-descriptions>
             </a-space>
@@ -34,19 +34,19 @@
         <a-row align="center">
           <a-col :span="24">
             <a-tabs :type="tabsType" :size="tabsSize" :active-key="activeTabs" @change="onChangeTab">
-              <a-tab-pane key="1" title="基本设置">
+              <a-tab-pane key="1" title="Basic Settings">
                 <Info v-model="Conf" @refresh="refresh" />
               </a-tab-pane>
-              <a-tab-pane key="2" title="交易通知">
+              <a-tab-pane key="2" title="TransactionNotifications">
                 <Notifier v-model="Conf" @refresh="refresh" />
               </a-tab-pane>
-              <a-tab-pane key="4" title="API设置">
+              <a-tab-pane key="4" title="API Settings">
                 <Api v-model="Conf" @refresh="refresh" />
               </a-tab-pane>
-              <a-tab-pane key="5" title="MQTT设置">
+              <a-tab-pane key="5" title="MQTT Settings">
                 <Mqtt v-model="Conf" @refresh="refresh" />
               </a-tab-pane>
-              <a-tab-pane key="3" title="安全设置">
+              <a-tab-pane key="3" title="Security Settings">
                 <Security v-model="Conf" @refresh="refresh" />
               </a-tab-pane>
             </a-tabs>

@@ -61,7 +61,7 @@ const onTabs = (key: string) => {
   router.push(key);
 };
 
-// 删除当前标签页并跳转到最后一个标签页
+// Delete当前标签页并跳转到最后one个标签页
 const onDelete = (path: string) => {
   routerStore.removeTabsList(path);
   routerStore.removeRouteName(path);
@@ -70,7 +70,7 @@ const onDelete = (path: string) => {
   router.push(tabsList.value.at(-1).path);
 };
 
-// 刷新当前页
+// Refresh当前页
 const rotateOpen = ref(false);
 const refresh = () => {
   rotateOpen.value = true;
@@ -86,16 +86,16 @@ const refresh = () => {
   });
 };
 
-// 关闭当前
+// Close Current
 const closeCurrent = () => {
   onDelete(currentRoute.value.path);
 };
 
-// 关闭右侧&关闭左侧
+// Close Right&Close Left
 const closeSides = (type: string) => {
   // 获得当前index
   let currentIndex = tabsList.value.findIndex((item: Menu.MenuOptions) => item.path === currentRoute.value.path);
-  // 过滤出两侧可关闭的 affix: false 表示可关闭
+  // 过滤出两侧可Off的 affix: false 表示可Off
   let rightList = tabsList.value.filter((item: Menu.MenuOptions, index: number) => {
     if (type == "right") {
       if (index > currentIndex && !item.meta.affix) return item;
@@ -103,17 +103,17 @@ const closeSides = (type: string) => {
       if (index < currentIndex && !item.meta.affix) return item;
     }
   });
-  // 返回可关闭名称
+  // 返回可OffName
   let rightPaths = rightList.map((item: Menu.MenuOptions) => item.path);
-  // 删除右侧
+  // Delete右侧
   tabsList.value = tabsList.value.filter((item: Menu.MenuOptions) => !rightPaths.includes(item.path));
-  // 删除缓存
+  // Delete缓存
   routerStore.removeRoutePaths(rightPaths);
 };
 
-// 关闭其它&关闭全部
+// Close Others&Close All
 const closeOther = (type: string) => {
-  // 过滤出可关闭项 affix: false 表示可关闭
+  // 过滤出可Off项 affix: false 表示可Off
   let list = tabsList.value.filter((item: Menu.MenuOptions) => {
     if (type == "other") {
       if (item.path != currentRoute.value.path && !item.meta.affix) {
@@ -125,13 +125,13 @@ const closeOther = (type: string) => {
       }
     }
   });
-  // 返回可关闭名称
+  // 返回可OffName
   let rightNames = list.map((item: Menu.MenuOptions) => item.path);
-  // 删除可关闭项
+  // Delete可Off项
   tabsList.value = tabsList.value.filter((item: Menu.MenuOptions) => !rightNames.includes(item.path));
-  // 删除缓存
+  // Delete缓存
   routerStore.removeRoutePaths(rightNames);
-  // 关闭全部，若当前被关闭则跳转最后一个
+  // Close All，若当前被Off则跳转最后one个
   if (tabsList.value.length != 0 && !currentRoute.value.meta.affix && type == "all") {
     router.push(tabsList.value.at(-1).path);
   }
@@ -159,7 +159,7 @@ const closeOther = (type: string) => {
   }
 }
 :deep(.arco-tabs-nav-tab) {
-  // 移入展示关闭icon
+  // 移入展示Officon
   .arco-tabs-tab-closable {
     svg {
       width: 0;

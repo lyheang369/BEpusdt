@@ -33,7 +33,7 @@ export function useChart(sourceOption: optionsFn): {
   return {
     // ECharts配置项
     option,
-    // 黑暗模式
+    // dark mode
     theme
   };
 }

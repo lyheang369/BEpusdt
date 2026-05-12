@@ -4,14 +4,14 @@ import { useRouteConfigStore } from "@/store/modules/route-config";
 import { findCategoryById, findPathOfParentNode } from "@/utils/tree-tools";
 
 /**
- * 路由处理hooks，内置多种路由处理场景
- * @returns 路由方法
+ * route处理hooks，内置多种route处理场景
+ * @returns route方法
  */
 export const useRoutingMethod = () => {
   /**
-   * 从一维路由中查找路由
-   * @param {string} path 路由的path
-   * @returns 查找到的路由，undefined则表示未找到
+   * 从one维routeMedium查找route
+   * @param {string} path route path
+   * @returns found route, undefined means not found
    */
   const findLinearArray = (path: string) => {
     const routerStore = useRouteConfigStore(pinia);
@@ -20,9 +20,9 @@ export const useRoutingMethod = () => {
   };
 
   /**
-   * 根据当前路由找到所有直属父级路由
-   * @param {string} path 路由的path
-   * @returns 查找到的所有父级路由，未找到则null
+   * 根据current route找到所有直属父级route
+   * @param {string} path route path
+   * @returns 查找到的所有父级route，未找到则null
    */
   const getAllParentRoute = (path: string) => {
     const routerStore = useRouteConfigStore(pinia);
@@ -31,9 +31,9 @@ export const useRoutingMethod = () => {
   };
 
   /**
-   * 从一维路由中判断路由是否存在
-   * @param {string} key 路由的name
-   * @returns 路由是否存在，true存在 false不存在
+   * 从one维routeMedium判断routeYesNo存在
+   * @param {string} key route name
+   * @returns routeYesNo存在，true存在 false不存在
    */
   const hasRoute = (key: string) => {
     const routerStore = useRouteConfigStore(pinia);
@@ -42,9 +42,9 @@ export const useRoutingMethod = () => {
   };
 
   /**
-   * 从tabs路由中查找路由
-   * @param {string} key 路由的name
-   * @returns 查找到的路由，undefined则表示未找到
+   * 从tabsrouteMedium查找route
+   * @param {string} key route name
+   * @returns found route, undefined means not found
    */
   const findTagsList = (key: string) => {
     const routerStore = useRouteConfigStore(pinia);
@@ -53,26 +53,26 @@ export const useRoutingMethod = () => {
   };
 
   /**
-   * 处理外链跳转，打开一个新窗口并根据url跳转
-   * @param {any} route 路由
+   * handle external link navigation，打开one个新窗口并根据url跳转
+   * @param {any} route route
    */
   const openExternalLinks = (route: any) => {
-    // 处理外链跳转
+    // handle external link navigation
     if (route.meta.link && !route.meta.iframe) {
       window.open(route.meta.link as string, "_blank");
     }
   };
 
   /**
-   * 检测是否是动态匹配路由，如果是动态匹配路由，则path必然带有"/:"字样，例如：/user/:id
-   * @param {string} path 路由path
-   * @returns 是否是动态匹配路由
+   * 检测YesNoYes动态匹配route，如果Yes动态匹配route，则path必然带有"/:"字样，Example：/user/:id
+   * @param {string} path routepath
+   * @returns YesNoYes动态匹配route
    */
   const isDynamicRoute = (route: any) => {
-    // to.matched 包含了当前路由匹配到的所有层级（包括父级 layout 等）
-    // 我们主要关心叶子节点或包含参数的节点
+    // to.matched 包含了current route匹配到的所有层级（包括父级 layout 等）
+    // 我们主要关心叶子node或包含参数的node
     return route.matched.some((record: any) => {
-      // record.path 是定义时的路径，如 "/user/:id"
+      // record.path Yes定义时的路径，如 "/user/:id"
       return record.path.includes("/:");
     });
   };

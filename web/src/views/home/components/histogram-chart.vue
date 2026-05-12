@@ -1,6 +1,6 @@
 <template>
   <div class="histogram-scroll" :class="{ empty: isEmpty, scrollable: isScrollable }" ref="histogramScroll">
-    <a-empty v-if="isEmpty" description="暂无订单数据" />
+    <a-empty v-if="isEmpty" description="No order data" />
     <div v-else class="histogram-canvas" :style="{ width: chartWidth }">
       <s-echarts :options="option" :theme="theme" :update-options="{ notMerge: true }" />
     </div>
@@ -74,7 +74,7 @@ const { option, theme } = useChart((isDark, palette = []) => {
           .map(item => `${item.marker} ${item.seriesName} <b style="margin-left: 16px">${item.value}</b>`)
           .join("<br/>");
         const gmv = gmvPaidByDate.value[date] || "0.00";
-        return `<b>${date}</b><br/>${rows}<br/>已收款 <b style="margin-left: 16px">${gmv}</b>`;
+        return `<b>${date}</b><br/>${rows}<br/>Received <b style="margin-left: 16px">${gmv}</b>`;
       }
     },
     legend: {
@@ -123,14 +123,14 @@ const { option, theme } = useChart((isDark, palette = []) => {
     ],
     series: [
       {
-        name: "订单总数",
+        name: "Total Orders",
         type: "bar",
         barWidth: 9,
         barGap: "25%",
         data: ordersTotalData.value
       },
       {
-        name: "已支付订单",
+        name: "Paid Orders",
         type: "bar",
         barWidth: 9,
         data: ordersPaidData.value

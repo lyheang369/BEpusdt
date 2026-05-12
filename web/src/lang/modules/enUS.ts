@@ -3,7 +3,7 @@ export default {
     ["login"]: "login",
     ["not-power"]: "No permission",
     ["not-found"]: "Page not found",
-    ["zh-CN"]: "中文",
+    ["zh-CN"]: "Chinese",
     ["en-US"]: "English",
     ["refresh"]: "refresh",
     ["close-current"]: "close current",

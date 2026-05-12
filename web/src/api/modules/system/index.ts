@@ -32,7 +32,7 @@ export const getRoleAPI = () => {
   });
 };
 
-// 获取账户数据
+// 获取Account数据
 export const getAccountAPI = () => {
   return axios({
     url: "/mock/system/getAccount",
@@ -40,7 +40,7 @@ export const getAccountAPI = () => {
   });
 };
 
-// 获取菜单管理列表
+// 获取Menu Management列表
 export const getMenuListAPI = () => {
   return axios({
     url: "/mock/menu/getMenuList",
@@ -48,7 +48,7 @@ export const getMenuListAPI = () => {
   });
 };
 
-// 根据角色获取权限数据
+// 根据角色获取permission数据
 export const getUserPermissionAPI = (params: { role: string }) => {
   return axios({
     url: "/mock/menu/getUserPermission",

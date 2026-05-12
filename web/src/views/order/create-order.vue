@@ -5,8 +5,8 @@
         <a-row justify="center">
           <a-col :xs="22" :sm="18" :md="16" :lg="16" :xl="12" :xxl="12">
             <a-steps :current="currentStep" line-less>
-              <a-step description="创建订单">基本信息</a-step>
-              <a-step description="创建成功">完成创建</a-step>
+              <a-step description="Create Order">Basic Information</a-step>
+              <a-step description="Created Successfully">Complete</a-step>
             </a-steps>
           </a-col>
         </a-row>
@@ -14,26 +14,26 @@
           <a-col :xs="18" :sm="12" :md="12" :lg="12" :xl="12" :xxl="12">
             <a-form ref="formRef" auto-label-width :layout="formLayout" :model="form" :rules="rules" @submit="handleSubmit">
               <div v-if="currentStep == 1">
-                <a-form-item field="name" label="收款项目" :validate-trigger="['change', 'input']">
-                  <a-input :style="{ width: '100%' }" v-model="form.name" placeholder="请输入收款项目" allow-clear />
+                <a-form-item field="name" label="Payment Item" :validate-trigger="['change', 'input']">
+                  <a-input :style="{ width: '100%' }" v-model="form.name" placeholder="Enter payment item" allow-clear />
                 </a-form-item>
-                <a-form-item field="order_id" label="订单号" :validate-trigger="['change', 'input']">
-                  <a-input :style="{ width: '100%' }" v-model="form.order_id" placeholder="请输入订单号" allow-clear />
+                <a-form-item field="order_id" label="Order Number" :validate-trigger="['change', 'input']">
+                  <a-input :style="{ width: '100%' }" v-model="form.order_id" placeholder="Enter order number" allow-clear />
                 </a-form-item>
-                <a-form-item field="amount" label="订单金额" :validate-trigger="['change', 'input']">
-                  <a-input-number :style="{ width: '100%' }" v-model="form.amount" placeholder="请输入订单金额" allow-clear />
+                <a-form-item field="amount" label="Order Amount" :validate-trigger="['change', 'input']">
+                  <a-input-number :style="{ width: '100%' }" v-model="form.amount" placeholder="Enter order amount" allow-clear />
                 </a-form-item>
-                <a-form-item field="trade_fiat" label="法币币种" :rules="[{ required: true, message: '法币币种不能为空' }]">
-                  <a-select v-model="form.trade_fiat" placeholder="请选择" allow-clear>
+                <a-form-item field="trade_fiat" label="Fiat Currency" :rules="[{ required: true, message: 'Fiat currency is required' }]">
+                  <a-select v-model="form.trade_fiat" placeholder="Select" allow-clear>
                     <a-option v-for="(_, key) in userInfoStore.trade_fiat" :key="key" :value="key">{{ key }}</a-option>
                   </a-select>
                 </a-form-item>
-                <a-form-item field="trade_crypto" label="限定加密货币（留空不限制）">
-                  <a-select v-model="form.trade_crypto" placeholder="请选择" multiple>
+                <a-form-item field="trade_crypto" label="Limit Cryptocurrency (leave empty for no limit)">
+                  <a-select v-model="form.trade_crypto" placeholder="Select" multiple>
                     <a-option v-for="(_, key) in userInfoStore.trade_crypto" :key="key" :value="key">{{ key }}</a-option>
                   </a-select>
                 </a-form-item>
-                <a-form-item field="timeout" label="订单有效期（小时）">
+                <a-form-item field="timeout" label="Order Validity (hours)">
                   <a-slider v-model="form.timeout" :max="3" />
                 </a-form-item>
               </div>
@@ -44,12 +44,12 @@
                   <template #extra>
                     <a-space direction="vertical" size="large">
                       <a-space v-if="resultStatus === 'success'" class="payment-link-row" wrap>
-                        <span>订单链接: </span>
+                        <span>Order Link: </span>
                         <a-link class="payment-link" :href="paymentUrl" target="_blank" :hoverable="false">{{ paymentUrl }}</a-link>
                       </a-space>
                       <a-space wrap>
-                        <a-button type="primary" v-if="resultStatus === 'success'" @click="copyLink">复制订单链接</a-button>
-                        <a-button @click="resetForm">再次创建</a-button>
+                        <a-button type="primary" v-if="resultStatus === 'success'" @click="copyLink">Copy Order Link</a-button>
+                        <a-button @click="resetForm">Create Again</a-button>
                       </a-space>
                     </a-space>
                   </template>
@@ -57,8 +57,8 @@
               </div>
               <a-form-item v-if="currentStep != 2">
                 <a-space>
-                  <a-button @click="onLastStep" v-if="currentStep != 1">上一步</a-button>
-                  <a-button html-type="submit" type="primary">下一步</a-button>
+                  <a-button @click="onLastStep" v-if="currentStep != 1">Previous</a-button>
+                  <a-button html-type="submit" type="primary">Next</a-button>
                 </a-space>
               </a-form-item>
             </a-form>
@@ -67,10 +67,10 @@
         <a-row v-if="currentStep == 2">
           <a-col :span="16" :offset="4">
             <a-typography class="result-tip">
-              <a-typography-paragraph>提示</a-typography-paragraph>
+              <a-typography-paragraph>Notice</a-typography-paragraph>
               <ul>
-                <li>您可以将该链接发给客户让其支付</li>
-                <li>该订单将在您设置的有效期内有效</li>
+                <li>You can send this link to the customer for payment.</li>
+                <li>This order is valid within the period you set.</li>
               </ul>
             </a-typography>
           </a-col>
@@ -91,7 +91,7 @@ const copyLink = async () => {
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(paymentUrl.value);
-      Message.success("复制成功");
+      Message.success("CopySuccess");
     } else {
       // Fallback for non-secure contexts or older browsers
       const textArea = document.createElement("textarea");
@@ -103,16 +103,16 @@ const copyLink = async () => {
       textArea.select();
       try {
         document.execCommand('copy');
-        Message.success("复制成功");
+        Message.success("CopySuccess");
       } catch (err) {
         console.error('Fallback: Oops, unable to copy', err);
-        Message.error("复制失败");
+        Message.error("Copy failed");
       }
       document.body.removeChild(textArea);
     }
   } catch (e) {
     console.error(e);
-    Message.error("复制失败");
+    Message.error("Copy failed");
   }
 };
 
@@ -124,16 +124,16 @@ const formRef = ref();
 const formLayout = ref("vertical");
 const rules = {
   name: [
-    { required: true, message: '收款项目不能为空' },
-    { minLength: 3, message: '必须大于 3 个字符' }
+    { required: true, message: 'Payment item is required' },
+    { minLength: 3, message: 'Must be longer than 3 characters' }
   ],
-  order_id: [{ required: true, message: '订单号不能为空' }],
+  order_id: [{ required: true, message: 'Order number is required' }],
   amount: [
-    { required: true, message: '订单金额不能为空' },
-    { type: 'number', min: 1, max: 99999999, message: '订单金额必须在 1 到 99999999 之间' }
+    { required: true, message: 'Order amount is required' },
+    { type: 'number', min: 1, max: 99999999, message: 'Order amount must be between 1 and 99999999' }
   ],
-  trade_fiat: [{ required: true, message: '法币币种不能为空' }],
-  timeout: [{ type: 'number', min: 1, message: '最小为1小时' }]
+  trade_fiat: [{ required: true, message: 'Fiat currency is required' }],
+  timeout: [{ type: 'number', min: 1, message: 'Minimum is 1 hour' }]
 };
 
 const form = reactive({
@@ -164,8 +164,8 @@ onMounted(() => {
 });
 
 const resultStatus = ref("success");
-const resultTitle = ref("创建成功");
-const resultSubtitle = ref("订单创建成功");
+const resultTitle = ref("Created Successfully");
+const resultSubtitle = ref("Order created successfully");
 const paymentUrl = ref("");
 
 const handleSubmit = async ({ errors, values }: ArcoDesign.ArcoSubmit) => {
@@ -184,22 +184,22 @@ const handleSubmit = async ({ errors, values }: ArcoDesign.ArcoSubmit) => {
     const res = await createOrderApi(payload);
     if (res.code === 200) {
       resultStatus.value = "success";
-      resultTitle.value = "创建成功";
-      resultSubtitle.value = "订单创建成功";
+      resultTitle.value = "Created Successfully";
+      resultSubtitle.value = "Order created successfully";
       paymentUrl.value = res.data.payment_url;
       currentStep.value += 1;
     } else {
       resultStatus.value = "error";
-      resultTitle.value = "订单创建失败";
-      resultSubtitle.value = res.data.message || "未知错误";
+      resultTitle.value = "Failed to create order";
+      resultSubtitle.value = res.data.message || "Unknown error";
       paymentUrl.value = "";
       currentStep.value += 1;
     }
   } catch (err: any) {
     console.error(err);
     resultStatus.value = "error";
-    resultTitle.value = "订单创建失败";
-    resultSubtitle.value = err.message || "请求失败";
+    resultTitle.value = "Failed to create order";
+    resultSubtitle.value = err.message || "Request failed";
     paymentUrl.value = "";
     currentStep.value += 1;
   } finally {

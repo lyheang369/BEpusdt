@@ -1,12 +1,12 @@
 <template>
   <div class="page-404">
     <div>
-      <s-svg-icon name="暂无权限" :size="500" />
+      <s-svg-icon name="no-permission" :size="500" />
     </div>
     <div class="prompt">
       <div class="title">401</div>
-      <div class="text">抱歉，暂无访问权限~</div>
-      <a-button type="primary" @click="onBack">立即返回</a-button>
+      <div class="text">Sorry, you do not have access permission.</div>
+      <a-button type="primary" @click="onBack">Return Now</a-button>
     </div>
   </div>
 </template>

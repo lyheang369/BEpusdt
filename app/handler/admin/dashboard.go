@@ -225,7 +225,7 @@ func resolveDashboardRange(req homeReq) (string, time.Time, time.Time, *time.Loc
 			return "", time.Time{}, time.Time{}, nil, err
 		}
 		if to.Before(from) {
-			return "", time.Time{}, time.Time{}, nil, errors.New("自定义统计周期结束时间不能早于开始时间")
+			return "", time.Time{}, time.Time{}, nil, errors.New("CustomStatistics period end time cannot be earlier than start time")
 		}
 
 		return rangeKey, from, to, loc, nil
@@ -240,7 +240,7 @@ func resolveDashboardRange(req homeReq) (string, time.Time, time.Time, *time.Loc
 
 func parseDashboardDate(value string, loc *time.Location, start bool) (time.Time, error) {
 	if value == "" {
-		return time.Time{}, errors.New("请选择自定义统计周期")
+		return time.Time{}, errors.New("SelectCustomStatistics Period")
 	}
 
 	layouts := []string{time.RFC3339, "2006-01-02 15:04:05", "2006-01-02"}
@@ -259,7 +259,7 @@ func parseDashboardDate(value string, loc *time.Location, start bool) (time.Time
 		return t.In(loc), nil
 	}
 
-	return time.Time{}, errors.New("自定义统计周期格式错误")
+	return time.Time{}, errors.New("Custom statistics period format is invalid")
 }
 
 func dayStart(t time.Time, loc *time.Location) time.Time {

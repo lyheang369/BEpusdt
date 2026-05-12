@@ -1,7 +1,7 @@
 package conf
 
 const (
-	Desc   = "一款更好用的个人加密货币收款网关"
+	Desc   = "A better personal cryptocurrency payment gateway"
 	Github = "https://github.com/v03413/BEpusdt"
 )
 
@@ -41,26 +41,26 @@ const (
 )
 
 const (
-	UsdtTronDecimals     = -6  // USDT Tron小数位数
-	UsdtBscDecimals      = -18 // USDT BEP20小数位数
-	UsdtEthDecimals      = -6  // USDT ERC20小数位数
-	UsdtXlayerDecimals   = -6  // USDT Xlayer小数位数
-	UsdtPlasmaDecimals   = -6  // USDT Plasma小数位数
-	UsdtPolygonDecimals  = -6  // USDT Polygon小数位数
-	UsdtArbitrumDecimals = -6  // USDT Arbitrum小数位数
-	UsdtAptosDecimals    = -6  // USDT Aptos小数位数
-	UsdtSolanaDecimals   = -6  // USDT Solana小数位数
+	UsdtTronDecimals     = -6  // USDT Trondecimal places
+	UsdtBscDecimals      = -18 // USDT BEP20decimal places
+	UsdtEthDecimals      = -6  // USDT ERC20decimal places
+	UsdtXlayerDecimals   = -6  // USDT Xlayerdecimal places
+	UsdtPlasmaDecimals   = -6  // USDT Plasmadecimal places
+	UsdtPolygonDecimals  = -6  // USDT Polygondecimal places
+	UsdtArbitrumDecimals = -6  // USDT Arbitrumdecimal places
+	UsdtAptosDecimals    = -6  // USDT Aptosdecimal places
+	UsdtSolanaDecimals   = -6  // USDT Solanadecimal places
 
-	UsdcEthDecimals      = -6  // USDC ERC20小数位数
-	UsdcPolygonDecimals  = -6  // USDC Polygon小数位数
-	UsdcXlayerDecimals   = -6  // USDC Xlayer小数位数
-	UsdcArbitrumDecimals = -6  // USDC Arbitrum小数位数
-	UsdcBaseDecimals     = -6  // USDC Base小数位数
-	UsdcBscDecimals      = -18 // USDC BEP20小数位数
-	UsdcTronDecimals     = -6  // USDC Tron小数位数
-	UsdcAptosDecimals    = -6  // USDC Aptos小数位数
-	UsdcSolanaDecimals   = -6  // USDC Solana小数位数
+	UsdcEthDecimals      = -6  // USDC ERC20decimal places
+	UsdcPolygonDecimals  = -6  // USDC Polygondecimal places
+	UsdcXlayerDecimals   = -6  // USDC Xlayerdecimal places
+	UsdcArbitrumDecimals = -6  // USDC Arbitrumdecimal places
+	UsdcBaseDecimals     = -6  // USDC Basedecimal places
+	UsdcBscDecimals      = -18 // USDC BEP20decimal places
+	UsdcTronDecimals     = -6  // USDC Trondecimal places
+	UsdcAptosDecimals    = -6  // USDC Aptosdecimal places
+	UsdcSolanaDecimals   = -6  // USDC Solanadecimal places
 
-	BscBnbDecimals      = -18 // BSC BNB 小数位数
-	EthereumEthDecimals = -18 // Ethereum ETH 小数位数
+	BscBnbDecimals      = -18 // BSC BNB decimal places
+	EthereumEthDecimals = -18 // Ethereum ETH decimal places
 )

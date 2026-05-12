@@ -32,7 +32,7 @@ func (Rate) Sync(ctx context.Context) {
 	err := model.CoingeckoRate()
 	if err != nil {
 
-		log.Warn(fmt.Sprintf("同步汇率失败: %s", err.Error()))
+		log.Warn(fmt.Sprintf("Failed to sync rates: %s", err.Error()))
 	}
 }
 

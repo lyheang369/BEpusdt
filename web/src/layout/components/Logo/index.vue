@@ -13,10 +13,10 @@ import { useThemeConfig } from "@/store/modules/theme-config";
 const themeStore = useThemeConfig();
 const { collapsed, asideDark, layoutType } = storeToRefs(themeStore);
 
-// 全局title
+// global title
 const title = import.meta.env.VITE_GLOB_APP_TITLE;
 
-// 黑暗模式的文字渲染
+// dark mode的文字渲染
 const isDark = computed(() => {
   if (asideDark.value && layoutType.value != "layoutHead") {
     return true;
@@ -25,7 +25,7 @@ const isDark = computed(() => {
   }
 });
 
-// 是否展示标题
+// YesNo展示标题
 const isTitle = computed(() => {
   if (!collapsed.value || layoutType.value == "layoutHead") {
     return true;
@@ -53,7 +53,7 @@ const isTitle = computed(() => {
     overflow: hidden;
   }
 
-  // 折叠或者是横向布局-去掉padding，logo居中
+  // 折叠或者YesHorizontal Layout-去掉padding，logo居Medium
   .padding-unset {
     justify-content: space-around;
     padding: unset;

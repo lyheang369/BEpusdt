@@ -1,22 +1,22 @@
 <template>
   <a-row align="center" :gutter="[0, 16]">
     <a-col :span="24">
-      <a-card title="安全设置">
+      <a-card title="Security Settings">
         <a-form :model="form" :rules="rules" :layout="layoutMode" class="base-setting-form" @submit="onSubmit">
-          <a-form-item field="admin_secure" extra="长度限制：8-18位，必须以 / 开头" label="安全入口">
-            <a-input v-model="form.admin_secure" placeholder="请输入安全入口" allow-clear />
+          <a-form-item field="admin_secure" extra="Length: 8-18 characters. Must start with /" label="Secure Entry">
+            <a-input v-model="form.admin_secure" placeholder="Enter secure entry" allow-clear />
           </a-form-item>
 
-          <a-form-item field="admin_username" label="管理账号">
+          <a-form-item field="admin_username" label="Admin Account">
             <div class="username-input-wrapper">
-              <a-input v-model="form.admin_username" placeholder="请输入管理账号" allow-clear />
-              <a-button type="text" @click="showPasswordModal" class="password-btn">修改密码</a-button>
+              <a-input v-model="form.admin_username" placeholder="Enter admin account" allow-clear />
+              <a-button type="text" @click="showPasswordModal" class="password-btn">Change Password</a-button>
             </div>
           </a-form-item>
 
           <a-form-item>
             <a-space>
-              <a-button type="primary" html-type="submit">保存设置</a-button>
+              <a-button type="primary" html-type="submit">Save Settings</a-button>
             </a-space>
           </a-form-item>
         </a-form>
@@ -24,19 +24,19 @@
     </a-col>
   </a-row>
 
-  <!-- 修改密码弹窗 -->
-  <a-modal :width="dialogWidth()" v-model:visible="passwordModalVisible" title="修改密码" @ok="handlePasswordSubmit" @cancel="handlePasswordCancel">
+  <!-- Change Password modal -->
+  <a-modal :width="dialogWidth()" v-model:visible="passwordModalVisible" title="Change Password" @ok="handlePasswordSubmit" @cancel="handlePasswordCancel">
     <a-form :model="passwordForm" auto-label-width :layout="formLayout" :rules="passwordRules" ref="passwordFormRef">
-      <a-form-item field="password" label="当前密码">
-        <a-input-password v-model="passwordForm.password" placeholder="请输入当前密码" allow-clear />
+      <a-form-item field="password" label="Current Password">
+        <a-input-password v-model="passwordForm.password" placeholder="Enter current password" allow-clear />
       </a-form-item>
 
-      <a-form-item field="new_password" label="新密码">
-        <a-input-password v-model="passwordForm.new_password" placeholder="请输入新密码" allow-clear />
+      <a-form-item field="new_password" label="New Password">
+        <a-input-password v-model="passwordForm.new_password" placeholder="Enter new password" allow-clear />
       </a-form-item>
 
-      <a-form-item field="confirm_password" label="重复新密码">
-        <a-input-password v-model="passwordForm.confirm_password" placeholder="请再次输入新密码" allow-clear />
+      <a-form-item field="confirm_password" label="Repeat New Password">
+        <a-input-password v-model="passwordForm.confirm_password" placeholder="Enter new password again" allow-clear />
       </a-form-item>
     </a-form>
   </a-modal>
@@ -56,40 +56,40 @@ const { isMobile } = useDevicesSize();
 const layoutMode = computed(() => (isMobile.value ? "vertical" : "horizontal"));
 const { dialogWidth, formLayout } = useLayoutModel();
 
-// 基础设置表单
+// basic settings form
 const form = ref({
   admin_secure: "",
   admin_username: ""
 });
 
-// 密码修改表单
+// password edit form
 const passwordForm = ref({
   password: "",
   new_password: "",
   confirm_password: ""
 });
 
-// 密码弹窗相关
+// password modal related
 const passwordModalVisible = ref(false);
 const passwordFormRef = ref();
 
-// 基础设置验证规则
+// basic settings validation rules
 const rules = {
   admin_secure: [
     {
       required: true,
-      message: "安全入口不能为空"
+      message: "Secure Entry is required"
     },
     {
       validator: (value: string, cb: any) => {
         if (!value.startsWith("/")) {
-          cb("安全入口必须以 / 开头");
+          cb("Secure entry must start with /");
         } else if (value.length < 8) {
-          cb("安全入口长度不能少于8位");
+          cb("Secure entry must be at least 8 characters");
         } else if (value.length > 18) {
-          cb("安全入口长度不能超过18位");
+          cb("Secure entry cannot exceed 18 characters");
         } else if (!/^\/[a-zA-Z0-9]+$/.test(value)) {
-          cb("安全入口只能包含字母和数字");
+          cb("Secure entry can only contain letters and numbers");
         } else {
           cb();
         }
@@ -99,38 +99,38 @@ const rules = {
   admin_username: [
     {
       required: true,
-      message: "管理账号不能为空"
+      message: "Admin Account is required"
     }
   ]
 };
 
-// 密码修改验证规则
+// password edit validation rules
 const passwordRules = {
   current_password: [
     {
       required: true,
-      message: "当前密码不能为空"
+      message: "Current Password is required"
     }
   ],
   new_password: [
     {
       required: true,
-      message: "新密码不能为空"
+      message: "New Password is required"
     },
     {
       minLength: 6,
-      message: "新密码长度不能少于6位"
+      message: "New password must be at least 6 characters"
     }
   ],
   confirm_password: [
     {
       required: true,
-      message: "请重复输入新密码"
+      message: "Repeat the new password"
     },
     {
       validator: (value: string, cb: any) => {
         if (value !== passwordForm.value.new_password) {
-          cb("两次输入的密码不一致");
+          cb("The two passwords do not match");
         } else {
           cb();
         }
@@ -139,7 +139,7 @@ const passwordRules = {
   ]
 };
 
-// 保存基础设置
+// save basic settings
 const onSubmit = async ({ errors }: ArcoDesign.ArcoSubmit) => {
   if (errors) return;
 
@@ -150,20 +150,20 @@ const onSubmit = async ({ errors }: ArcoDesign.ArcoSubmit) => {
     ]);
 
     if (response && response.code === 200) {
-      Message.success("设置保存成功！");
+      Message.success("Settings saved successfully！");
       emit("refresh");
     } else {
-      Message.error(response?.msg || "设置保存失败");
+      Message.error(response?.msg || "Failed to save settings");
     }
   } catch (error: any) {
     Message.error(error);
   }
 };
 
-// 显示密码修改弹窗
+// show password edit modal
 const showPasswordModal = () => {
   passwordModalVisible.value = true;
-  // 重置密码表单
+  // reset password form
   passwordForm.value = {
     password: "",
     new_password: "",
@@ -171,7 +171,7 @@ const showPasswordModal = () => {
   };
 };
 
-// 提交密码修改
+// SubmitPasswordEdit
 const handlePasswordSubmit = async () => {
   try {
     const valid = await passwordFormRef.value?.validate();
@@ -183,20 +183,20 @@ const handlePasswordSubmit = async () => {
       });
 
       if (response && response.code === 200) {
-        Message.success("密码修改成功，请重新登录！");
+        Message.success("Password changed successfully. Please log in again.！");
         passwordModalVisible.value = false;
         emit("refresh");
       } else {
-        Message.error(response?.msg || "密码修改失败");
+        Message.error(response?.msg || "Failed to change password");
       }
     }
   } catch (error: any) {
-    console.error("密码修改失败:", error);
-    Message.error("密码修改失败，请稍后重试");
+    console.error("Failed to change password:", error);
+    Message.error("Failed to change password. Please try again later.");
   }
 };
 
-// 取消密码修改
+// CancelPasswordEdit
 const handlePasswordCancel = () => {
   passwordModalVisible.value = false;
   passwordForm.value = {
@@ -206,7 +206,7 @@ const handlePasswordCancel = () => {
   };
 };
 
-// 监听数据变化，更新表单
+// watch data changes and update form
 watch(
   () => data.value,
   () => {

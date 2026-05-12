@@ -8,13 +8,13 @@
               <template #icon>
                 <icon-settings />
               </template>
-              同步配置
+              Sync Configuration
             </a-button>
             <a-button type="primary" @click="showAtomModal" :status="'danger'">
               <template #icon>
                 <icon-robot-add />
               </template>
-              支付颗粒度
+              Payment Granularity
             </a-button>
           </a-space>
         </a-col>
@@ -42,23 +42,23 @@
         </template>
         <template #syntax="{ record }">
           <div class="syntax-display">
-            <span class="syntax-value">{{ record.syntax || "无" }}</span>
+            <span class="syntax-value">{{ record.syntax || "None" }}</span>
             <span class="syntax-description">{{ getTableSyntaxDescription(record.syntax) }}</span>
           </div>
         </template>
         <template #optional="{ record }">
           <a-space wrap>
-            <a-button size="mini" type="primary" @click="onEdit(record)">编辑</a-button>
+            <a-button size="mini" type="primary" @click="onEdit(record)">Edit</a-button>
           </a-space>
         </template>
       </a-table>
     </div>
   </div>
 
-  <!-- 编辑汇率语法模态框 -->
+  <!-- Edit Rate Syntax modal -->
   <a-modal
     v-model:visible="editModalVisible"
-    title="编辑汇率语法"
+    title="Edit Rate Syntax"
     @ok="handleEditSubmit"
     @cancel="handleEditCancel"
     :ok-loading="editLoading"
@@ -68,14 +68,14 @@
     <a-form ref="editFormRef" :model="editForm" layout="vertical">
       <a-row :gutter="12">
         <a-col :xs="24" :sm="24" :md="12">
-          <a-form-item label="交易法币">
+          <a-form-item label="Transaction Fiat">
             <a-input v-model="editForm.fiat" readonly size="small">
               <template #prefix>{{ getFiatFlag(editForm.fiat) }}</template>
             </a-input>
           </a-form-item>
         </a-col>
         <a-col :xs="24" :sm="24" :md="12">
-          <a-form-item label="加密货币">
+          <a-form-item label="Cryptocurrency">
             <a-tag :color="getCryptoColor(editForm.crypto)" :bordered="true">
               {{ editForm.crypto }}
             </a-tag>
@@ -83,16 +83,16 @@
         </a-col>
       </a-row>
 
-      <a-form-item label="语法类型">
+      <a-form-item label="Syntax Type">
         <a-radio-group v-model="syntaxType" @change="handleSyntaxTypeChange">
-          <a-radio value="">固定数值</a-radio>
-          <a-radio value="+">固定增加</a-radio>
-          <a-radio value="-">固定减少</a-radio>
-          <a-radio value="~">百分比浮动</a-radio>
+          <a-radio value="">Fixed Value</a-radio>
+          <a-radio value="+">Fixed Increase</a-radio>
+          <a-radio value="-">Fixed Decrease</a-radio>
+          <a-radio value="~">Percentage Float</a-radio>
         </a-radio-group>
       </a-form-item>
 
-      <a-form-item label="数值">
+      <a-form-item label="Value">
         <a-input-number
           v-model="syntaxValue"
           :placeholder="getSyntaxPlaceholder()"
@@ -116,10 +116,10 @@
     </a-form>
   </a-modal>
 
-  <!-- 同步频率设置模态框 -->
+  <!-- sync interval settings modal -->
   <a-modal
     v-model:visible="syncModalVisible"
-    title="汇率同步配置"
+    title="Rate Sync Configuration"
     @ok="handleSyncSubmit"
     @cancel="handleSyncCancel"
     :ok-loading="syncLoading"
@@ -127,19 +127,19 @@
     class="sync-modal"
   >
     <a-form ref="syncFormRef" :model="syncForm" layout="vertical">
-      <a-form-item label="同步频率（分钟）">
+      <a-form-item label="Sync Interval (minutes)">
         <a-input-number
           v-model="syncForm.minutes"
           :min="10"
           :max="1440"
           :precision="0"
-          placeholder="请输入同步频率"
+          placeholder="Enter sync interval"
           style="width: 100%"
         />
       </a-form-item>
 
-      <a-form-item label="API 接口">
-        <a-select v-model="syncForm.apiUrl" placeholder="请选择 API 接口" style="width: 100%">
+      <a-form-item label="API Endpoint">
+        <a-select v-model="syncForm.apiUrl" placeholder="Select API endpoint" style="width: 100%">
           <a-option v-for="option in apiUrlOptions" :key="option.value" :value="option.value" :label="option.label">
             {{ option.label }}
           </a-option>
@@ -147,16 +147,16 @@
       </a-form-item>
 
       <a-form-item label="API Key">
-        <a-input v-model="syncForm.apiKey" placeholder="请输入 API Key（可选）" allow-clear style="width: 100%" />
+        <a-input v-model="syncForm.apiKey" placeholder="Enter API Key (optional)" allow-clear style="width: 100%" />
       </a-form-item>
 
-      <a-form-item label="汇率保留天数">
+      <a-form-item label="Rate Retention Days">
         <a-input-number
           v-model="syncForm.historyDays"
           :min="1"
           :max="365"
           :precision="0"
-          placeholder="请输入汇率保留天数"
+          placeholder="Enter rate retention days"
           style="width: 100%"
         />
       </a-form-item>
@@ -164,22 +164,22 @@
       <div class="sync-tip">
         <a-typography-text type="secondary">
           <icon-info-circle style="margin-right: 4px" />
-          同步频率：10-1440分钟，推荐60分钟<br />
-          官方接口：免费但有速率限制，配置
+          Sync interval: 10-1440 minutes. Recommended: 60 minutes<br />
+          Official API: free but rate-limited. Configure an
           <a-link href="https://www.coingecko.com/" target="_blank" :hoverable="false">API Key</a-link>
-          可解除限制<br />
-          开源接口：作者提供的免费缓存接口（落后官方接口3分钟），无速率限制<br />
+          to remove the limit<br />
+          Open-source API: a free cached API provided by the author, about 3 minutes behind the official API, with no rate limit<br />
           <hr />
-          <b class="sync-warning">官方接口特指 CoinGecko，是全球最大的独立加密货币数据聚合平台之一</b>
+          <b class="sync-warning">Official API refers to CoinGecko, one of the world's largest independent cryptocurrency data aggregators</b>
         </a-typography-text>
       </div>
     </a-form>
   </a-modal>
 
-  <!-- 支付颗粒度设置模态框 -->
+  <!-- payment granularity settings modal -->
   <a-modal
     v-model:visible="atomModalVisible"
-    title="设置支付颗粒度"
+    title="Set Payment Granularity"
     @ok="handleAtomSubmit"
     @cancel="handleAtomCancel"
     :ok-loading="atomLoading"
@@ -187,62 +187,62 @@
     class="atom-modal"
   >
     <a-form ref="atomFormRef" :model="atomForm" layout="vertical">
-      <a-form-item label="USDT 颗粒度">
+      <a-form-item label="USDT Granularity">
         <a-input-number
           v-model="atomForm.usdt"
           :min="0.000001"
           :max="100"
           :precision="undefined"
           :step="0.000001"
-          placeholder="推荐0.01"
+          placeholder="Recommended 0.01"
           style="width: 100%"
         />
       </a-form-item>
 
-      <a-form-item label="USDC 颗粒度">
+      <a-form-item label="USDC Granularity">
         <a-input-number
           v-model="atomForm.usdc"
           :min="0.000001"
           :max="100"
           :precision="undefined"
           :step="0.000001"
-          placeholder="推荐0.01"
+          placeholder="Recommended 0.01"
           style="width: 100%"
         />
       </a-form-item>
 
-      <a-form-item label="TRX 颗粒度">
+      <a-form-item label="TRX Granularity">
         <a-input-number
           v-model="atomForm.trx"
           :min="0.000001"
           :max="100"
           :precision="undefined"
           :step="0.000001"
-          placeholder="推荐0.01"
+          placeholder="Recommended 0.01"
           style="width: 100%"
         />
       </a-form-item>
 
-      <a-form-item label="BNB 颗粒度">
+      <a-form-item label="BNB Granularity">
         <a-input-number
           v-model="atomForm.bnb"
           :min="0.00000001"
           :max="100"
           :precision="undefined"
           :step="0.000001"
-          placeholder="推荐0.00001"
+          placeholder="Recommended 0.00001"
           style="width: 100%"
         />
       </a-form-item>
 
-      <a-form-item label="ETH 颗粒度">
+      <a-form-item label="ETH Granularity">
         <a-input-number
           v-model="atomForm.eth"
           :min="0.00000001"
           :max="100"
           :precision="undefined"
           :step="0.000001"
-          placeholder="推荐0.000001"
+          placeholder="Recommended 0.000001"
           style="width: 100%"
         />
       </a-form-item>
@@ -250,7 +250,7 @@
       <div class="atom-tip">
         <a-typography-text type="secondary">
           <icon-info-circle style="margin-right: 4px" />
-          支付数额递增时的最小单位，支付数额的最终保留位数；除非你明确知道其功能含义，一般情况下不推荐修改。
+          Minimum increment unit for payment amounts and the final retained precision. Do not change this unless you clearly understand its purpose.
         </a-typography-text>
       </div>
     </a-form>
@@ -288,7 +288,7 @@ const editForm = reactive<EditForm>({
 
 const columns = [
   {
-    title: "交易法币",
+    title: "Transaction Fiat",
     dataIndex: "fiat",
     align: "center",
     width: 100,
@@ -306,7 +306,7 @@ const columns = [
     }
   },
   {
-    title: "加密货币",
+    title: "Cryptocurrency",
     dataIndex: "crypto",
     align: "center",
     width: 100,
@@ -324,13 +324,13 @@ const columns = [
     }
   },
   {
-    title: "汇率浮动",
+    title: "Rate Adjustment",
     dataIndex: "syntax",
     slotName: "syntax",
     width: 300
   },
   {
-    title: "操作",
+    title: "Actions",
     slotName: "optional",
     align: "center",
     fixed: "right",
@@ -350,26 +350,26 @@ const parseSyntax = (syntax: string) => {
 const generateSyntax = () => {
   if (syntaxValue.value === undefined || syntaxValue.value === null) return "";
 
-  // 格式化数值,去除末尾的0
+  // format value,remove trailing zeroes
   const formatValue = (val: number) => {
     return parseFloat(val.toFixed(6)).toString();
   };
 
-  // 百分比浮动
+  // Percentage Float
   if (syntaxType.value === "~") {
     return syntaxType.value + formatValue(syntaxValue.value);
   }
 
-  // 其他类型
+  // other types
   return syntaxType.value + formatValue(syntaxValue.value);
 };
 
 const getSyntaxPlaceholder = () => {
   const placeholders = {
-    "+": "如：0.3",
-    "-": "如：0.2",
-    "~": "如：1.020000 或 0.970000",
-    "": "如：7.4"
+    "+": "Example: 0.3",
+    "-": "Example: 0.2",
+    "~": "Example: 1.020000 or 0.970000",
+    "": "Example: 7.4"
   };
   return placeholders[syntaxType.value as keyof typeof placeholders];
 };
@@ -380,40 +380,40 @@ const getTableSyntaxDescription = (syntax: string) => {
   const parsed = parseSyntax(syntax);
   if (parsed.value === undefined || parsed.value === null) return "";
 
-  // 格式化数值,去除末尾的0
+  // format value,remove trailing zeroes
   const formatValue = (val: number) => {
     return parseFloat(val.toFixed(6)).toString();
   };
 
   switch (parsed.type) {
     case "+":
-      return `订单汇率 = 基准汇率 + ${formatValue(parsed.value)}`;
+      return `Order rate = base rate + ${formatValue(parsed.value)}`;
     case "-":
-      return `订单汇率 = 基准汇率 - ${formatValue(parsed.value)}`;
+      return `Order rate = base rate - ${formatValue(parsed.value)}`;
     case "~":
-      return parsed.value != 1 ? `订单汇率 = 基准汇率 * ${formatValue(parsed.value)}` : `订单汇率 = 基准汇率`;
+      return parsed.value != 1 ? `Order rate = base rate * ${formatValue(parsed.value)}` : `Order rate = base rate`;
     default:
-      return `订单汇率强制固定 ${formatValue(parsed.value)}`;
+      return `Order rate fixed at ${formatValue(parsed.value)}`;
   }
 };
 
 const getFormSyntaxDescription = () => {
   if (!syntaxType.value || syntaxValue.value === undefined || syntaxValue.value === null) return "";
 
-  // 格式化数值,去除末尾的0
+  // format value,remove trailing zeroes
   const formatValue = (val: number) => {
     return parseFloat(val.toFixed(6)).toString();
   };
 
   switch (syntaxType.value) {
     case "+":
-      return `订单汇率 = 基准汇率 + ${formatValue(syntaxValue.value)}`;
+      return `Order rate = base rate + ${formatValue(syntaxValue.value)}`;
     case "-":
-      return `订单汇率 = 基准汇率 - ${formatValue(syntaxValue.value)}`;
+      return `Order rate = base rate - ${formatValue(syntaxValue.value)}`;
     case "~":
-      return syntaxValue.value != 1 ? `订单汇率 = 基准汇率 * ${formatValue(syntaxValue.value)}` : `订单汇率 = 基准汇率`;
+      return syntaxValue.value != 1 ? `Order rate = base rate * ${formatValue(syntaxValue.value)}` : `Order rate = base rate`;
     default:
-      return `订单汇率强制固定 ${formatValue(syntaxValue.value)}`;
+      return `Order rate fixed at ${formatValue(syntaxValue.value)}`;
   }
 };
 
@@ -450,22 +450,22 @@ const onEdit = (record: List) => {
 const handleEditSubmit = async () => {
   try {
     if (!editForm.fiat || !editForm.crypto) {
-      Message.error("交易对信息不完整");
+      Message.error("Trading pair information is incomplete");
       return;
     }
 
     if (syntaxValue.value === undefined || syntaxValue.value === null) {
-      Message.error("请输入有效的数值");
+      Message.error("Enter a valid value");
       return;
     }
 
     if (syntaxType.value === "~") {
       if (syntaxValue.value <= 0) {
-        Message.error("百分比浮动数值必须大于 0");
+        Message.error("Percentage float value must be greater than 0");
         return;
       }
     } else if (syntaxValue.value < 0) {
-      Message.error("数值不能为负数");
+      Message.error("Value cannot be negative");
       return;
     }
 
@@ -478,12 +478,12 @@ const handleEditSubmit = async () => {
       syntax: syntax
     });
 
-    Message.success("编辑成功");
+    Message.success("Edited successfully");
     editModalVisible.value = false;
     await getCommonTableList();
   } catch (error) {
-    console.error("编辑失败:", error);
-    Message.error("编辑失败");
+    console.error("Edit failed:", error);
+    Message.error("Edit failed");
   } finally {
     editLoading.value = false;
   }
@@ -496,7 +496,7 @@ const handleEditCancel = () => {
   syntaxValue.value = undefined;
 };
 
-// 同步频率相关状态
+// sync interval related state
 const syncModalVisible = ref<boolean>(false);
 const syncLoading = ref<boolean>(false);
 const syncFormRef = ref();
@@ -508,19 +508,19 @@ const syncForm = reactive({
   historyDays: 30
 });
 
-// API 接口选项
+// API Endpointoptions
 const apiUrlOptions = [
   {
-    label: "官方接口 免费额度存在速率限制",
+    label: "Official API, free quota is rate-limited",
     value: "https://api.coingecko.com"
   },
   {
-    label: "开源免费 作者自建 没有速率限制",
+    label: "Open-source free author-hosted API without rate limit",
     value: "https://api-coingecko-com.bepusdt.online"
   }
 ];
 
-// 显示同步频率模态框
+// show sync interval modal
 const showSyncModal = async () => {
   try {
     const res = await getsConfAPI({
@@ -546,12 +546,12 @@ const showSyncModal = async () => {
       syncForm.historyDays = 30;
     }
   } catch (error) {
-    console.error("获取同步频率配置失败:", error);
+    console.error("Failed to get sync interval configuration:", error);
     syncForm.minutes = 60;
     syncForm.apiUrl = "https://api.coingecko.com";
     syncForm.apiKey = "";
     syncForm.historyDays = 30;
-    Message.warning("获取当前配置失败，使用默认值");
+    Message.warning("Failed to get current configuration. Using defaults.");
   }
 
   syncModalVisible.value = true;
@@ -560,17 +560,17 @@ const showSyncModal = async () => {
 const handleSyncSubmit = async () => {
   try {
     if (!syncForm.minutes || syncForm.minutes < 10 || syncForm.minutes > 1440) {
-      Message.error("请输入有效的同步频率（10-1440分钟）");
+      Message.error("Enter a valid sync interval (10-1440 minutes)");
       return;
     }
 
     if (!syncForm.apiUrl) {
-      Message.error("请选择 API 接口");
+      Message.error("Select API endpoint");
       return;
     }
 
     if (!syncForm.historyDays || syncForm.historyDays < 1 || syncForm.historyDays > 365) {
-      Message.error("请输入有效的汇率保留天数（1-365天）");
+      Message.error("Enter valid rate retention days (1-365 days)");
       return;
     }
 
@@ -584,11 +584,11 @@ const handleSyncSubmit = async () => {
       { key: "rate_sync_history_days", value: syncForm.historyDays.toString() }
     ]);
 
-    Message.success("汇率同步配置已保存");
+    Message.success("Rate sync configuration saved");
     syncModalVisible.value = false;
   } catch (error) {
-    console.error("设置同步配置失败:", error);
-    Message.error("设置失败");
+    console.error("Failed to set sync configuration:", error);
+    Message.error("Setting failed");
   } finally {
     syncLoading.value = false;
   }
@@ -603,7 +603,7 @@ const handleSyncCancel = () => {
   syncForm.historyDays = 30;
 };
 
-// 支付颗粒度相关状态
+// Payment Granularityrelated state
 const atomModalVisible = ref<boolean>(false);
 const atomLoading = ref<boolean>(false);
 const atomFormRef = ref();
@@ -631,8 +631,8 @@ const showAtomModal = async () => {
       atomForm.bnb = res.data.atom_bnb ? parseFloat(res.data.atom_bnb) : 0.00001;
     }
   } catch (error) {
-    console.error("获取支付颗粒度配置失败:", error);
-    Message.warning("获取当前配置失败，使用默认值");
+    console.error("Failed to get payment granularity configuration:", error);
+    Message.warning("Failed to get current configuration. Using defaults.");
   }
 
   atomModalVisible.value = true;
@@ -641,7 +641,7 @@ const showAtomModal = async () => {
 const handleAtomSubmit = async () => {
   try {
     if (!atomForm.usdt || !atomForm.usdc || !atomForm.trx || !atomForm.eth || !atomForm.bnb) {
-      Message.error("请填写所有颗粒度配置");
+      Message.error("Fill in all granularity settings");
       return;
     }
 
@@ -655,11 +655,11 @@ const handleAtomSubmit = async () => {
       { key: "atom_bnb", value: atomForm.bnb.toString() }
     ]);
 
-    Message.success("支付颗粒度设置成功");
+    Message.success("Payment GranularitySettings saved");
     atomModalVisible.value = false;
   } catch (error) {
-    console.error("设置支付颗粒度失败:", error);
-    Message.error("设置失败");
+    console.error("Set Payment GranularityFailed:", error);
+    Message.error("Setting failed");
   } finally {
     atomLoading.value = false;
   }
@@ -731,7 +731,7 @@ getCommonTableList();
 .toolbar {
   margin-bottom: 16px;
   display: flex;
-  justify-content: flex-start; // 改为左对齐
+  justify-content: flex-start; // change to left alignment
 }
 
 .sync-modal {

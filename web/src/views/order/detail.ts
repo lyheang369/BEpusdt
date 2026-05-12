@@ -53,7 +53,7 @@ export const useOrderDetail = () => {
     tx_url: ""
   });
 
-  // 显示详情
+  // show details
   const showDetail = async (record: Detail) => {
     loading.value = true;
 
@@ -62,13 +62,13 @@ export const useOrderDetail = () => {
       detailData.value = response.data;
       detailVisible.value = true;
     } catch (error) {
-      alert("获取订单详情失败" + error);
+      alert("Failed to get order details" + error);
     } finally {
       loading.value = false;
     }
   };
 
-  // 关闭详情
+  // OffDetails
   const closeDetail = () => {
     detailVisible.value = false;
     detailData.value = {

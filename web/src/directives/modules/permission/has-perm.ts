@@ -2,47 +2,47 @@ import { Directive } from "vue";
 import { useUserInfoStore } from "@/store/modules/user-info";
 
 /**
- * 检测指令绑定值是否为空
- * @param value 指令绑定值
- * @returns {Array<string>} 指令绑定值数组
+ * 检测directive binding valueYesNo为空
+ * @param value directive binding value
+ * @returns {Array<string>} directive binding value数组
  */
 const bindingValueEmpty = (value: unknown): Array<string> => {
   // 处理未定义或空值情况
-  if (!value) throw new Error("v-hasPerm 指令需要配置权限标识");
+  if (!value) throw new Error("v-hasPerm directive requires a permission identifier");
 
-  // 标准化为数组格式
-  // 如果 value 是一个数组，则直接返回该数组
-  // 如果 value 不是数组，则将其转换为包含单个字符串元素的数组
+  // 标准化为数组format
+  // 如果 value Yesone个数组，则直接返回该数组
+  // 如果 value 不Yes数组，则将其转换为包含单个stringelement的数组
   return Array.isArray(value) ? (value as string[]) : [String(value)];
 };
 
 /**
- * 检查自定义指令权限
- * @param {HTMLElement} el dom元素
- * @param {unknown} bindingValue 指令绑定值
+ * check custom directive permission
+ * @param {HTMLElement} el domelement
+ * @param {unknown} bindingValue directive binding value
  */
 const checkPermissions = (el: HTMLElement, bindingValue: unknown) => {
   try {
-    // 检测自定义指令值并转化为数组格式
+    // 检测Custom Directive值并转化为数组format
     const requiredPermissions = bindingValueEmpty(bindingValue);
 
-    // 超级管理员标识
+    // super admin identifier
     const all_permission = "*:*:*";
 
-    // 获取用户权限标识-Array[string]
+    // 获取用户permission标识-Array[string]
     let { permissions } = useUserInfoStore().account;
 
-    // 如果是超级管理员则放行
+    // 如果Yes超级Admin则放行
     if (permissions.includes(all_permission)) return;
 
-    // 是否有权限
+    // YesNohas permission
     const hasPermissions = requiredPermissions.some((perm: string) => permissions.includes(perm));
 
-    // 无权限、父节点存在时，删除当前节点
+    // Nonepermission、父node存在时，Deletecurrent node
     if (!hasPermissions && el.parentNode) el.parentNode.removeChild(el);
   } catch (error) {
-    console.error(`权限指令错误: ${error}`);
-    // 删除当前节点
+    console.error(`permission directive error: ${error}`);
+    // Deletecurrent node
     if (el.parentNode) el.parentNode.removeChild(el);
   }
 };

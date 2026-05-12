@@ -427,7 +427,7 @@
         navigator.clipboard.writeText(text).then(function () {
             showCopySuccess(element, isButton);
         }).catch(function (err) {
-            console.error('复制失败: ', err);
+            console.error('Copy failed: ', err);
             fallbackCopy(text, element, isButton);
         });
     }
@@ -435,8 +435,8 @@
     function showCopySuccess(element, isButton) {
         const t = window.i18next ? window.i18next.t.bind(window.i18next) : function (key) {
             const translations = {
-                'payment.copied': '已复制!',
-                'payment.copySuccess': '✓ 已复制!'
+                'payment.copied': 'Copied!',
+                'payment.copySuccess': '✓ Copied!'
             };
             return translations[key] || key;
         };
@@ -464,7 +464,7 @@
     function fallbackCopy(text, element, isButton) {
         const t = window.i18next ? window.i18next.t.bind(window.i18next) : function (key) {
             const translations = {
-                'payment.copyFailed': '复制失败，请手动复制'
+                'payment.copyFailed': 'Copy failed. Please copy manually.'
             };
             return translations[key] || key;
         };

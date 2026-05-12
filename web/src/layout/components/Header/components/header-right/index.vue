@@ -1,7 +1,7 @@
 <template>
   <div class="header_setting" :class="isMobile && 'head-absolute-fix'">
-    <!-- 国际化 -->
-    <!-- 暂时也是真没精力搞国际化 -->
+    <!-- Internationalization -->
+    <!-- 暂时也Yes真没精力搞Internationalization -->
     <!-- <a-dropdown trigger="hover" @select="onLange">
       <a-button size="mini" type="text" class="icon_btn" id="system-language">
         <template #icon>
@@ -21,7 +21,7 @@
         </template>
       </a-button>
     </a-tooltip>
-    <!-- 切换黑夜模式 -->
+    <!-- Switch to Night Mode -->
     <a-tooltip :content="$t(`system.${!darkMode ? 'switch-to-night-mode' : 'switch-to-daytime-mode'}`)">
       <a-button size="mini" type="text" class="icon_btn" id="system-dark" @click="onNightMode">
         <template #icon>
@@ -40,7 +40,7 @@
         </div>
       </div>
       <template #content>
-        <!-- 项目地址 -->
+        <!-- Project URL -->
         <a-doption @click="onProject">
           <template #default>
             <s-svg-icon :name="'github'" :size="18" />
@@ -48,7 +48,7 @@
           </template>
         </a-doption>
         <a-divider margin="0" />
-        <!-- 退出登录 -->
+        <!-- Log Out -->
         <a-doption @click="logOut">
           <template #default>
             <s-svg-icon :name="'exit'" :size="18" />
@@ -85,18 +85,18 @@ const themeStore = useThemeConfig();
 const { darkMode } = storeToRefs(themeStore);
 const { admin_username } = storeToRefs(userStore); // 添加这行来获取 admin_username
 
-// 系统设置
+// System Settings
 const systemOpen = ref(false);
 const onSystemSetting = () => {
   systemOpen.value = true;
 };
 
-// 主题设置
+// Theme Settings
 const themeOpen = ref(false);
 // const onThemeSetting = () => {
 //   themeOpen.value = true;
 // };
-// 全屏
+// Full Screen
 // const fullScreen = ref(true);
 // const onFullScreen = () => {
 //   if (!document.fullscreenElement) {
@@ -110,7 +110,7 @@ const themeOpen = ref(false);
 //   }
 // };
 
-// 黑暗模式
+// dark mode
 const onNightMode = () => {
   darkMode.value = !darkMode.value;
   let { setDarkMode } = useThemeMethods();
@@ -119,7 +119,7 @@ const onNightMode = () => {
 
 // 语言
 // const onLange = (value: string) => {
-//   if (value === "Chinese" || value === "中文") {
+//   if (value === "Chinese" || value === "Chinese") {
 //     themeStore.setLanguage("zh-CN");
 //   } else {
 //     themeStore.setLanguage("en-US");
@@ -127,16 +127,16 @@ const onNightMode = () => {
 //   i18n.locale.value = language.value;
 // };
 
-// 项目地址
+// Project URL
 const onProject = () => {
   window.open("https://github.com/v03413/BEpusdt", "_blank");
 };
 
-// 退出登录
+// Log Out
 const logOut = () => {
   Modal.warning({
-    title: "提示",
-    content: "确定退出登录？",
+    title: "Notice",
+    content: "Confirm logout?",
     hideCancel: false,
     closable: true,
     onBeforeOk: async () => {
@@ -144,7 +144,7 @@ const logOut = () => {
         // 用户退出
         await userStore.logOut();
         router.replace("/login");
-        // 清除路由数据
+        // 清除route数据
         useRouteConfigStore().resetRoute();
         return true;
       } catch {

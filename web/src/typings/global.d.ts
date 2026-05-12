@@ -1,5 +1,5 @@
 /* ts命名空间 */
-/* 路由-Menu */
+/* route-Menu */
 declare namespace Menu {
   interface MenuOptions {
     id: string;

@@ -7,12 +7,12 @@ import { generate, getRgbStr } from "@arco-design/color";
  */
 export const useThemeMethods = () => {
   /**
-   * @description: 初始化主题
+   * @description: initialize theme
    */
   const initTheme = () => {
-    // 黑暗模式和主题色
+    // dark mode和主题色
     setDarkMode();
-    // 色弱模式和灰色模式
+    // Color Weakness Mode和Gray Mode
     const themeStore = useThemeConfig();
     const { grayMode } = storeToRefs(themeStore);
     if (grayMode.value) {
@@ -31,17 +31,17 @@ export const useThemeMethods = () => {
     if (darkMode.value) {
       // 设置为暗黑主题
       document.body.setAttribute("arco-theme", "dark");
-      asideDark.value = false; // 黑暗模式与侧边栏深色互斥
+      asideDark.value = false; // dark mode与Dark Sidebar互斥
     } else {
       // 恢复亮色主题
       document.body.removeAttribute("arco-theme");
     }
-    // 黑暗模式切换后需要更新主题色
+    // dark mode切换后需要更新主题色
     setThemeColor();
   };
 
   /**
-   * @description: 主题色设置
+   * @description: theme color setting
    */
   const setThemeColor = () => {
     const themeStore = useThemeConfig();
@@ -56,16 +56,16 @@ export const useThemeMethods = () => {
   };
 
   /**
-   * @description: 色弱模式
+   * @description: Color Weakness Mode
    */
   const setColorWeak = () => {
-    // 获取html
+    // get HTML
     const htmlCase = document.querySelector("html") as HTMLHtmlElement | null;
     if (!htmlCase) return;
     const themeStore = useThemeConfig();
     const { colorWeakMode, grayMode } = storeToRefs(themeStore);
     if (colorWeakMode.value) {
-      grayMode.value = false; // 色弱模式和灰色模式互斥
+      grayMode.value = false; // Color Weakness Modeand Gray Mode are mutually exclusive
       htmlCase.style.filter = "invert(80%)"; // 反转色80%
     } else {
       htmlCase.style.filter = "";
@@ -73,16 +73,16 @@ export const useThemeMethods = () => {
   };
 
   /**
-   * @description: 灰色模式
+   * @description: Gray Mode
    */
   const setGray = () => {
-    // 获取html
+    // get HTML
     const htmlCase = document.querySelector("html") as HTMLHtmlElement | null;
     if (!htmlCase) return;
     const themeStore = useThemeConfig();
     const { colorWeakMode, grayMode } = storeToRefs(themeStore);
     if (grayMode.value) {
-      colorWeakMode.value = false; // 色弱模式和灰色模式互斥
+      colorWeakMode.value = false; // Color Weakness Modeand Gray Mode are mutually exclusive
       htmlCase.style.filter = "grayscale(100%)"; // 灰度100%
     } else {
       htmlCase.style.filter = "";

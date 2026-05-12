@@ -3,7 +3,7 @@
 
 // Transition过渡动画
 
-/* 轻过渡 */
+/* Light Transition */
 // 进入
 .fadeInOut-enter-active {
   animation: slide-enter-right 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
@@ -58,7 +58,7 @@
   }
 }
 
-/* 卡片 */
+/* card */
 // 进入
 .cardInOut-enter-active {
   animation: swing-in-top-fwd 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
@@ -95,7 +95,7 @@
   }
 }
 
-/* 渐退 */
+/* Fade Out */
 // 进入
 .fadeOut-enter-active {
   animation: fade-in 0.25s cubic-bezier(0.39, 0.575, 0.565, 1) both;

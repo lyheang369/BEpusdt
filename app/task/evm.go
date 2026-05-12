@@ -24,15 +24,15 @@ import (
 )
 
 const (
-	blockParseMaxNum = 10 // 每次解析区块的最大数量
+	blockParseMaxNum = 10 // 每次解析Block的最大数量
 	evmTransferEvent = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 )
 
 var chainBlockNum sync.Map
 
 type block struct {
-	RollDelayOffset int64 // 延迟偏移量，某些RPC节点如果不延迟，会报错 block is out of range，目前发现 https://rpc.xlayer.tech/ 存在此问题
-	ConfirmedOffset int   // 确认偏移量，开启交易确认后，区块高度需要减去此值认为交易已确认
+	RollDelayOffset int64 // 延迟偏移量，某些RPCnode如果不延迟，会报错 block is out of range，目前发现 https://rpc.xlayer.tech/ 存在此问题
+	ConfirmedOffset int   // 确认偏移量，OnTransaction Confirmed后，Block高度需要减去此值认为Transaction已确认
 }
 
 type evmNative struct {
@@ -46,7 +46,7 @@ type evm struct {
 	Block          block
 	Native         evmNative
 	Client         *http.Client
-	AvgBlockTime   int64 // 平均出块时间，单位秒；一个大概值，用于计算首次启动时需要回溯的区块数量，尽量准确设置，默认1秒一个区块
+	AvgBlockTime   int64 // 平均出块Time，单位sec；one个大概值，用于计算首次启动时需要回溯的Block数量，尽量准确设置，默认1secone个Block
 	blockScanQueue *chanx.UnboundedChan[evmBlock]
 }
 
@@ -88,7 +88,7 @@ func (e *evm) syncBlocksForward(ctx context.Context) {
 
 	var res = gjson.ParseBytes(body)
 	if !res.IsObject() {
-		log.Task.Warn(fmt.Sprintf("EVM 数据解析错误(%s): %s", e.Network, string(body)))
+		log.Task.Warn(fmt.Sprintf("EVM Data parse error(%s): %s", e.Network, string(body)))
 
 		return
 	}
@@ -104,7 +104,7 @@ func (e *evm) syncBlocksForward(ctx context.Context) {
 
 		lastBlockNumber = v.(int64)
 	} else {
-		e.syncBlocksBackward(now) // 不存在，说明是第一次启动
+		e.syncBlocksBackward(now) // 不存在，说明YesNo. one次启动
 	}
 
 	if now-lastBlockNumber > cast.ToInt64(model.GetC(model.BlockHeightMaxDiff)) {
@@ -129,7 +129,7 @@ func (e *evm) syncBlocksForward(ctx context.Context) {
 }
 
 func (e *evm) syncBlocksBackward(now int64) {
-	if e.AvgBlockTime <= 0 { // 未设置平均出块时间，默认1秒一个
+	if e.AvgBlockTime <= 0 { // 未设置平均出块Time，默认1secone个
 		e.AvgBlockTime = 1
 	}
 
@@ -141,7 +141,7 @@ func (e *evm) syncBlocksBackward(now int64) {
 		return
 	}
 
-	sub := ((time.Now().Unix() - o.CreatedAt.Time().Unix()) / e.AvgBlockTime) + 30 //计算需要回溯的区块数量，同时冗余30个区块
+	sub := ((time.Now().Unix() - o.CreatedAt.Time().Unix()) / e.AvgBlockTime) + 30 //计算需要回溯的Block数量，同时冗余30个Block
 	start := now - sub
 
 	go func() {
@@ -275,21 +275,21 @@ func (e *evm) getBlockByNumber(a any) {
 		transferQueue.In <- transfers
 	}
 
-	log.Task.Info(fmt.Sprintf("区块扫描完成(%s): %d → %d 成功率：%s", e.Network, b.From, b.To, conf.GetSuccessRate(e.Network)))
+	log.Task.Info(fmt.Sprintf("Block scan complete(%s): %d → %d success rate:%s", e.Network, b.From, b.To, conf.GetSuccessRate(e.Network)))
 }
 
 func (e *evm) parseNativeTransfer(array []gjson.Result, num int, timestamp time.Time) []transfer {
 	nativeTransfers := make([]transfer, 0)
 	for _, tx := range array {
 		if tx.Get("input").String() != "0x" {
-			// 非原生币交易
+			// 非原生币Transaction
 
 			continue
 		}
 
 		valStr := tx.Get("value").String()
 		if valStr == "0x0" || len(valStr) < 3 {
-			// 过滤 0 值交易
+			// 过滤 0 值Transaction
 
 			continue
 		}
@@ -301,7 +301,7 @@ func (e *evm) parseNativeTransfer(array []gjson.Result, num int, timestamp time.
 		}
 
 		toAddress := tx.Get("to").String()
-		if toAddress == "" { // 合约创建交易 to 为空
+		if toAddress == "" { // 合Approx.创建Transaction to 为空
 
 			continue
 		}
@@ -456,7 +456,7 @@ func (e *evm) rpcEndpoint() string {
 
 func syncBreak(network string, num int) bool {
 	if num >= blockQueueLimit {
-		log.Task.Warn(fmt.Sprintf("%s 同步阻塞，当前区块消费堆积数量：%d", network, num))
+		log.Task.Warn(fmt.Sprintf("%s sync blocked, current block consumer backlog:%d", network, num))
 
 		return true
 	}

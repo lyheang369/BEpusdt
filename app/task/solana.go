@@ -23,7 +23,7 @@ import (
 	"github.com/v03413/bepusdt/app/utils"
 )
 
-// 参考文档
+// 参考Docs
 //  - https://solana.com/zh/docs/rpc
 //  - https://github.com/solana-program/token/blob/6d18ff73b1dd30703a30b1ca941cb0f1d18c2b2a/program/src/instruction.rs
 
@@ -99,17 +99,17 @@ func (s *solana) syncSlotForward(ctx context.Context) {
 		s.syncSlotBackward(now)
 	}
 
-	if now-s.lastSlotNum > cast.ToInt(model.GetC(model.BlockHeightMaxDiff)) { // 区块高度变化过大，强制丢块重扫
+	if now-s.lastSlotNum > cast.ToInt(model.GetC(model.BlockHeightMaxDiff)) { // Blockblock height changed too much, forcing rescan
 		s.lastSlotNum = now
 	}
 
-	if now == s.lastSlotNum { // 区块高度没有变化
+	if now == s.lastSlotNum { // Blockblock height unchanged
 
 		return
 	}
 
 	for n := s.lastSlotNum + 1; n <= now; n++ {
-		// 待扫描区块入列
+		// block queued for scanning
 
 		s.slotQueue.In <- n
 	}
@@ -131,8 +131,8 @@ func (s *solana) syncSlotBackward(now int) {
 		return
 	}
 
-	// Solana 大概1秒3个区块（大概值，实际存在波动）
-	num := int((time.Now().Unix() - o.CreatedAt.Time().Unix() + 1) * 3) // 计算需要反向扫描的区块数量
+	// Solana 大概1sec3个Block（大概值，实际存在波动）
+	num := int((time.Now().Unix() - o.CreatedAt.Time().Unix() + 1) * 3) // calculate the number of blocks to scan backward
 
 	go func() {
 		ticker := time.NewTicker(time.Millisecond * 125)
@@ -214,7 +214,7 @@ func (s *solana) slotParse(n any) {
 	for _, trans := range gjson.GetBytes(body, "result.transactions").Array() {
 		hash := trans.Get("transaction.signatures.0").String()
 
-		// 解析账号索引
+		// 解析Account索引
 		accountKeys := make([]string, 0)
 		for _, key := range trans.Get("transaction.message.accountKeys").Array() {
 			accountKeys = append(accountKeys, key.String())
@@ -235,13 +235,13 @@ func (s *solana) slotParse(n any) {
 			}
 		}
 
-		// SPL Token的Mint地址，即不包含 Token 交易信息
+		// SPL Token的MintAddress，即不包含 Token Transactioninformation
 		if splTokenIndex == -1 {
 
 			continue
 		}
 
-		// 解析 Token 账户 【Token Wallet => Owner Wallet】
+		// 解析 Token Account 【Token Wallet => Owner Wallet】
 		tokenAccountMap := make(map[string]solanaTokenOwner)
 		for _, v := range []string{"postTokenBalances", "preTokenBalances"} {
 			for _, itm := range trans.Get("meta." + v).Array() {
@@ -260,7 +260,7 @@ func (s *solana) slotParse(n any) {
 
 		transArr := make([]transfer, 0)
 
-		// 解析外部指令
+		// 解析External指令
 		for _, instr := range trans.Get("transaction.message.instructions").Array() {
 			if instr.Get("programIdIndex").Int() != splTokenIndex {
 
@@ -270,7 +270,7 @@ func (s *solana) slotParse(n any) {
 			transArr = append(transArr, s.parseTransfer(instr, accountKeys, tokenAccountMap))
 		}
 
-		// 解析内部指令
+		// 解析Internal指令
 		for _, itm := range trans.Get("meta.innerInstructions").Array() {
 			for _, instr := range itm.Get("instructions").Array() {
 				if instr.Get("programIdIndex").Int() != splTokenIndex {
@@ -282,7 +282,7 @@ func (s *solana) slotParse(n any) {
 			}
 		}
 
-		// 过滤无关交易
+		// 过滤None关Transaction
 		result := make([]transfer, 0)
 		for _, t := range transArr {
 			if t.FromAddress == "" || t.RecvAddress == "" || t.Amount.IsZero() {
@@ -303,13 +303,13 @@ func (s *solana) slotParse(n any) {
 		}
 	}
 
-	log.Task.Info(fmt.Sprintf("区块扫描完成(Solana) %d 成功率：%s", slot, conf.GetSuccessRate(network)))
+	log.Task.Info(fmt.Sprintf("Block scan complete(Solana) %d success rate:%s", slot, conf.GetSuccessRate(network)))
 }
 
 func (s *solana) parseTransfer(instr gjson.Result, accountKeys []string, tokenAccountMap map[string]solanaTokenOwner) transfer {
 	accounts := instr.Get("accounts").Array()
 	trans := transfer{}
-	if len(accounts) < 3 { // from to singer，至少存在3个账户索引，如果是多签则 > 3
+	if len(accounts) < 3 { // from to singer，至少存在3个Account索引，如果Yes多签则 > 3
 
 		return trans
 	}

@@ -34,7 +34,7 @@ func initCustomPayment(e *gin.Engine, path string) {
 	e.StaticFS("/payment/assets", http.Dir(filepath.Join(path, "assets")))
 	e.StaticFS("/secure/assets", http.FS(subFS(static.Secure, "secure/assets")))
 
-	log.Info("成功注册自定义静态资源路径：", path)
+	log.Info("Successfully registered custom static asset path:", path)
 }
 
 func initDefaultPayment(e *gin.Engine) {

@@ -17,13 +17,13 @@ import "virtual:svg-icons-register";
 import i18n from "@/lang/index";
 // 引入字体
 import "@/assets/fonts/fonts.scss";
-// 引入自定义指令
+// 引入Custom Directive
 import directives from "@/directives/index";
 
 const app = createApp(App);
 
 // app.use(plugin, options)
-// 其中 plugin 表示要传递的插件对象， options 参数是可选的，表示选项配置
+// 其Medium plugin 表示要传递的插件object， options 参数Yesoptional的，表示options配置
 // https://cn.vuejs.org/api/application.html#app-use
 
 app.use(ArcoVue, {

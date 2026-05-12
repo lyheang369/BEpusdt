@@ -43,7 +43,7 @@ func (Conf) Set(ctx *gin.Context) {
 
 	defer model.RefreshC()
 
-	base.Ok(ctx, "配置成功")
+	base.Ok(ctx, "Configuration saved")
 }
 
 func (Conf) Get(ctx *gin.Context) {
@@ -67,7 +67,7 @@ func (Conf) Del(ctx *gin.Context) {
 
 	model.Db.Where("k = ?", req.Key).Delete(&model.Conf{})
 
-	base.Ok(ctx, "删除成功")
+	base.Ok(ctx, "Deleted successfully")
 }
 
 func (Conf) Gets(ctx *gin.Context) {
@@ -108,12 +108,12 @@ func (Conf) Sets(ctx *gin.Context) {
 
 	for _, v := range data {
 		if v.K == model.PaymentStaticPath && v.V != "" && !utils.IsExist(v.V) {
-			base.BadRequest(ctx, "静态资源路径不存在，请确认后重新配置："+v.V)
+			base.BadRequest(ctx, "Static asset path does not exist. Confirm and reconfigure:"+v.V)
 
 			return
 		}
 		if v.K == model.ApiAuthToken {
-			base.BadRequest(ctx, "安全考虑，不允许自定义修改 API 对接令牌")
+			base.BadRequest(ctx, "For security reasons, custom API integration token changes are not allowed")
 
 			return
 		}
@@ -124,7 +124,7 @@ func (Conf) Sets(ctx *gin.Context) {
 
 	defer model.RefreshC()
 
-	base.Ok(ctx, "配置成功")
+	base.Ok(ctx, "Configuration saved")
 }
 
 func (Conf) Notifier(ctx *gin.Context) {
@@ -142,22 +142,22 @@ func (Conf) Notifier(ctx *gin.Context) {
 		{K: model.NotifierParams, V: string(req.Params)},
 	})
 
-	base.Ok(ctx, "配置成功")
+	base.Ok(ctx, "Configuration saved")
 }
 
 func (Conf) NotifierTest(ctx *gin.Context) {
 	err := notifier.Test()
 	if err != nil {
-		base.Ok(ctx, "发送测试失败："+err.Error())
+		base.Ok(ctx, "Test send failed:"+err.Error())
 
 		return
 	}
 
-	base.Ok(ctx, "发送测试成功")
+	base.Ok(ctx, "Test sent successfully")
 }
 
 func (Conf) ResetApiAuthToken(ctx *gin.Context) {
 	model.SetK(model.ApiAuthToken, strings.ToUpper(utils.Md5String(utils.StrSha256(time.Now().String()))))
 
-	base.Ok(ctx, "重置成功")
+	base.Ok(ctx, "ResetSuccess")
 }

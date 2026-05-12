@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BEpusdt - 收银台</title>
+    <title>BEpusdt - Cashier</title>
     <link rel="shortcut icon" href="/payment/assets/img/tether.svg">
     <link rel="stylesheet" href="/payment/assets/css/core.min.css">
     <link rel="stylesheet" href="/payment/assets/css/cashier.css">
@@ -16,36 +16,36 @@
     <div class="payment-container">
         <div class="language-switcher">
             <select id="languageSwitcher" onchange="changeLanguage(this.value)">
-                <option value="zh">中文</option>
+                <option value="zh">Chinese</option>
                 <option value="en">English</option>
             </select>
         </div>
 
         <div class="crypto-icon">--</div>
-        <h1 class="payment-title" data-i18n="payment.title">-- 支付</h1>
+        <h1 class="payment-title" data-i18n="payment.title">-- Payment</h1>
         <p class="payment-subtitle">
             <span class="status-indicator"></span>
-            <span data-i18n="payment.subtitle2">请选择支付币种和网络</span>
+            <span data-i18n="payment.subtitle2">Please select currency and network</span>
         </p>
 
         <div class="order-info">
             <div class="order-item">
-                <span class="order-label" data-i18n="payment.paymentAmount">付款数额:</span>
+                <span class="order-label" data-i18n="payment.paymentAmount">Payment Amount:</span>
                 <span class="order-value amount-value" id="payAmount" onclick="copyAmount()"
-                    data-i18n="[title]payment.clickToCopy" title="点击复制金额">-- --</span>
+                    data-i18n="[title]payment.clickToCopy" title="Click to copy amount">-- --</span>
             </div>
             <div class="order-item">
-                <span class="order-label" data-i18n="payment.merchantOrder">商户订单:</span>
+                <span class="order-label" data-i18n="payment.merchantOrder">Merchant Order:</span>
                 <span class="order-value">{{.order_id}}</span>
             </div>
             <div class="order-item">
-                <span class="order-label" data-i18n="payment.productName">商品名称:</span>
+                <span class="order-label" data-i18n="payment.productName">Product Name:</span>
                 <span class="order-value">{{.name}}</span>
             </div>
             <div class="order-item">
-                <span class="order-label" data-i18n="payment.orderAmount">订单金额:</span>
+                <span class="order-label" data-i18n="payment.orderAmount">Order Amount:</span>
                 <span class="order-value">
-                    <span class="fiat-amount"><span data-i18n="payment.amountPrefix">约</span> {{.money}}
+                    <span class="fiat-amount"><span data-i18n="payment.amountPrefix">Approx.</span> {{.money}}
                         {{.fiat}}</span>
                 </span>
             </div>
@@ -53,18 +53,18 @@
         <div class="countdown-banner">
             <div class="countdown-content">
                 <div class="countdown-info">
-                    <div class="countdown-title" data-i18n="payment.countdownTitle">⏰ 支付倒计时</div>
-                    <div class="countdown-subtitle" data-i18n="payment.countdownSubtitle">请在指定时间内完成转账，超时勿付请重新下单</div>
+                    <div class="countdown-title" data-i18n="payment.countdownTitle">⏰ Payment Countdown</div>
+                    <div class="countdown-subtitle" data-i18n="payment.countdownSubtitle">Please complete the transfer within the specified time. Do not pay after timeout; create a new order.</div>
                 </div>
                 <div class="countdown-timer" id="countdown">
                     <div class="time-unit">
                         <span class="time-number" id="minutes">15</span>
-                        <span class="time-label" data-i18n="payment.minutes">分</span>
+                        <span class="time-label" data-i18n="payment.minutes">min</span>
                     </div>
                     <span class="time-separator">:</span>
                     <div class="time-unit">
                         <span class="time-number" id="seconds">00</span>
-                        <span class="time-label" data-i18n="payment.seconds">秒</span>
+                        <span class="time-label" data-i18n="payment.seconds">sec</span>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
             <div class="selector-content">
                 <div class="selector-container">
                     <div class="coin-select" id="currency-select">
-                        <span data-i18n="payment.selectCurrency">请选择币种</span><svg xmlns="http://www.w3.org/2000/svg"
+                        <span data-i18n="payment.selectCurrency">Please select currency</span><svg xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" fill="none">
                             <path fill="currentColor" fill-rule="evenodd"
                                 d="M5.232 9.36a1 1 0 0 1 1.408-.128L12 13.698l5.36-4.466a1 1 0 0 1 1.28 1.536l-6 5a1 1 0 0 1-1.28 0l-6-5a1 1 0 0 1-.128-1.408"
@@ -81,7 +81,7 @@
                         </svg>
                     </div>
                     <div class="coin-select" id="network-select">
-                        <span data-i18n="payment.selectNetwork">请选择网络</span><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                        <span data-i18n="payment.selectNetwork">Please select network</span><svg xmlns="http://www.w3.org/2000/svg" width="24"
                             height="24" fill="none">
                             <path fill="currentColor" fill-rule="evenodd"
                                 d="M5.232 9.36a1 1 0 0 1 1.408-.128L12 13.698l5.36-4.466a1 1 0 0 1 1.28 1.536l-6 5a1 1 0 0 1-1.28 0l-6-5a1 1 0 0 1-.128-1.408"
@@ -91,16 +91,16 @@
                 </div>
             </div>
             <button class="pay-button" disabled>
-                <p data-i18n="payment.payNow">立即支付</p>
+                <p data-i18n="payment.payNow">Pay Now</p>
             </button>
         </div>
         <div class="instructions">
-            <h4 data-i18n="payment.instructionsTitle">📋 转账说明</h4>
+            <h4 data-i18n="payment.instructionsTitle">📋 Transfer Instructions</h4>
             <ol>
-                <li data-i18n="payment.cashierInstr1">请选择您喜欢的付款方式进行转账</li>
-                <li data-i18n="payment.instruction2">转账完成后系统会自动确认到账</li>
-                <li data-i18n="payment.instruction3">转账金额必须与显示金额完全一致</li>
-                <li data-i18n="payment.instruction4">如果有其它疑问，请联系客服处理</li>
+                <li data-i18n="payment.cashierInstr1">Select your preferred payment method for transfer.</li>
+                <li data-i18n="payment.instruction2">The system will automatically confirm receipt after the transfer.</li>
+                <li data-i18n="payment.instruction3">The transfer amount must exactly match the displayed amount.</li>
+                <li data-i18n="payment.instruction4">If you have any questions, contact customer support.</li>
             </ol>
         </div>
         <div class="footer-info">

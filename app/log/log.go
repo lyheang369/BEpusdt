@@ -43,7 +43,7 @@ func newLogger(file string) (*logrus.Logger, error) {
 func Init(dir string) error {
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 
-		return fmt.Errorf("创建日志目录失败：%w", err)
+		return fmt.Errorf("failed to create log directory: %w", err)
 	}
 
 	var err error
@@ -86,7 +86,7 @@ func Close() {
 	for _, f := range loggers {
 		if f != nil {
 			if err := f.Close(); err != nil {
-				_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf("日志句柄资源关闭错误：%s", err.Error()))
+				_, _ = fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to close log handle resource: %s", err.Error()))
 			}
 		}
 	}

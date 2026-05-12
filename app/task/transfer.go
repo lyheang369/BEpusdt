@@ -38,11 +38,11 @@ type resource struct {
 }
 
 var resourceQueue = chanx.NewUnboundedChan[[]resource](context.Background(), 30) // 资源队列
-var notOrderQueue = chanx.NewUnboundedChan[[]transfer](context.Background(), 30) // 非订单队列
-var transferQueue = chanx.NewUnboundedChan[[]transfer](context.Background(), 30) // 交易转账队列
+var notOrderQueue = chanx.NewUnboundedChan[[]transfer](context.Background(), 30) // 非Order队列
+var transferQueue = chanx.NewUnboundedChan[[]transfer](context.Background(), 30) // Transaction转账队列
 
 const batchInterval = time.Second * 1       // 批处理缓解数据库读取压力
-const orderCheckInterval = time.Second * 10 // 订单过期检查间隔
+const orderCheckInterval = time.Second * 10 // Orderexpired检查间隔
 
 func init() {
 	Register(Task{Callback: orderTransferHandle})
@@ -66,7 +66,7 @@ func orderTransferHandle(ctx context.Context) {
 			}
 			batch = append(batch, transfers...)
 		case <-ticker.C:
-			// 每10秒强制检查一次过期订单，即使没有交易，防止无交易时订单不过期
+			// 每10secStrong制检查one次expiredOrder，即使没有Transaction，防止NoneTransaction时Order不expired
 			var shouldCheck = time.Since(lastCheckTime) >= orderCheckInterval
 			if len(batch) == 0 && !shouldCheck {
 				continue
@@ -77,12 +77,12 @@ func orderTransferHandle(ctx context.Context) {
 			}
 
 			var other = make([]transfer, 0)
-			var orders = getAllWaitingOrders() // 内部包含过期检查逻辑
+			var orders = getAllWaitingOrders() // Internal包含expired检查逻辑
 			if len(batch) == 0 {
 				continue
 			}
 			for _, t := range batch {
-				// 判断数额是否在允许范围内
+				// 判断数额YesNo在允许范围内
 				if !model.IsAmountValid(t.TradeType, t.Amount) {
 					continue
 				}
@@ -98,7 +98,7 @@ func orderTransferHandle(ctx context.Context) {
 
 				var matched bool
 				for i, o := range orderList {
-					// 金额匹配
+					// Amount匹配
 					if !o.AddressLocked && !amountMatch(t.Amount, o.Amount, string(o.TradeType)) {
 						continue
 					}
@@ -108,10 +108,10 @@ func orderTransferHandle(ctx context.Context) {
 						continue
 					}
 
-					// 从内存 map 中移除已匹配订单，防止同批次其他 transfer 重复匹配
+					// 从内存 map Medium移除已匹配Order，防止同批次其他 transfer 重复匹配
 					orders[key] = append(orderList[:i], orderList[i+1:]...)
 
-					// 订单匹配 进入确认流程
+					// Order匹配 进入确认流程
 					o.MarkConfirming(t.BlockNum, t.FromAddress, t.TxHash, t.Timestamp, t.Amount)
 					matched = true
 					break
@@ -198,7 +198,7 @@ func tronResourceHandle(ctx context.Context) {
 
 			for _, wa := range was {
 				if wa.GetNetwork() != conf.Tron {
-					// 只有 Tron 网络目前才有资源变更通知
+					// 只有 Tron Network目前才有资源变更Notifications
 					continue
 				}
 
@@ -234,7 +234,7 @@ func getAllWaitingOrders() map[string][]model.Order {
 	var tradeOrders = model.GetOrderByStatus(model.OrderStatusWaiting)
 	var data = make(map[string][]model.Order)
 	for _, t := range tradeOrders {
-		if time.Now().Unix() >= t.ExpiredAt.Unix() { // 订单过期
+		if time.Now().Unix() >= t.ExpiredAt.Unix() { // Orderexpired
 			t.SetExpired()
 			notify.Bepusdt(t)
 

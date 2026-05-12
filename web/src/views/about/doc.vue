@@ -1,14 +1,14 @@
 <template>
   <div class="doc-container">
     <div class="card">
-      <h2>项目文档</h2>
+      <h2>Project Docs</h2>
       <div class="divider"></div>
       <p>
-        仓库地址：
+        Repository URL:
         <a href="https://github.com/v03413/BEpusdt" target="_blank" class="link"> https://github.com/v03413/BEpusdt </a>
       </p>
       <p style="margin-top: 12px">
-        API对接：
+        API integration:
         <a href="https://github.com/v03413/BEpusdt/blob/main/docs/api/api.md" target="_blank" class="link">
           https://github.com/v03413/BEpusdt/blob/main/docs/api/api.md
         </a>

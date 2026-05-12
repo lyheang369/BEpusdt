@@ -1,7 +1,7 @@
 <template>
   <div class="shortcut-box">
     <div class="box-title">
-      <div>数据汇总</div>
+      <div>Data Summary</div>
     </div>
     <a-divider :margin="16" />
     <a-grid class="finance-card" :cols="{ xs: 1, sm: 2, lg: 3, xl: 5 }" :col-gap="16" :row-gap="20">
@@ -39,39 +39,39 @@ const buildFinanceData = (data: any) => {
   return [
     {
       id: 1,
-      title: "订单总数",
+      title: "Total Orders",
       value: kpi.orders_total || 0,
-      subLabel: "已支付订单:",
+      subLabel: "Paid Orders:",
       subValue: kpi.orders_success || 0,
       color: "#165DFF"
     },
     {
       id: 2,
-      title: "收款金额",
+      title: "Received Amount",
       value: formatAmount(kpi.gmv_paid),
-      subLabel: "支付成功率:",
+      subLabel: "Payment Success Rate:",
       subValue: `${formatAmount(kpi.order_success_rate)}%`,
       color: "#14A058"
     },
     {
       id: 3,
-      title: "待付订单",
+      title: "Pending Orders",
       value: kpi.orders_pending || 0,
-      subLabel: "确认中订单:",
+      subLabel: "Confirming Orders:",
       subValue: kpi.orders_confirming || 0,
       color: "#F5A623"
     },
     {
       id: 4,
-      title: "失败订单",
+      title: "FailedOrder",
       value: kpi.orders_failed || 0,
-      subLabel: "通知失败:",
+      subLabel: "NotificationsFailed:",
       subValue: kpi.notify_failed || 0,
       color: "#E33E38"
     },
     {
       id: 5,
-      title: "统计周期",
+      title: "Statistics Period",
       value: formatPeriod(data?.from, data?.to),
       subLabel: "",
       subValue: data?.timezone || "--",

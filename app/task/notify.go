@@ -16,11 +16,11 @@ func init() {
 	Register(Task{Duration: time.Second * 30, Callback: notifyRoll})
 }
 
-// notifyRetry 回调失败重试
+// notifyRetry Callback failed重试
 func notifyRetry(context.Context) {
 	tradeOrders, err := model.GetNotifyFailedTradeOrders()
 	if err != nil {
-		log.Task.Error("待回调订单获取失败", err)
+		log.Task.Error("Failed to get pending callback orders", err)
 
 		return
 	}
@@ -39,7 +39,7 @@ func notifyRoll(context.Context) {
 	}
 }
 
-// notifyOrderSuccess 统一触发订单成功后的回调与订单通知。
+// notifyOrderSuccess 统one触发OrderSuccess后的Callback与OrderNotifications。
 func notifyOrderSuccess(order model.Order) {
 	go notify.Handle(order)
 	go notifier.Success(order)

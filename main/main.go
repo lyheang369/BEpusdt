@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	// 不推荐引导小白参与修改各种配置文件
+	// Not recommended to guide beginners into editing configuration files
 	_ = godotenv.Load()
 }
 

@@ -15,13 +15,13 @@ import (
 	"github.com/v03413/bepusdt/app/utils"
 )
 
-const Pid = "1000" // 固定商户号
+const Pid = "1000" // 固定Merchant号
 
 type Epay struct {
 }
 
 type submit struct {
-	Pid        string     `form:"pid" json:"pid" binding:"required"` // 商户号
+	Pid        string     `form:"pid" json:"pid" binding:"required"` // Merchant号
 	Type       string     `form:"type" json:"type" binding:"required"`
 	NotifyURL  string     `form:"notify_url" json:"notify_url" binding:"required"`
 	ReturnURL  string     `form:"return_url" json:"return_url" binding:"required"`
@@ -35,7 +35,7 @@ type submit struct {
 	Address    string     `form:"address" json:"address"`
 }
 
-// Submit 【兼容】易支付提交
+// Submit 【兼容】易PaymentSubmit
 func (e Epay) Submit(ctx *gin.Context) {
 	var err error
 	var data submit
@@ -64,25 +64,25 @@ func (e Epay) Submit(ctx *gin.Context) {
 	}
 
 	if e.sign(dataMap, model.AuthToken()) != data.Sign {
-		ctx.String(200, "签名错误")
+		ctx.String(200, "Signature error")
 
 		return
 	}
 
 	if !utils.IsAllowedCallbackURL(data.NotifyURL) {
-		ctx.String(200, "notify_url 地址不合法")
+		ctx.String(200, "notify_url Addressinvalid")
 
 		return
 	}
 	if !utils.IsAllowedCallbackURL(data.ReturnURL) {
-		ctx.String(200, "return_url 地址不合法")
+		ctx.String(200, "return_url Addressinvalid")
 
 		return
 	}
 
 	money, err := decimal.NewFromString(data.Money)
 	if err != nil {
-		ctx.String(200, "参数 money 解析错误，"+err.Error())
+		ctx.String(200, "Failed to parse parameter money: "+err.Error())
 
 		return
 	}
@@ -101,12 +101,12 @@ func (e Epay) Submit(ctx *gin.Context) {
 		Fiat:        data.Fiat,
 	})
 	if err2 != nil {
-		ctx.String(200, fmt.Sprintf("订单创建失败：%v", err2))
+		ctx.String(200, fmt.Sprintf("Failed to create order：%v", err2))
 
 		return
 	}
 
-	// 解析请求地址
+	// 解析请求Address
 	var host = "http://" + ctx.Request.Host
 	if ctx.Request.TLS != nil {
 		host = "https://" + ctx.Request.Host
@@ -115,21 +115,21 @@ func (e Epay) Submit(ctx *gin.Context) {
 	ctx.Redirect(http.StatusFound, model.CheckoutCounter(host, order.TradeId))
 }
 
-// verify 验证请求参数
+// verify validation请求参数
 func (e Epay) verify(data map[string]string) (submit, error) {
 	var params = submit{}
 
 	pid, ok := data["pid"]
 	if !ok || pid != Pid {
 
-		return params, fmt.Errorf("BEpusdt 易支付兼容模式，商户号【PID】必须固定为" + Pid)
+		return params, fmt.Errorf("BEpusdt EasyPay compatibility mode requires merchant ID [PID] to be fixed as " + Pid)
 	}
 
 	var requiredFields = []string{"pid", "type", "out_trade_no", "notify_url", "return_url", "name", "money", "sign"}
 	for _, field := range requiredFields {
 		if _, ok := data[field]; !ok || data[field] == "" {
 
-			return params, fmt.Errorf("参数 %s 缺失或为空", field)
+			return params, fmt.Errorf("Parameter %s is missing or empty", field)
 		}
 	}
 

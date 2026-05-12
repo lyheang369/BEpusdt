@@ -2,26 +2,26 @@ import { defineStore } from "pinia";
 import persistedstateConfig from "@/store/config/index";
 /**
  * 全局配置
- * @methods setCollapsed 设置菜单折叠
- * @methods setRefreshPage 刷新页面
+ * @methods setCollapsed 设置Collapse Menu
+ * @methods setRefreshPage Refreshpage
  * @methods setLanguage 设置语言
  */
 const themeConfig = () => {
-  // 是否折叠菜单
+  // YesNo折叠菜单
   const collapsed = ref<boolean>(false);
-  // 刷新页面
+  // Refreshpage
   const refreshPage = ref<boolean>(true);
   // 系统语言
   const language = ref<string>("zh-CN");
-  // 黑暗模式
+  // dark mode
   const darkMode = ref<boolean>(false);
-  // 菜单手风琴
+  // Menu Accordion
   const isAccordion = ref<boolean>(true);
-  // 面包屑渲染
+  // Breadcrumb渲染
   const isBreadcrumb = ref<boolean>(true);
-  // 标签栏渲染
+  // Tab Bar渲染
   const isTabs = ref<boolean>(true);
-  // 页脚渲染
+  // Footer渲染
   const isFooter = ref<boolean>(true);
   // 水印
   const watermark = ref<string>("");
@@ -30,21 +30,21 @@ const themeConfig = () => {
     fontSize: 12,
     color: "rgba(0, 0, 0, 0.15)"
   });
-  // 水印角度
+  // Watermark Angle
   const watermarkRotate = ref<number>(330);
-  // 水印间隙
+  // Watermark Gap
   const watermarkGap = ref<[number, number]>([100, 100]);
   // 防止调试
   const debugPrevention = ref<boolean>(false);
   // 布局模式：layoutDefaults、layoutHead、layoutMixing
   const layoutType = ref<string>("layoutDefaults");
-  // 色弱模式
+  // Color Weakness Mode
   const colorWeakMode = ref<boolean>(false);
-  // 灰色模式
+  // Gray Mode
   const grayMode = ref<boolean>(false);
-  // 侧边栏深色
+  // Dark Sidebar
   const asideDark = ref<boolean>(false);
-  // 页面过渡方式
+  // Page Transition方式
   const transitionPage = ref<string>("fadeInOut");
   // 主题色
   const themeColor = ref<string>("#165DFF");
@@ -72,7 +72,7 @@ const themeConfig = () => {
   function setCollapsed(data: boolean) {
     collapsed.value = data;
   }
-  // 刷新页面
+  // Refreshpage
   function setRefreshPage(data: boolean) {
     refreshPage.value = data;
   }

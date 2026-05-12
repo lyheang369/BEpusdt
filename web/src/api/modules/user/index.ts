@@ -1,6 +1,6 @@
 import axios from "@/api";
 
-// 登录
+// Login
 export const loginAPI = (data: any) => {
   return axios({
     url: "/api/auth/login",
@@ -9,7 +9,7 @@ export const loginAPI = (data: any) => {
   });
 };
 
-// 获取用户信息
+// 获取User Information
 export const getUserInfoAPI = (params?: any) => {
   return axios({
     url: "/api/auth/info",
@@ -18,7 +18,7 @@ export const getUserInfoAPI = (params?: any) => {
   });
 };
 
-// 安全设置
+// Security Settings
 export const securityAPI = (data: any) => {
   return axios({
     url: "/api/auth/security",
@@ -27,7 +27,7 @@ export const securityAPI = (data: any) => {
   });
 };
 
-// 设置密码
+// 设置Password
 export const setPasswordAPI = (data: any) => {
   return axios({
     url: "/api/auth/set_password",

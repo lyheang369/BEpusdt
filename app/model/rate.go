@@ -20,11 +20,11 @@ import (
 
 type Rate struct {
 	Id
-	Rate    string  `gorm:"column:rate;type:varchar(32);not null;comment:订单汇率" json:"rate"`
-	Fiat    string  `gorm:"column:fiat;type:varchar(16);not null;comment:法币" json:"fiat"`
-	Crypto  string  `gorm:"column:crypto;type:varchar(16);not null;comment:加密货币" json:"crypto"`
-	RawRate float64 `gorm:"column:raw_rate;type:decimal(10,4);not null;comment:基准汇率" json:"raw_rate"`
-	Syntax  string  `gorm:"column:syntax;type:varchar(32);not null;default:'';comment:浮动语法" json:"syntax"`
+	Rate    string  `gorm:"column:rate;type:varchar(32);not null;comment:Order Rate" json:"rate"`
+	Fiat    string  `gorm:"column:fiat;type:varchar(16);not null;comment:fiat" json:"fiat"`
+	Crypto  string  `gorm:"column:crypto;type:varchar(16);not null;comment:Cryptocurrency" json:"crypto"`
+	RawRate float64 `gorm:"column:raw_rate;type:decimal(10,4);not null;comment:Base Rate" json:"raw_rate"`
+	Syntax  string  `gorm:"column:syntax;type:varchar(32);not null;default:'';comment:adjustment syntax" json:"syntax"`
 	AutoTimeAt
 }
 
@@ -133,7 +133,7 @@ func ParseFloatRate(syntax string, rawVal float64) float64 {
 
 	match, err := regexp.MatchString(`^[~+-]\d+(\.\d+)?$`, syntax)
 	if !match || err != nil {
-		log.Error("浮动语法解析错误", err)
+		log.Error("Rate adjustment syntax parse error", err)
 
 		return 0
 	}
@@ -156,8 +156,8 @@ func ParseFloatRate(syntax string, rawVal float64) float64 {
 }
 
 func round(val float64, precision int) float64 {
-	// Round 四舍五入，ROUND_HALF_UP 模式实现
-	// 返回将 val 根据指定精度 precision（十进制小数点后数字的数目）进行四舍五入的结果。precision 也可以是负数或零。
+	// Round four舍五入，ROUND_HALF_UP 模式实现
+	// 返回将 val 根据指定精度 precision（十进制小数点后number的数目）进行four舍五入的结果。precision 也可以Yes负数或zero。
 
 	if precision == 0 {
 		return math.Round(val)
@@ -176,7 +176,7 @@ func GetOrderRate(token Crypto, fiat Fiat, syntax string) (decimal.Decimal, erro
 	Db.Where("crypto = ? and fiat = ?", token, fiat).Order("created_at desc").Limit(1).Find(&r)
 	if r.ID == 0 {
 
-		return decimal.Decimal{}, fmt.Errorf("创建失败，请检查汇率同步是否正常：%s %s", token, fiat)
+		return decimal.Decimal{}, fmt.Errorf("Creation failed. Check whether rate sync is normal: %s %s", token, fiat)
 	}
 
 	if syntax == "" {

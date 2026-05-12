@@ -52,10 +52,10 @@ func (Order) Create(ctx *gin.Context) {
 
 	host := utils.GetRequestHost(ctx.Request)
 
-	// 创建待付款订单
+	// 创建待付款Order
 	order, err := model.BuildPendingOrder(model.OrderParams{
 		Money:         decimal.NewFromFloat(req.Amount),
-		ApiType:       model.OrderApiTypeAdmin, // 使用 Admin 类型
+		ApiType:       model.OrderApiTypeAdmin, // Use Admin type
 		OrderId:       req.OrderID,
 		Name:          req.Name,
 		Timeout:       req.Timeout,
@@ -89,7 +89,7 @@ func (Order) Create(ctx *gin.Context) {
 		return
 	}
 
-	// 返回响应数据
+	// return response data
 	base.Response(ctx, 200, gin.H{
 		"status":      "success",
 		"message":     "order created",
@@ -174,7 +174,7 @@ func (Order) Detail(ctx *gin.Context) {
 	var o model.Order
 	model.Db.Where("id = ?", req.ID).Find(&o)
 	if o.ID == 0 {
-		base.BadRequest(ctx, "订单不存在")
+		base.BadRequest(ctx, "Order does not exist")
 
 		return
 	}
@@ -196,7 +196,7 @@ func (Order) Paid(ctx *gin.Context) {
 	var order model.Order
 	model.Db.Where("id = ?", req.ID).Find(&order)
 	if order.ID == 0 {
-		base.BadRequest(ctx, "订单不存在")
+		base.BadRequest(ctx, "Order does not exist")
 
 		return
 	}
@@ -221,7 +221,7 @@ func (Order) Paid(ctx *gin.Context) {
 
 	go notify.Handle(order)
 
-	base.Ok(ctx, "操作成功")
+	base.Ok(ctx, "Operation successful")
 }
 
 func (Order) ManualNotify(ctx *gin.Context) {
@@ -235,13 +235,13 @@ func (Order) ManualNotify(ctx *gin.Context) {
 	var order model.Order
 	model.Db.Where("id = ?", req.ID).Find(&order)
 	if order.ID == 0 {
-		base.BadRequest(ctx, "订单不存在")
+		base.BadRequest(ctx, "Order does not exist")
 
 		return
 	}
 
 	if order.Status != model.OrderStatusSuccess {
-		base.BadRequest(ctx, "订单状态不是交易成功,无法手动回调")
+		base.BadRequest(ctx, "Order status is not Transaction Successful; manual callback is not allowed")
 
 		return
 	}
@@ -252,7 +252,7 @@ func (Order) ManualNotify(ctx *gin.Context) {
 		return
 	}
 
-	base.Ok(ctx, "订单回调成功！")
+	base.Ok(ctx, "OrderCallback successful！")
 }
 
 func (Order) Del(ctx *gin.Context) {
@@ -270,5 +270,5 @@ func (Order) Del(ctx *gin.Context) {
 		return
 	}
 
-	base.Ok(ctx, "删除成功")
+	base.Ok(ctx, "Deleted successfully")
 }

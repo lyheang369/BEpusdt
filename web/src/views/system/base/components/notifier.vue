@@ -1,10 +1,10 @@
 <template>
   <a-row align="center" :gutter="[0, 16]">
     <a-col :span="24">
-      <a-card title="通知设置">
+      <a-card title="Notification Settings">
         <a-form :model="form" :rules="rules" :layout="layoutMode" class="base-setting-form" @submit="onSubmit">
-          <a-form-item field="notifier_channel" label="通知渠道">
-            <a-select v-model="form.notifier_channel" placeholder="请选择通知渠道" @change="onChannelChange">
+          <a-form-item field="notifier_channel" label="Notification Channel">
+            <a-select v-model="form.notifier_channel" placeholder="Select notification channel" @change="onChannelChange">
               <a-option
                 v-for="channel in channelConfigs"
                 :key="channel.value"
@@ -29,9 +29,9 @@
 
           <a-form-item>
             <a-space>
-              <a-button type="primary" html-type="submit">保存配置</a-button>
+              <a-button type="primary" html-type="submit">Save Configuration</a-button>
               <a-button v-if="form.notifier_channel !== 'none'" type="outline" @click="onTest" :loading="testLoading">
-                推送测试
+                Push Test
               </a-button>
             </a-space>
           </a-form-item>
@@ -77,7 +77,7 @@ interface FormData {
 const channelConfigs: ChannelConfig[] = [
   {
     value: "none",
-    label: "关闭通知",
+    label: "Disable Notifications",
     disabled: false,
     fields: []
   },
@@ -89,50 +89,50 @@ const channelConfigs: ChannelConfig[] = [
       {
         key: "bot_token",
         label: "Bot Token",
-        placeholder: "请输入 Telegram Bot Token",
+        placeholder: "Enter Telegram Bot Token",
         required: true,
-        message: "Bot Token 不能为空"
+        message: "Bot Token  is required"
       },
-      { key: "chat_id", label: "Chat ID", placeholder: "请输入 Telegram Chat ID", required: true, message: "Chat ID 不能为空" },
-      { key: "topic_id", label: "Topic ID", placeholder: "请输入 Telegram Topic ID", required: false }
+      { key: "chat_id", label: "Chat ID", placeholder: "Enter Telegram Chat ID", required: true, message: "Chat ID  is required" },
+      { key: "topic_id", label: "Topic ID", placeholder: "Enter Telegram Topic ID", required: false }
     ]
   },
   {
     value: "wechat",
-    label: "企业微信（开发中）",
+    label: "WeCom (in development)",
     disabled: true,
     fields: [
       {
         key: "webhook_url",
         label: "Webhook URL",
-        placeholder: "请输入企业微信 Webhook URL",
+        placeholder: "Enter WeCom Webhook URL",
         type: "url",
         required: true,
-        message: "Webhook URL不能为空",
+        message: "Webhook URL is required",
         validator: "url"
       }
     ]
   },
   {
     value: "email",
-    label: "邮箱（开发中）",
+    label: "Email (in development)",
     disabled: true,
     fields: [
       {
         key: "email",
-        label: "邮箱地址",
-        placeholder: "请输入邮箱地址",
+        label: "Email Address",
+        placeholder: "Enter email address",
         type: "email",
         required: true,
-        message: "邮箱地址不能为空",
+        message: "Email Address is required",
         validator: "email"
       },
       {
         key: "smtp_server",
-        label: "SMTP服务器",
-        placeholder: "请输入SMTP服务器地址",
+        label: "SMTP Server",
+        placeholder: "Enter SMTP server address",
         required: true,
-        message: "SMTP服务器不能为空"
+        message: "SMTP Server is required"
       }
     ]
   }
@@ -153,7 +153,7 @@ const currentChannelParamKeys = computed<string[]>(() => currentChannelFields.va
 
 const rules = computed(() => {
   const baseRules: Record<string, any[]> = {
-    notifier_channel: [{ required: true, message: "请选择通知渠道" }]
+    notifier_channel: [{ required: true, message: "Select notification channel" }]
   };
 
   currentChannelFields.value.forEach(field => {
@@ -162,9 +162,9 @@ const rules = computed(() => {
       const fieldRules: any[] = [{ required: true, message: field.message }];
 
       if (field.validator === "email") {
-        fieldRules.push({ type: "email", message: "请输入正确的邮箱格式" });
+        fieldRules.push({ type: "email", message: "Enter a valid email format" });
       } else if (field.validator === "url") {
-        fieldRules.push({ type: "url", message: "请输入正确的URL格式" });
+        fieldRules.push({ type: "url", message: "Enter a valid URL format" });
       }
 
       baseRules[fieldPath] = fieldRules;
@@ -206,14 +206,14 @@ const onSubmit = async ({ errors }: ArcoDesign.ArcoSubmit): Promise<void> => {
     });
 
     if (response?.code === 200) {
-      Message.success("配置成功！");
+      Message.success("Configuration saved！");
       emit("refresh");
     } else {
-      Message.error(response?.msg || "配置保存失败");
+      Message.error(response?.msg || "Failed to save configuration");
     }
   } catch (error: any) {
-    console.error("配置保存失败:", error);
-    Message.error("配置保存失败，请稍后重试");
+    console.error("Failed to save configuration:", error);
+    Message.error("Failed to save configuration. Please try again later.");
   }
 };
 
@@ -235,13 +235,13 @@ const onTest = async (): Promise<void> => {
     });
 
     if (response?.code === 200) {
-      Message.success("推送测试成功！");
+      Message.success("Push test successful！");
     } else {
-      Message.error(response?.msg || "推送测试失败");
+      Message.error(response?.msg || "Push test failed");
     }
   } catch (error: any) {
-    console.error("推送测试失败:", error);
-    Message.error("推送测试失败，请稍后重试");
+    console.error("Push test failed:", error);
+    Message.error("Push test failed. Please try again later.");
   } finally {
     testLoading.value = false;
   }
@@ -265,7 +265,7 @@ watch(
 
           form.value.notifier_params = { ...initParams(), ...parsedParams };
         } catch (e) {
-          console.error("解析 notifier_params 失败:", e);
+          console.error("Failed to parse notifier_params:", e);
           form.value.notifier_params = initParams();
         }
       } else {

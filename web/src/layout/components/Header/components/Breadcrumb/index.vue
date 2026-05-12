@@ -27,22 +27,22 @@ const route = useRoute();
 const router = useRouter();
 
 /**
- * 获取面包屑
- * 根据当前路由信息获取，route.matched可以获取当前路由的所有父级路由信息
- * 如果当前路由是home路由，则只返回当前路由信息(说明当前就是顶层)
- * 否则返回所有父级路由信息，顶层路由重写为首页
+ * 获取Breadcrumb
+ * 根据current routeinformation获取，route.matched可以获取current route的所有父级routeinformation
+ * 如果current routeYeshomeroute，则只返回current routeinformation(说明当前就Yes顶层)
+ * No则返回所有父级routeinformation，顶层route重写为Home
  */
 const breadcrumb = computed(() => {
-  // 如果是首页则直接返回当前路由信息
+  // 如果YesHome则直接返回current routeinformation
   if (route.path === HOME_PATH) return [route];
-  // 返回路径信息
+  // 返回路径information
   let list = findPathOfParentNode(routeTree.value, "name", route.name);
   if (!list) return [];
   if (!routeTree.value[0].children) list.unshift(routeTree.value[0]);
   return list;
 });
 
-// 页面过渡
+// Page Transition
 const transition = computed(() => {
   if (transitionPage.value === "fadeInOut") {
     return "fadeInOut-enter-active";
@@ -53,7 +53,7 @@ const transition = computed(() => {
   }
 });
 
-// 面包屑跳转
+// Breadcrumb跳转
 const onBreadcrumb = (route: any) => {
   let path = route.redirect || route.path;
   router.replace((path as string) || HOME_PATH);

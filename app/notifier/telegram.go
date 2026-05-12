@@ -50,7 +50,7 @@ func (t *Telegram) Success(o model.Order) {
 	tradeType := string(o.TradeType)
 	tokenType, err := model.GetCrypto(o.TradeType)
 	if err != nil {
-		t.sendMessage(&bot.SendMessageParams{Text: "❌交易类型不支持：" + tradeType})
+		t.sendMessage(&bot.SendMessageParams{Text: "❌Unsupported trade type:" + tradeType})
 
 		return
 	}
@@ -58,16 +58,16 @@ func (t *Telegram) Success(o model.Order) {
 	token := string(tokenType)
 
 	text := `
-\#收款成功 \#订单交易 \#` + token + `
+\#Payment Successful \#OrderTransaction \#` + token + `
 \-\-\-
 ` + "```" + `
-🚦商户订单：%v
-💰请求金额：%v ` + string(o.Fiat) + `(%v)
-💲支付数额：%v ` + tradeType + `
-💎交易哈希：%s
-✅收款地址：%s
-⏱️创建时间：%s
-️🎯️支付时间：%s
+🚦Merchant Order：%v
+💰Requested amount:%v ` + string(o.Fiat) + `(%v)
+💲Payment amount:%v ` + tradeType + `
+💎Transaction Hash：%s
+✅Receiving Address：%s
+⏱️Created At：%s
+️🎯️PaymentTime：%s
 ` + "```" + `
 `
 	text = fmt.Sprintf(text,
@@ -87,7 +87,7 @@ func (t *Telegram) Success(o model.Order) {
 		ReplyMarkup: &models.InlineKeyboardMarkup{
 			InlineKeyboard: [][]models.InlineKeyboardButton{
 				{
-					models.InlineKeyboardButton{Text: "📝查看交易明细", URL: o.GetTxUrl()},
+					models.InlineKeyboardButton{Text: "📝View transaction details", URL: o.GetTxUrl()},
 				},
 			},
 		},
@@ -98,7 +98,7 @@ func (t *Telegram) NotifyFail(o model.Order, reason string) {
 	tradeType := string(o.TradeType)
 	tokenT, err := model.GetCrypto(o.TradeType)
 	if err != nil {
-		t.sendMessage(&bot.SendMessageParams{Text: "❌交易类型不支持：" + tradeType})
+		t.sendMessage(&bot.SendMessageParams{Text: "❌Unsupported trade type:" + tradeType})
 
 		return
 	}
@@ -106,16 +106,16 @@ func (t *Telegram) NotifyFail(o model.Order, reason string) {
 	token := string(tokenT)
 
 	text := fmt.Sprintf(`
-\#回调失败 \#订单交易 \#`+token+`
+\#Callback failed \#OrderTransaction \#`+token+`
 \-\-\-
 `+"```"+`
-🚦商户订单：%v
-💲支付数额：%v
-💰请求金额：%v `+string(o.Fiat)+`(%v)
-💍交易类别：%s
-⚖️️确认时间：%s
-⏰下次回调：%s
-🗒️失败原因：%s
+🚦Merchant Order：%v
+💲Payment amount:%v
+💰Requested amount:%v `+string(o.Fiat)+`(%v)
+💍Transaction type:%s
+⚖️️Confirmation time:%s
+⏰Next callback:%s
+🗒️Failure reason:%s
 `+"```"+`
 `,
 		utils.Ec(o.OrderId),
@@ -133,7 +133,7 @@ func (t *Telegram) NotifyFail(o model.Order, reason string) {
 		ReplyMarkup: &models.InlineKeyboardMarkup{
 			InlineKeyboard: [][]models.InlineKeyboardButton{
 				{
-					models.InlineKeyboardButton{Text: "📝查看收款详情", CallbackData: o.GetTxUrl()},
+					models.InlineKeyboardButton{Text: "📝View payment details", CallbackData: o.GetTxUrl()},
 				},
 			},
 		},
@@ -141,13 +141,13 @@ func (t *Telegram) NotifyFail(o model.Order, reason string) {
 }
 
 func (t *Telegram) NonOrderTransfer(trans model.TronTransfer, wa model.Wallet) {
-	title := "收入"
+	title := "Income"
 	if trans.RecvAddress != wa.Address {
-		title = "支出"
+		title = "Expense"
 	}
 
 	text := fmt.Sprintf(
-		"\\#账户%s \\#非订单交易\n\\-\\-\\-\n```\n💲交易数额：%v \n💍交易类别："+strings.ToUpper(string(trans.TradeType))+"\n⏱️交易时间：%v\n✅接收地址：%v\n🅾️发送地址：%v```\n",
+		"\\#Account%s \\#Non-order transaction\n\\-\\-\\-\n```\n💲Trade Amount：%v \n💍Transaction type:"+strings.ToUpper(string(trans.TradeType))+"\n⏱️TransactionTime：%v\n✅Receiving address:%v\n🅾️Sending address:%v```\n",
 		title,
 		trans.Amount.String(),
 		trans.Timestamp.Format(time.DateTime),
@@ -161,7 +161,7 @@ func (t *Telegram) NonOrderTransfer(trans model.TronTransfer, wa model.Wallet) {
 		ReplyMarkup: models.InlineKeyboardMarkup{
 			InlineKeyboard: [][]models.InlineKeyboardButton{
 				{
-					models.InlineKeyboardButton{Text: "📝查看交易明细", URL: model.GetTxUrl(trans.TradeType, trans.TxHash)},
+					models.InlineKeyboardButton{Text: "📝View transaction details", URL: model.GetTxUrl(trans.TradeType, trans.TxHash)},
 				},
 			},
 		},
@@ -169,13 +169,13 @@ func (t *Telegram) NonOrderTransfer(trans model.TronTransfer, wa model.Wallet) {
 }
 
 func (t *Telegram) TronResourceChange(res model.TronResource) {
-	title := "代理"
+	title := "Delegate"
 	if res.Type == core.Transaction_Contract_UnDelegateResourceContract {
-		title = "回收"
+		title = "Reclaim"
 	}
 
 	text := fmt.Sprintf(
-		"\\#资源动态 \\#能量"+title+"\n\\-\\-\\-\n```\n🔋质押数量："+cast.ToString(res.Balance/1000000)+"\n⏱️交易时间：%v\n✅操作地址：%v\n🅾️资源来源：%v```\n",
+		"\\#Resource update \\#Energy"+title+"\n\\-\\-\\-\n```\n🔋Staked amount:"+cast.ToString(res.Balance/1000000)+"\n⏱️TransactionTime：%v\n✅Action address:%v\n🅾️Resource source:%v```\n",
 		res.Timestamp.Format(time.DateTime),
 		utils.MaskAddress(res.RecvAddress),
 		utils.MaskAddress(res.FromAddress),
@@ -187,7 +187,7 @@ func (t *Telegram) TronResourceChange(res model.TronResource) {
 		ReplyMarkup: models.InlineKeyboardMarkup{
 			InlineKeyboard: [][]models.InlineKeyboardButton{
 				{
-					models.InlineKeyboardButton{Text: "📝查看交易明细", URL: "https://tronscan.org/#/transaction/" + res.ID},
+					models.InlineKeyboardButton{Text: "📝View transaction details", URL: "https://tronscan.org/#/transaction/" + res.ID},
 				},
 			},
 		},
@@ -196,10 +196,10 @@ func (t *Telegram) TronResourceChange(res model.TronResource) {
 
 func (t *Telegram) Welcome() {
 	text := `
-👋 欢迎使用 BEpusdt，` + conf.Desc + `，如果您看到此消息，说明系统已启动成功！
+👋 Welcome to BEpusdt，` + conf.Desc + `，If you see this message, the system started successfully!
 
-📌当前版本：` + app.Version + `
-🎉开源地址：` + conf.Github + `
+📌Current version:` + app.Version + `
+🎉Open-source URL:` + conf.Github + `
 ---
 `
 	t.sendMessage(&bot.SendMessageParams{
@@ -207,8 +207,8 @@ func (t *Telegram) Welcome() {
 		ReplyMarkup: models.InlineKeyboardMarkup{
 			InlineKeyboard: [][]models.InlineKeyboardButton{
 				{
-					{Text: "📢 关注频道", URL: "https://t.me/BEpusdtChannel"},
-					{Text: "💬 社区交流", URL: "https://t.me/BEpusdtChat"},
+					{Text: "📢 Follow Channel", URL: "https://t.me/BEpusdtChannel"},
+					{Text: "💬 Community Chat", URL: "https://t.me/BEpusdtChat"},
 				},
 			},
 		},
@@ -221,7 +221,7 @@ func (t *Telegram) Test() error {
 	_, err := t.api.SendMessage(ctx, &bot.SendMessageParams{
 		ChatID:          t.chatID,
 		MessageThreadID: t.topicID,
-		Text:            "✅ 这是一条测试消息，Telegram 通知配置成功！\n当前系统时间：" + time.Now().Format("2006-01-02 15:04:05"),
+		Text:            "✅ This is a test message. Telegram notification configuration was saved successfully!\nCurrent system time: " + time.Now().Format("2006-01-02 15:04:05"),
 	})
 
 	return err

@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-// NewTronGrpcClient 目前很多 TRON API 基本都有QPS限制，过于激进或者过于保守的重试策略都不合适
+// NewTronGrpcClient many TRON APIs have QPS limits, so overly aggressive or conservative retry strategies are inappropriate
 func NewTronGrpcClient(apiNode string, apiKey []string) (*grpc.ClientConn, error) {
 	apiNode = strings.TrimSpace(apiNode)
 	if apiNode == "" {

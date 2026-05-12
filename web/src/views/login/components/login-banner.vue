@@ -5,12 +5,12 @@
       {{ title }}
     </div>
     <div class="banner_img">
-      <s-svg-icon name="数据时代" size="100%" />
+      <s-svg-icon name="data-era" size="100%" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-// 全局title
+// global title
 const title = import.meta.env.VITE_GLOB_APP_TITLE;
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="analysis-chart" :class="{ empty: isEmpty }">
-    <a-empty v-if="isEmpty" description="暂无交易数据" />
+    <a-empty v-if="isEmpty" description="No transaction data" />
     <s-echarts v-else :options="option" :theme="theme" :update-options="{ notMerge: true }" />
   </div>
 </template>
@@ -63,7 +63,7 @@ const { option, theme } = useChart((_, palette = []) => {
       borderWidth: 0,
       formatter: (params: any) => {
         const amount = params.data?.amount ?? 0;
-        return `<b>${params.name}</b><br/>${params.marker} 占比 <b style="margin-left: 16px">${params.value}%</b><br/>金额 <b style="margin-left: 16px">${amount}</b>`;
+        return `<b>${params.name}</b><br/>${params.marker} Share <b style="margin-left: 16px">${params.value}%</b><br/>Amount <b style="margin-left: 16px">${amount}</b>`;
       }
     },
     legend: {

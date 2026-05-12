@@ -8,8 +8,8 @@ import (
 )
 
 type Result struct {
-	Code  int         `json:"code,omitempty"`  // 状态码
-	Msg   string      `json:"msg,omitempty"`   // 状态消息
+	Code  int         `json:"code,omitempty"`  // Status码
+	Msg   string      `json:"msg,omitempty"`   // StatusMessages
 	Total int64       `json:"total,omitempty"` // 总条数
 	Data  interface{} `json:"data,omitempty"`  // 数据
 }
@@ -89,7 +89,7 @@ func Response(ctx *gin.Context, code int, data ...any) {
 			}
 		}
 
-		d.Msg = "服务器错误"
+		d.Msg = "Server error"
 	}
 
 	ctx.JSON(200, d)
@@ -99,12 +99,12 @@ func Ok(ctx *gin.Context, data ...any) {
 	Response(ctx, 200, data...)
 }
 
-// Error 500 服务器错误
+// Error 500 Server error
 func Error(ctx *gin.Context, err error) {
 	Response(ctx, 500, err)
 }
 
-// BadRequest 400 请求错误
+// BadRequest 400 Request error
 func BadRequest(ctx *gin.Context, err string) {
 	Response(ctx, 400, err)
 }

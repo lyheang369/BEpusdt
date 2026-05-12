@@ -13,19 +13,19 @@ import (
 )
 
 type OrderParams struct {
-	Money         decimal.Decimal `json:"money"`          // 交易金额 (单位：法币)s
-	ApiType       string          `json:"api_type"`       // 支付 API 类型
-	Address       string          `json:"address"`        // 收款地址
-	OrderId       string          `json:"order_id"`       // 商户订单 ID
-	TradeType     TradeType       `json:"trade_type"`     // 交易类型
-	RedirectUrl   string          `json:"redirect_url"`   // 成功跳转地址
-	NotifyUrl     string          `json:"notify_url"`     // 异步通知地址
-	Name          string          `json:"name"`           // 商品名称
-	Timeout       int64           `json:"timeout"`        // 订单超时时间（秒）
-	Rate          string          `json:"rate"`           // 强制指定汇率
+	Money         decimal.Decimal `json:"money"`          // Transaction Amount (单位：法币)s
+	ApiType       string          `json:"api_type"`       // Payment API 类型
+	Address       string          `json:"address"`        // Receiving Address
+	OrderId       string          `json:"order_id"`       // Merchant Order ID
+	TradeType     TradeType       `json:"trade_type"`     // Trade Type
+	RedirectUrl   string          `json:"redirect_url"`   // Success跳转Address
+	NotifyUrl     string          `json:"notify_url"`     // 异步NotificationsAddress
+	Name          string          `json:"name"`           // Product Name
+	Timeout       int64           `json:"timeout"`        // Order超时Time（sec）
+	Rate          string          `json:"rate"`           // Strong制指定汇率
 	Fiat          Fiat            `json:"fiat"`           // 法币类型
-	CurrencyLimit string          `json:"currency_limit"` // 限定币种
-	AddressLocked bool            `json:"address_locked"` // 地址独占锁定
+	CurrencyLimit string          `json:"currency_limit"` // limited currency
+	AddressLocked bool            `json:"address_locked"` // Address独占锁定
 }
 
 type Trade struct {
@@ -46,19 +46,19 @@ func StartBuildOrder(p OrderParams) (Order, error) {
 			!utils.IsValidSolanaAddress(p.Address) &&
 			!utils.IsValidAptosAddress(p.Address) {
 
-			return order, fmt.Errorf("钱包地址格式错误：%s", p.Address)
+			return order, fmt.Errorf("Wallet address format error: %s", p.Address)
 		}
 	}
 	if _, ok := registry[p.TradeType]; !ok {
-		return order, fmt.Errorf("不支持的交易类型：%s", p.TradeType)
+		return order, fmt.Errorf("Unsupported trade type：%s", p.TradeType)
 	}
 	if _, ok := supportFiat[p.Fiat]; !ok {
-		return order, fmt.Errorf("不支持的法币类型：%s", p.Fiat)
+		return order, fmt.Errorf("Unsupported fiat type: %s", p.Fiat)
 	}
 	maxAmount := decimal.NewFromFloat(cast.ToFloat64(GetC(PaymentMaxAmount)))
 	minAmount := decimal.NewFromFloat(cast.ToFloat64(GetC(PaymentMinAmount)))
 	if !p.AddressLocked && (p.Money.GreaterThan(maxAmount) || p.Money.LessThan(minAmount)) {
-		return order, fmt.Errorf("交易金额必须在 %s - %s 之间", minAmount.String(), maxAmount.String())
+		return order, fmt.Errorf("Transaction Amountmust be between %s - %s and", minAmount.String(), maxAmount.String())
 	}
 
 	Db.Where("order_id = ?", p.OrderId).Order("id desc").Limit(1).Find(&order)
@@ -101,7 +101,7 @@ func BuildOrder(p OrderParams, data Trade) (Order, error) {
 		Amount:        data.Amount,
 		Money:         p.Money.String(),
 		Address:       data.Address,
-		AddressLocked: p.Money.IsZero(), // 零值订单，地址锁定 独占
+		AddressLocked: p.Money.IsZero(), // zero值Order，Address锁定 独占
 		Status:        OrderStatusWaiting,
 		Name:          p.Name,
 		ApiType:       p.ApiType,
@@ -113,14 +113,14 @@ func BuildOrder(p OrderParams, data Trade) (Order, error) {
 		Fiat:          p.Fiat,
 		Crypto:        data.Crypto,
 		CurrencyLimit: p.CurrencyLimit,
-		ConfirmedAt:   &zero, // 默认填充一个0值时间，尽量避免数据库出现允许 NULL 值存在
+		ConfirmedAt:   &zero, // 默认填充one个0值Time，尽量避免数据库出现允许 NULL 值存在
 	}
 
 	if tradeOrder.Name == "" {
 		tradeOrder.Name = tradeOrder.OrderId
 	}
 	if err = Db.Create(&tradeOrder).Error; err != nil {
-		log.Error("订单创建失败：", err.Error())
+		log.Error("Failed to create order：", err.Error())
 		return Order{}, err
 	}
 
@@ -131,31 +131,31 @@ func BuildTrade(p OrderParams) (Trade, error) {
 	// 获取代币类型
 	crypto, err := GetCrypto(p.TradeType)
 	if err != nil {
-		return Trade{}, fmt.Errorf("代币类型(%s)不支持：%v", p.TradeType, err)
+		return Trade{}, fmt.Errorf("Token type (%s) is not supported: %v", p.TradeType, err)
 	}
 
-	// 获取订单汇率
+	// 获取Order Rate
 	rate, err := GetOrderRate(crypto, p.Fiat, p.Rate)
 	if err != nil {
 		return Trade{}, err
 	}
 	if rate.LessThanOrEqual(decimal.Zero) {
-		return Trade{}, fmt.Errorf("%s %s 汇率异常", crypto, p.Fiat)
+		return Trade{}, fmt.Errorf("%s %s rate error", crypto, p.Fiat)
 	}
 
 	var wallet = GetAvailableAddress(p.TradeType)
 	if p.Address != "" {
 		wallet = []string{p.Address}
-		if !AddrCaseSens(p.TradeType) { // 交易类型不区分大小写，统一转小写；这个地址最后的交易匹配要用到，千万不能错
+		if !AddrCaseSens(p.TradeType) { // Trade Type不区min大小写，统one转小写；这个Address最后的Transaction匹配要用到，千ten thousand不能错
 			wallet = []string{strings.ToLower(p.Address)}
 		}
 	}
 
 	if len(wallet) == 0 {
-		return Trade{}, fmt.Errorf("%s 未检测到可用钱包地址", p.TradeType)
+		return Trade{}, fmt.Errorf("No available wallet address detected for %s", p.TradeType)
 	}
 
-	// 计算交易金额
+	// 计算Transaction Amount
 	address, amount, err := CalcTradeAmount(wallet, rate, p)
 	if err != nil {
 
@@ -192,14 +192,14 @@ func RebuildOrder(t Order, p OrderParams) (Order, error) {
 	return t, Db.Save(&t).Error
 }
 
-// BuildPendingOrder 创建待支付订单（不锁定地址和汇率）
+// BuildPendingOrder 创建待PaymentOrder（不锁定Address和汇率）
 func BuildPendingOrder(p OrderParams) (Order, error) {
 	var order Order
 
 	maxAmount := decimal.NewFromFloat(cast.ToFloat64(GetC(PaymentMaxAmount)))
 	minAmount := decimal.NewFromFloat(cast.ToFloat64(GetC(PaymentMinAmount)))
 	if !p.Money.IsZero() && (p.Money.GreaterThan(maxAmount) || p.Money.LessThan(minAmount)) {
-		return order, fmt.Errorf("交易金额必须在 %s - %s 之间", minAmount.String(), maxAmount.String())
+		return order, fmt.Errorf("Transaction Amountmust be between %s - %s and", minAmount.String(), maxAmount.String())
 	}
 
 	Db.Where("order_id = ?", p.OrderId).Order("id desc").Limit(1).Find(&order)
@@ -214,7 +214,7 @@ func BuildPendingOrder(p OrderParams) (Order, error) {
 		if err == nil {
 			crypto = c
 		}
-	} else if p.CurrencyLimit != "" { // 如果指定了唯一的币种限制，且不是黑名单模式，则使用该币种
+	} else if p.CurrencyLimit != "" { // 如果指定了唯one的币种限制，且不Yes黑名单模式，则使用该币种
 		cur := strings.ToUpper(p.CurrencyLimit)
 		if !strings.Contains(cur, ",") && !strings.HasPrefix(cur, "-") {
 			crypto = Crypto(cur)

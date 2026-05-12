@@ -120,14 +120,14 @@ const selectedMenu = computed(() => {
   white-space: nowrap;
 }
 
-// 横向菜单样式修改
+// 横向菜单样式Edit
 :deep(.arco-menu-horizontal) {
   flex: 1;
   overflow: hidden;
   .arco-menu-inner {
     padding-left: 0; // 横向排列，禁用左padding
     .arco-menu-overflow-wrap {
-      white-space: nowrap; // 禁用换行，否则会导致菜单换行闪烁
+      white-space: nowrap; // 禁用换行，No则会导致菜单换行闪烁
     }
   }
 }

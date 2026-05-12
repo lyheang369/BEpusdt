@@ -31,7 +31,7 @@ func init() {
 
 func mqttWatcher(_ context.Context) {
 	if err := appMqtt.Reload(); err != nil {
-		log.Printf("❌ MQTT 连接失败: %s\n", err.Error())
+		log.Printf("❌ MQTT connection failed: %s\n", err.Error())
 	}
 
 	networks := strings.Split(model.GetC(model.MqttNetworks), ",")

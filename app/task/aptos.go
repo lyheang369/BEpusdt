@@ -199,7 +199,7 @@ func (a *aptos) versionDispatch(ctx context.Context) {
 	}
 }
 
-// 由于 aptos 网络特性，交易数据中不会显示存在交易转账 from => to 的对应关系，
+// 由于 aptos Network特性，Transaction数据Medium不会显示存在Transaction转账 from => to 的对应关系，
 // 所以目前此解析函数存在大量循环嵌套解析，逻辑较为复杂，希望未来有更好的方式进行解析 慢慢优化
 func (a *aptos) versionParse(n any) {
 	p := n.(version)
@@ -295,7 +295,7 @@ func (a *aptos) versionParse(n any) {
 			return true
 		})
 
-		// 针对 一个withdraw 对应 一个deposit 且数额相同的情况
+		// 针对 one个withdraw 对应 one个deposit 且数额相同的情况
 		for amt, to := range amtAddrMap["deposit"] {
 			from, ok := amtAddrMap["withdraw"][amt]
 			if !ok {
@@ -327,13 +327,13 @@ func (a *aptos) versionParse(n any) {
 			})
 		}
 
-		// 针对 一个withdraw 对应 多个deposit(数额累计等于 withdraw) 的情况
+		// 针对 one个withdraw 对应 多个deposit(数额累计等于 withdraw) 的情况
 		processEvents := func(tradeType model.TradeType, events []aptEvent) ([]aptEvent, map[string]string) {
 			deposits := make([]aptEvent, 0)
 			withdraws := make(map[decimal.Decimal]aptEvent)
 			fromMap := make(map[string]string)
 
-			// 分类事件
+			// min类事件
 			for _, e := range events {
 				if addrType[e.Address] == tradeType {
 					if e.Action == "deposit" {
@@ -346,7 +346,7 @@ func (a *aptos) versionParse(n any) {
 			}
 
 			// 穷举计算匹配关系，只穷举 A + B = C 的情况，实际上还存在 A + B + C + ... = D
-			// 大部分这种情况都是合约 swap 等交易，非普通人1对1转账，所以选择忽视
+			// 大部min这种情况都Yes合Approx. swap 等Transaction，非普通人1对1转账，所以选择忽视
 			for k1, e1 := range deposits {
 				for k2, e2 := range deposits {
 					if k1 == k2 {
@@ -393,7 +393,7 @@ func (a *aptos) versionParse(n any) {
 		transferQueue.In <- transfers
 	}
 
-	log.Task.Info(fmt.Sprintf("区块扫描完成(Aptos) %d.%d 成功率：%s", p.Start, p.Limit, conf.GetSuccessRate(net)))
+	log.Task.Info(fmt.Sprintf("Block scan complete(Aptos) %d.%d success rate:%s", p.Start, p.Limit, conf.GetSuccessRate(net)))
 }
 
 func (a *aptos) padAddressLeadingZeros(addr string) string {

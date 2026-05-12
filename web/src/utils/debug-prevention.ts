@@ -1,10 +1,10 @@
 /**
- * 阻止键盘事件打开控制台
+ * prevent keyboard events from opening devtools
  */
 class KeydownControl {
   /**
-   * 阻止键盘事件打开控制台
-   * 主要的组合键有四种：
+   * prevent keyboard events from opening devtools
+   * 主要的组合键有four种：
    * 1、ctrl+shift+i
    * 2、F12
    * 3、ctrl+shift+c
@@ -13,8 +13,8 @@ class KeydownControl {
    */
   private keydown = (e: KeyboardEvent) => {
     const code = e.code; // 具体按键
-    const ctrl = e.ctrlKey; // Control键是否按下
-    const shift = e.shiftKey; // Shift键是否按下
+    const ctrl = e.ctrlKey; // Controlwhether key is pressed
+    const shift = e.shiftKey; // Shiftwhether key is pressed
     // ctrl+shift+i
     const isCSI = ctrl && shift && code === "KeyI";
     // F12
@@ -39,11 +39,11 @@ class KeydownControl {
 }
 
 /**
- * 阻止鼠标事件打开控制台
+ * prevent mouse events from opening devtools
  */
 class RightMouseControl {
   /**
-   * 阻止鼠标事件打开控制台
+   * prevent mouse events from opening devtools
    * @param e 鼠标事件
    */
   private rightClick = (e: MouseEvent) => {
@@ -61,14 +61,14 @@ class RightMouseControl {
 }
 
 /**
- * 使用debugger关键字阻止打开控制台
+ * use debugger keyword to prevent devtools opening
  */
 class DebugProtector {
-  private isActive = false; // 是否开启防调试
+  private isActive = false; // YesNoOnAnti-debugging
 
   start() {
     if (this.isActive) return;
-    this.isActive = true; // 开启防调试
+    this.isActive = true; // OnAnti-debugging
     this.asyncCheck(); // 异步检查
   }
 
@@ -80,7 +80,7 @@ class DebugProtector {
     // 异步调度避免栈溢出
     setTimeout(() => {
       this.asyncCheck();
-    }, 200); // 保持0.2秒间隔
+    }, 200); // 保持0.2sec间隔
   }
 
   stop() {
@@ -89,10 +89,10 @@ class DebugProtector {
 }
 
 /**
- * 防调试开关
- * 1、阻止键盘事件打开控制台
- * 2、阻止鼠标事件打开控制台
- * 3、使用debugger关键字阻止打开控制台
+ * Anti-debugging开关
+ * 1、prevent keyboard events from opening devtools
+ * 2、prevent mouse events from opening devtools
+ * 3、use debugger keyword to prevent devtools opening
  */
 class DebugControl {
   private modules: any[] = [];
@@ -101,13 +101,13 @@ class DebugControl {
     this.modules.push(new KeydownControl(), new RightMouseControl(), new DebugProtector());
   }
   /**
-   * 开启防调试
+   * OnAnti-debugging
    */
   start() {
     this.modules.forEach(m => m.start?.());
   }
   /**
-   * 关闭防调试
+   * OffAnti-debugging
    */
   stop() {
     this.modules.forEach(m => m.stop?.());

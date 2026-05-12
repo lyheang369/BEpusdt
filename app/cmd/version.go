@@ -10,9 +10,9 @@ import (
 
 var Version = &cli.Command{
 	Name:  "version",
-	Usage: "显示版本信息",
+	Usage: "Show version information",
 	Action: func(ctx context.Context, cmd *cli.Command) error {
-		fmt.Println("BEpusdt 版本：" + app.Version)
+		fmt.Println("BEpusdt version:" + app.Version)
 
 		return nil
 	},

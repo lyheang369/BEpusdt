@@ -2,8 +2,8 @@
   <div class="data-box">
     <div class="sell-histogram">
       <div>
-        <span class="data-title">收款趋势</span>
-        <span class="data-subtext">单位: 天</span>
+        <span class="data-title">Receiving Trend</span>
+        <span class="data-subtext">Unit: days</span>
       </div>
 
       <div class="chart-body">
@@ -12,7 +12,7 @@
     </div>
     <div class="daily-analysis">
       <div>
-        <span class="data-title">交易占比</span>
+        <span class="data-title">Transaction Share</span>
       </div>
 
       <div class="chart-body">

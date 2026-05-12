@@ -1,34 +1,34 @@
 <template>
   <a-row align="center" :gutter="[0, 16]">
     <a-col :span="24">
-      <a-card title="API设置">
+      <a-card title="API Settings">
         <a-alert type="info" style="margin-bottom: 16px">
-          系统兼容彩虹易支付 <strong>submit.php</strong> 接口收单，对接时 PID 固定为 <strong>1000</strong>，KEY
-          则是和对接令牌保持一致。
+          The system is compatible with the Caihong EasyPay <strong>submit.php</strong> payment collection API. During integration, PID is fixed to <strong>1000</strong>, and KEY
+          and KEY must match the integration token.
         </a-alert>
         <a-form :model="form" :rules="rules" :layout="layoutMode" class="base-setting-form" @submit="onSubmit">
-          <a-form-item field="api_auth_token" label="对接令牌" extra="API对接的身份验证令牌，请妥善保管">
+          <a-form-item field="api_auth_token" label="Integration Token" extra="Authentication token for API integration. Keep it safe.">
             <a-input-group class="token-input-group">
-              <a-input-password v-model="form.api_auth_token" placeholder="请输入 Auth Token" readonly />
-              <a-button type="primary" @click="handleResetToken">重置</a-button>
+              <a-input-password v-model="form.api_auth_token" placeholder="Enter Auth Token" readonly />
+              <a-button type="primary" @click="handleResetToken">Reset</a-button>
             </a-input-group>
           </a-form-item>
 
-          <a-form-item field="api_app_uri" label="应用URI" extra="API对接的应用URI,前端收银台地址">
+          <a-form-item field="api_app_uri" label="Application URI" extra="Application URI for API integration, the frontend cashier address">
             <a-input v-model="form.api_app_uri" placeholder="http(s)://your-host-uri" allow-clear />
           </a-form-item>
 
           <a-form-item
             field="payment_static_path"
-            label="收银台静态资源"
-            extra="收银台静态资源路径,可通过此功能自定义前端收银台样式;不懂请勿修改,否则可能导致收银台异常!【修改重启生效】"
+            label="Cashier Static Assets"
+            extra="Cashier static asset path. You can customize the frontend cashier style with this option. Do not change it unless you understand it, otherwise the cashier may fail. Restart required."
           >
             <a-input v-model="form.payment_static_path" placeholder="/var/lib/bepusdt/payment/" allow-clear />
           </a-form-item>
 
           <a-form-item>
             <a-space>
-              <a-button type="primary" html-type="submit">提交</a-button>
+              <a-button type="primary" html-type="submit">Submit</a-button>
             </a-space>
           </a-form-item>
         </a-form>
@@ -54,10 +54,10 @@ const rules = {};
 const handleResetToken = async () => {
   try {
     await resetApiAuthToken({});
-    Message.success("令牌重置成功");
+    Message.success("Token reset successfully");
     emit("refresh");
   } catch {
-    Message.error("令牌重置失败");
+    Message.error("Failed to reset token");
   }
 };
 
@@ -75,7 +75,7 @@ const onSubmit = async ({ errors }: ArcoDesign.ArcoSubmit) => {
     }
   ]);
 
-  Message.success("保存成功");
+  Message.success("Saved successfully");
 
   emit("refresh");
 };

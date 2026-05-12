@@ -42,7 +42,7 @@ watch(watermarkConfig, newv => {
   height: 100%;
 }
 
-// 修改左侧滚动条宽度-主要针对main窗口内的滚动条
+// Editleft scrollbar width-主要针对main窗口内的滚动条
 :deep(.arco-scrollbar-thumb-direction-vertical .arco-scrollbar-thumb-bar) {
   width: 4px;
   margin-left: 8px;

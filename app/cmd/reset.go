@@ -14,14 +14,14 @@ import (
 
 var Reset = &cli.Command{
 	Name:  "reset",
-	Usage: "忘记密码时，此命令可重置账号密码登录入口",
+	Usage: "Reset account password and login entry when the password is forgotten",
 	Flags: []cli.Flag{SQLiteFlag, MySQLDSNFlag, PostgresDSNFlag},
 	Before: func(ctx context.Context, c *cli.Command) (context.Context, error) {
 		mysql := c.String("mysql")
 		postgres := c.String("postgres")
 		sqlite := c.String("sqlite")
 		if err := model.Init(sqlite, mysql, postgres); err != nil {
-			return ctx, fmt.Errorf("数据库初始化失败 %w", err)
+			return ctx, fmt.Errorf("database initialization failed %w", err)
 		}
 
 		return ctx, task.Init()
@@ -43,9 +43,9 @@ var Reset = &cli.Command{
 		model.SetK(model.AdminUsername, username)
 		model.SetK(model.AdminPassword, string(encrypt))
 
-		fmt.Println("重置成功，对应信息如下：")
-		fmt.Printf("管理员账号：%s\n管理员密码：%s\n后台管理入口：%s\n", username, password, entrance)
-		fmt.Println("请妥善保存以上信息！")
+		fmt.Println("Reset successful. Details:")
+		fmt.Printf("Admin account:%s\nAdmin password:%s\nAdmin entry:%s\n", username, password, entrance)
+		fmt.Println("Keep the above information safe!")
 		fmt.Println("-------------------------------")
 
 		return nil

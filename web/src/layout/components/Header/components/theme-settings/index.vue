@@ -66,25 +66,25 @@ const { layoutType, collapsed, colorWeakMode, grayMode, darkMode, asideDark, tra
 const layoutList = reactive({
   layoutDefaults: {
     value: "layoutDefaults",
-    label: "默认布局",
+    label: "Default Layout",
     class: "layout-defaults"
   },
   layoutHead: {
     value: "layoutHead",
-    label: "横向布局",
+    label: "Horizontal Layout",
     class: "layout-head"
   },
   layoutMixing: {
     value: "layoutMixing",
-    label: "混合布局",
+    label: "Mixed Layout",
     class: "layout-mixing"
   }
 });
 
 const transitions = ref([
-  { value: "fadeInOut", label: "轻过渡" },
-  { value: "cardInOut", label: "卡片" },
-  { value: "fadeOut", label: "渐退" }
+  { value: "fadeInOut", label: "Light Transition" },
+  { value: "cardInOut", label: "card" },
+  { value: "fadeOut", label: "Fade Out" }
 ]);
 
 interface IThemeColor {
@@ -101,25 +101,25 @@ interface IThemeColor {
     a: number;
   };
 }
-// 主题色设置
+// theme color setting
 const themeColorChange = (value: IThemeColor) => {
   themeColor.value = value.hex;
   const { setThemeColor } = useThemeMethods();
   setThemeColor();
 };
-// 色弱模式
+// Color Weakness Mode
 const onColorWeak = () => {
   const { setColorWeak } = useThemeMethods();
   setColorWeak();
 };
 
-// 灰色模式
+// Gray Mode
 const onGray = () => {
   const { setGray } = useThemeMethods();
   setGray();
 };
 
-// 布局变化
+// 布局change
 const layouetChange = (type: string) => {
   layoutType.value = type;
   const { isPc } = useDevicesSize();

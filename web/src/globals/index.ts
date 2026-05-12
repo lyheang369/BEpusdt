@@ -24,12 +24,12 @@ export const dictFilter = (code: string) => {
 
 /**
  *
- * Message提示框
- * @param {string} type 提示框类型
- * @param {string} content 提示框内容
- * @param {boolean} closable 是否可关闭
- * @param {string} position 提示框位置
- * @param {any} icon 提示框图标
+ * MessageNotice框
+ * @param {string} type Notice框类型
+ * @param {string} content Notice框内容
+ * @param {boolean} closable YesNo可Off
+ * @param {string} position Notice框位置
+ * @param {any} icon Notice框图标
  */
 export const arcoMessage = (type: string, content: string, closable: boolean = false, position: string = "top", icon?: any) => {
   interface ArcoMessage {
@@ -43,7 +43,7 @@ export const arcoMessage = (type: string, content: string, closable: boolean = f
     closable,
     position
   };
-  // icon必须是一个组件，例如：import { IconFaceSmileFill } from '@arco-design/web-vue/es/icon';
+  // icon必须Yesone个组件，Example：import { IconFaceSmileFill } from '@arco-design/web-vue/es/icon';
   if (icon) {
     message.icon = () => h(icon);
   }
@@ -76,10 +76,10 @@ export const arcoMessage = (type: string, content: string, closable: boolean = f
 };
 
 /**
- * 防抖函数
- * @param fn 要防抖的函数
- * @param delay 延迟时间（毫秒）
- * @returns 防抖后的函数
+ * Debounce函数
+ * @param fn 要Debounce的函数
+ * @param delay 延迟Time（毫sec）
+ * @returns Debounce后的函数
  */
 export const debounce = <T extends (...args: any[]) => any>(fn: T, delay: number): ((...args: Parameters<T>) => void) => {
   let timer: NodeJS.Timeout | null = null;

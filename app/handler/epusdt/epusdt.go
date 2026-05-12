@@ -77,7 +77,7 @@ type PaymentItem struct {
 func (Epusdt) SignVerify(ctx *gin.Context) {
 	rawData, err := ctx.GetRawData()
 	if err != nil {
-		ctx.JSON(200, respFailJson(fmt.Sprintf("json 数据读取错误 %s", err.Error())))
+		ctx.JSON(200, respFailJson(fmt.Sprintf("json Data read error %s", err.Error())))
 		ctx.Abort()
 
 		return
@@ -85,7 +85,7 @@ func (Epusdt) SignVerify(ctx *gin.Context) {
 
 	m := make(map[string]any)
 	if err = json.Unmarshal(rawData, &m); err != nil {
-		ctx.JSON(200, respFailJson(fmt.Sprintf("json 数据解析错误 %s", err.Error())))
+		ctx.JSON(200, respFailJson(fmt.Sprintf("json Data parse error %s", err.Error())))
 		ctx.Abort()
 
 		return
@@ -93,14 +93,14 @@ func (Epusdt) SignVerify(ctx *gin.Context) {
 
 	sign, ok := m["signature"]
 	if !ok {
-		ctx.JSON(200, respFailJson("签名丢失"))
+		ctx.JSON(200, respFailJson("Signature missing"))
 		ctx.Abort()
 
 		return
 	}
 
 	if utils.EpusdtSign(m, model.AuthToken()) != sign {
-		ctx.JSON(200, respFailJson("签名错误"))
+		ctx.JSON(200, respFailJson("Signature error"))
 		ctx.Abort()
 
 		return
@@ -147,17 +147,17 @@ func (Epusdt) CreateOrder(ctx *gin.Context) {
 	}
 
 	if !utils.IsAllowedCallbackURL(req.NotifyURL) {
-		ctx.JSON(200, respFailJson("notify_url 地址不合法"))
+		ctx.JSON(200, respFailJson("notify_url Addressinvalid"))
 
 		return
 	}
 	if !utils.IsAllowedCallbackURL(req.RedirectURL) {
-		ctx.JSON(200, respFailJson("redirect_url 地址不合法"))
+		ctx.JSON(200, respFailJson("redirect_url Addressinvalid"))
 
 		return
 	}
 
-	// 解析请求地址
+	// 解析请求Address
 	host := "http://" + ctx.Request.Host
 	if ctx.Request.TLS != nil {
 		host = "https://" + ctx.Request.Host
@@ -167,7 +167,7 @@ func (Epusdt) CreateOrder(ctx *gin.Context) {
 		req.Fiat = model.CNY
 	}
 
-	// 创建待付款订单
+	// 创建待付款Order
 	order, err := model.BuildPendingOrder(model.OrderParams{
 		Money:         decimal.NewFromFloat(req.Amount),
 		ApiType:       model.OrderApiTypeEpusdt,
@@ -184,9 +184,9 @@ func (Epusdt) CreateOrder(ctx *gin.Context) {
 		return
 	}
 
-	log.Info(fmt.Sprintf("订单创建成功 商户订单：%s", req.OrderID))
+	log.Info(fmt.Sprintf("Order created successfully Merchant Order：%s", req.OrderID))
 
-	// 返回响应数据
+	// return response data
 	ctx.JSON(200, respSuccJson(gin.H{
 		"fiat":            order.Fiat,
 		"trade_id":        order.TradeId,
@@ -200,22 +200,22 @@ func (Epusdt) CreateOrder(ctx *gin.Context) {
 	}))
 }
 
-// UpdateOrder 更新订单，返回付款链接。更新订单不需要签名，因为创建订单时已经验证，只需要提交参数更新订单即可。
+// UpdateOrder 更新Order，返回付款链接。更新Order不需要签名，因为Create Order时已经validation，只需要Submit参数更新Order即可。
 func (Epusdt) UpdateOrder(ctx *gin.Context) {
-	// 接收 trade_id, currency, network 三个参数
+	// 接收 trade_id, currency, network three个参数
 	var req updateOrderReq
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(200, respFailJson(fmt.Sprintf("UpdateOrder: request error: %s", err.Error())))
 		return
 	}
 
-	// 解析请求地址
+	// 解析请求Address
 	host := "http://" + ctx.Request.Host
 	if ctx.Request.TLS != nil {
 		host = "https://" + ctx.Request.Host
 	}
 
-	// 获取订单
+	// 获取Order
 	order, ok := model.GetTradeOrder(req.TradeID)
 	if !ok {
 		ctx.JSON(200, respFailJson("order not found"))
@@ -229,13 +229,13 @@ func (Epusdt) UpdateOrder(ctx *gin.Context) {
 		return
 	}
 
-	// 重建订单（更新支付方式）
-	// 注意：RebuildOrder 需要 OrderParams，我们需要从现有订单构造参数
+	// 重建Order（更新Payment方式）
+	// Warning：RebuildOrder 需要 OrderParams，我们需要从现有Order构造参数
 	money, _ := decimal.NewFromString(order.Money)
 	params := model.OrderParams{
 		Money:       money,
 		OrderId:     order.OrderId,
-		TradeType:   tradeType, // 新的交易类型
+		TradeType:   tradeType, // 新的Trade Type
 		RedirectUrl: order.ReturnUrl,
 		NotifyUrl:   order.NotifyUrl,
 		Name:        order.Name,
@@ -249,7 +249,7 @@ func (Epusdt) UpdateOrder(ctx *gin.Context) {
 		return
 	}
 
-	// 返回响应数据
+	// return response data
 	ctx.JSON(200, respSuccJson(gin.H{
 		"fiat":            newOrder.Fiat,
 		"trade_type":      newOrder.TradeType,
@@ -267,18 +267,18 @@ func (Epusdt) UpdateOrder(ctx *gin.Context) {
 func (Epusdt) CreateTransaction(ctx *gin.Context) {
 	var req createReq
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(200, respFailJson(fmt.Sprintf("请求参数错误：%s", err.Error())))
+		ctx.JSON(200, respFailJson(fmt.Sprintf("Request parameter error:%s", err.Error())))
 
 		return
 	}
 
 	if !utils.IsAllowedCallbackURL(req.NotifyURL) {
-		ctx.JSON(200, respFailJson("notify_url 地址不合法"))
+		ctx.JSON(200, respFailJson("notify_url Addressinvalid"))
 
 		return
 	}
 	if !utils.IsAllowedCallbackURL(req.RedirectURL) {
-		ctx.JSON(200, respFailJson("redirect_url 地址不合法"))
+		ctx.JSON(200, respFailJson("redirect_url Addressinvalid"))
 
 		return
 	}
@@ -305,14 +305,14 @@ func (Epusdt) CreateTransaction(ctx *gin.Context) {
 		Fiat:          req.Fiat,
 	})
 	if err != nil {
-		ctx.JSON(200, respFailJson(fmt.Sprintf("订单创建失败：%s", err.Error())))
+		ctx.JSON(200, respFailJson(fmt.Sprintf("Failed to create order：%s", err.Error())))
 
 		return
 	}
 
-	log.Info(fmt.Sprintf("订单创建成功 商户订单：%s", req.OrderID))
+	log.Info(fmt.Sprintf("Order created successfully Merchant Order：%s", req.OrderID))
 
-	// 返回响应数据
+	// return response data
 	ctx.JSON(200, respSuccJson(gin.H{
 		"fiat":            order.Fiat,
 		"trade_type":      order.TradeType,
@@ -330,26 +330,26 @@ func (Epusdt) CreateTransaction(ctx *gin.Context) {
 func (Epusdt) CancelTransaction(ctx *gin.Context) {
 	var req cancelReq
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(200, respFailJson(fmt.Sprintf("请求参数错误：%s", err.Error())))
+		ctx.JSON(200, respFailJson(fmt.Sprintf("Request parameter error:%s", err.Error())))
 
 		return
 	}
 
 	order, ok := model.GetTradeOrder(req.TradeID)
 	if !ok {
-		ctx.JSON(200, respFailJson("订单不存在"))
+		ctx.JSON(200, respFailJson("Order does not exist"))
 
 		return
 	}
 
 	if order.Status != model.OrderStatusWaiting {
-		ctx.JSON(200, respFailJson(fmt.Sprintf("当前订单(%s)状态不允许取消", req.TradeID)))
+		ctx.JSON(200, respFailJson(fmt.Sprintf("Current order(%s)status does not allow cancellation", req.TradeID)))
 
 		return
 	}
 
 	if err := order.SetCanceled(); err != nil {
-		ctx.JSON(200, respFailJson(fmt.Sprintf("订单取消失败：%s", err.Error())))
+		ctx.JSON(200, respFailJson(fmt.Sprintf("Failed to cancel order：%s", err.Error())))
 
 		return
 	}
@@ -361,15 +361,15 @@ func (Epusdt) CheckoutCounter(ctx *gin.Context) {
 	tradeId := ctx.Param("trade_id")
 	order, ok := model.GetTradeOrder(tradeId)
 	if !ok {
-		ctx.String(200, "订单不存在")
+		ctx.String(200, "Order does not exist")
 
 		return
 	}
 
 	uri, err := url.ParseRequestURI(order.ReturnUrl)
 	if err != nil {
-		ctx.String(200, "同步地址错误")
-		log.Error("同步地址解析错误", err.Error())
+		ctx.String(200, "Sync address error")
+		log.Error("Sync address parse error", err.Error())
 
 		return
 	}
@@ -424,7 +424,7 @@ func (Epusdt) CheckStatus(ctx *gin.Context) {
 	tradeId := ctx.Param("trade_id")
 	order, ok := model.GetTradeOrder(tradeId)
 	if !ok {
-		ctx.JSON(200, respFailJson("订单不存在"))
+		ctx.JSON(200, respFailJson("Order does not exist"))
 
 		return
 	}
@@ -433,12 +433,12 @@ func (Epusdt) CheckStatus(ctx *gin.Context) {
 	if order.Status == model.OrderStatusSuccess {
 		returnUrl = order.ReturnUrl
 		if order.ApiType == model.OrderApiTypeEpay {
-			// 易支付兼容
+			// 易Payment兼容
 			returnUrl = fmt.Sprintf("%s?%s", returnUrl, epay.BuildNotifyParams(order))
 		}
 	}
 
-	// 返回响应数据
+	// return response data
 	ctx.JSON(200, gin.H{
 		"trade_id":   tradeId,
 		"trade_hash": order.RefHash,
@@ -476,7 +476,7 @@ func GetPaymentItem(crypto model.Crypto, order model.Order) []PaymentItem {
 	var methods = make([]PaymentItem, 0)
 	allTrades := model.GetAllTradeConfig()
 
-	// 解析限定币种
+	// 解析limited currency
 	var whitelist = make(map[string]bool)
 	var blacklist = make(map[string]bool)
 	if order.CurrencyLimit != "" {
@@ -506,13 +506,13 @@ func GetPaymentItem(crypto model.Crypto, order model.Order) []PaymentItem {
 			continue
 		}
 
-		// 检查是否有可用钱包
+		// 检查YesNo有可用钱包
 		count := len(model.GetAvailableAddress(model.TradeType(tradeTypeStr)))
 		if count == 0 {
 			continue
 		}
 
-		// 获取汇率配置的浮动语法
+		// 获取Rate Configuration的浮动语法
 		syntax := model.GetK(model.ConfKey(fmt.Sprintf("rate_float_%s_%s", conf.Crypto, fiat)))
 
 		// 获取汇率
@@ -522,8 +522,8 @@ func GetPaymentItem(crypto model.Crypto, order model.Order) []PaymentItem {
 			continue
 		}
 
-		// 计算实际支付金额 (加密货币)
-		// Money 是法币金额
+		// 计算实际PaymentAmount (Cryptocurrency)
+		// Money Yes法币Amount
 		moneyDecimal, _ := decimal.NewFromString(order.Money)
 
 		// 计算精度

@@ -108,9 +108,9 @@ const onWatermarkGap = (e: number) => {
 };
 
 /*
-  是否关闭tabs栏
-  如果关闭，那么所有tabs全部取消、所有页面缓存全部取消
-  如果开启，那么添加当前路由到tabs
+  YesNoOfftabs栏
+  如果Off，那么所有tabs全部Cancel、所有page缓存全部Cancel
+  如果On，那么添加current route到tabs
 */
 const tabsChange = (e: boolean) => {
   if (!e) {
